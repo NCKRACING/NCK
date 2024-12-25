@@ -1,0 +1,579 @@
+<html>
+								<script>(
+									function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}}))}
+								)();
+								</script>
+							<head><base href="/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCK Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-blue: #007bff;
+        --dark-bg: #111111;
+        --header-bg: #1c1c1c;
+        --text-light: #ffffff;
+        --border-color: #333;
+        --accent-blue: #0066cc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-line {
+        height: 2px;
+        background-color: var(--primary-blue);
+    }
+
+    header {
+        background-color: var(--header-bg);
+        border-bottom: 1px solid #222;
+    }
+
+    .header-content {
+        max-width: 1744px; /* Match main-content width */
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1rem;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-blue);
+        text-transform: uppercase;
+        font-style: italic;
+    }
+
+    .nav-menu {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .nav-menu a {
+        color: #888;
+        text-decoration: none;
+        font-size: 16px;
+        text-transform: uppercase;
+        transition: color 0.2s;
+        font-style: italic;
+        padding: 5px 10px;
+    }
+
+    .nav-menu a:hover {
+        color: var(--text-light);
+    }
+
+    .nav-menu a.active {
+        color: var(--text-light);
+        border: 1px solid var(--primary-blue);
+        border-radius: 3px;
+    }
+
+    .user-actions {
+        display: flex;
+        gap: 1rem;
+        font-size: 16px;
+    }
+
+    .user-actions a {
+        text-decoration: none;
+        padding: 5px 10px;
+        font-style: italic;
+    }
+
+    .login-btn {
+        color: #888;
+    }
+
+    .signup-btn {
+        color: var(--primary-blue);
+        border: 1px solid var(--primary-blue);
+        border-radius: 3px;
+    }
+
+    .main-content {
+        max-width: 1744px; /* Increased from 1600px to accommodate wider columns */
+        margin: 1rem auto;
+        display: grid;
+        grid-template-columns: 398px 1fr 398px; /* Increased from 350px to 398px */
+        gap: 2rem;
+        padding: 0 1rem;
+        min-height: calc(100vh - 120px);
+    }
+
+    .sidebar,
+    .news-sidebar,
+    .portfolio-grid {
+        width: 398px; /* Increased from 350px */
+        height: calc(100vh - 140px); /* Reduced from 160px */
+    }
+
+    .sidebar {
+        border-radius: 3px;
+        font-size: 16px;
+    }
+
+    .sidebar h3,
+    .section-title, 
+    .race-title,
+    .news-sidebar h3 {
+        font-size: 24px;  /* Increased font size */
+        text-transform: uppercase;
+        font-style: italic;
+        margin-bottom: 0; /* Updated to remove margin */
+        text-align: center; /* Updated to center text */
+        padding: 5px 0; /* Make header skinnier */
+        background-color: var(--primary-blue);
+        border-radius: 5px 5px 0 0;
+    }
+
+    .sidebar h3 {
+        /* Remove duplicated properties that are now handled above */
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .sidebar-menu li {
+        text-align: center;
+    }
+
+    .sidebar-menu a {
+        text-decoration: none;
+        color: #888;
+    }
+
+    .sidebar-menu a:hover {
+        color: var(--text-light);
+    }
+
+    .discord-link {
+        display: block;
+        padding: 15px;
+        color: var(--text-light);
+        background-color: var(--primary-blue);
+        text-decoration: none;
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+        font-style: italic;
+        margin-top: 10px;
+        border-radius: 3px;
+    }
+
+    .portfolio-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0; /* Remove gap between elements */
+        text-align: center;
+        height: calc(100vh - 140px); /* Reduced from 160px */
+        position: relative;
+    }
+
+    .race-countdown {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background-color: var(--dark-bg);
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .countdown-timer {
+        font-size: 2em;
+        font-weight: bold;
+        color: var(--primary-blue);
+        margin: 15px 0;
+        border: 2px solid var(--primary-blue); /* Added border */
+        border-radius: 12px; /* Updated border radius */
+        padding: 15px; /* Added padding */
+        background: rgba(0, 123, 255, 0.05); /* Updated background */
+        box-shadow: 
+            0 0 15px rgba(0, 123, 255, 0.3),
+            inset 0 0 20px rgba(0, 123, 255, 0.1); /* Updated box-shadow */
+        display: inline-block; /* Changed display */
+        min-width: 200px; /* Added minimum width */
+        position: relative; /* Added position */
+        overflow: hidden; /* Added overflow */
+    }
+
+    .countdown-timer::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 20%,
+            rgba(0, 123, 255, 0.1) 40%,
+            rgba(0, 123, 255, 0.1) 60%,
+            transparent 80%
+        );
+        animation: shine 3s linear infinite;
+    }
+
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+    }
+
+    .portfolio-items-container {
+        overflow-y: auto;
+        height: calc(100% - 140px); /* Reduced from 160px */
+        padding-right: 10px;
+        background-color: transparent; 
+        border: none; /* Remove border */
+        border-radius: 0 0 5px 5px;
+        padding: 10px;
+        scrollbar-width: thin; 
+        scrollbar-color: var(--primary-blue) rgba(0, 123, 255, 0.1);
+    }
+
+    .portfolio-items-container::-webkit-scrollbar {
+        width: 8px; 
+    }
+
+    .portfolio-items-container::-webkit-scrollbar-track {
+        background: rgba(0, 123, 255, 0.1);
+        border-radius: 4px;
+    }
+
+    .portfolio-items-container::-webkit-scrollbar-thumb {
+        background: var(--primary-blue);
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+
+    .portfolio-items-container::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-blue);
+    }
+
+    .portfolio-item {
+        position: relative;
+        height: 200px;
+        min-height: 200px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        flex-shrink: 0;
+    }
+
+    .portfolio-item:nth-child(1) {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="100%" height="100%" fill="%23333"/><text x="50%" y="50%" font-family="Arial" font-size="20" fill="white" text-anchor="middle">Photography</text></svg>');
+    }
+
+    .portfolio-item:nth-child(2) {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="100%" height="100%" fill="%23333"/><text x="50%" y="50%" font-family="Arial" font-size="20" fill="white" text-anchor="middle">Motocross Graphics</text></svg>');
+    }
+
+    .portfolio-item:nth-child(3) {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="100%" height="100%" fill="%23333"/><g transform="translate(200,150)"><path d="M-60,-30 h120 v60 h-120z" fill="%23007bff"/><text x="0" y="0" font-family="Arial" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">LOGO</text><rect x="-40" y="-40" width="30" height="30" fill="%23fff"/><circle cx="20" cy="-25" r="15" fill="%23fff"/></g></svg>');
+    }
+
+    .portfolio-item:nth-child(4) {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="100%" height="100%" fill="%23333"/><g transform="translate(200,150)"><rect x="-60" y="-40" width="120" height="80" fill="%23007bff"/><text x="0" y="0" font-family="Arial" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">Custom Quote</text><path d="M-40,-20 L-20,-20 L-10,-10 L0,-20 L10,-10 L20,-20 L40,-20" stroke="white" fill="none" stroke-width="3"/></g></svg>');
+    }
+
+    .portfolio-item:nth-child(5) {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="100%" height="100%" fill="%23333"/><g transform="translate(200,150)"><rect x="-60" y="-40" width="120" height="80" fill="%23007bff"/><text x="0" y="0" font-family="Arial" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">Euphoria MX</text><path d="M-40,-20 L-20,-20 L-10,-10 L0,-20 L10,-10 L20,-20 L40,-20" stroke="white" fill="none" stroke-width="3"/></g></svg>');
+    }
+
+    .portfolio-item-title {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background-color: rgba(0, 123, 255, 0.8);
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .portfolio-item-title h3 {
+        color: white;
+        margin: 0;
+    }
+
+    .news-sidebar {
+        height: calc(100vh - 140px); /* Reduced from 160px */
+        width: 398px; /* Increased from 350px */
+    }
+
+    .news-sidebar h3 {
+        padding: 5px 0; /* Make header skinnier */
+        background-color: var(--primary-blue);
+        border-radius: 5px 5px 0 0;
+        margin-bottom: 0; /* Updated to remove margin */
+        font-size: 24px;  /* Increased font size */
+        text-transform: uppercase;
+        font-style: italic;
+        text-align: center; /* Updated to center text */
+    }
+
+    .news-content {
+        background-color: transparent;
+        border-radius: 3px;
+        height: calc(100% - 50px); /* Reduced from 60px */
+        overflow-y: auto;
+        border: none; /* Remove border */
+        border-radius: 0 0 5px 5px;
+        padding: 10px;
+        scrollbar-width: thin; 
+        scrollbar-color: var(--primary-blue) rgba(0, 123, 255, 0.1);
+    }
+
+    .news-content::-webkit-scrollbar {
+        width: 8px; 
+    }
+
+    .news-content::-webkit-scrollbar-track {
+        background: rgba(0, 123, 255, 0.1);
+        border-radius: 4px;
+    }
+
+    .news-content::-webkit-scrollbar-thumb {
+        background: var(--primary-blue);
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+
+    .news-content::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-blue);
+    }
+
+    .news-item {
+        padding: 15px;
+        border-bottom: 1px solid #222;
+    }
+
+    .news-item h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        font-style: italic;
+    }
+
+    .news-item p {
+        color: #888;
+        font-size: 16px;
+    }
+
+    .race-countdown {
+        background-color: transparent;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .race-title {
+        color: var(--text-light);
+        font-size: 1.2em;
+        margin-bottom: 5px; /* Updated margin for consistency */
+        padding: 5px 0;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-style: italic;
+        color: var(--text-light);
+        margin-top: 2px;
+        margin-bottom: 0; /* Remove bottom margin */
+        padding: 5px 0; /* Already correct size */
+        background-color: var(--primary-blue);
+        border-radius: 5px 5px 0 0; /* Round top corners only */
+    }
+
+    .blue-line {
+        height: 2px;
+        background-color: var(--primary-blue);
+        margin: 20px auto; /* Increased from 5px to 20px */
+        width: 100%;
+    }
+
+    footer {
+        background-color: var(--header-bg);
+        padding: 0.7rem; /* Reduced from 1rem */
+        text-align: center;
+        font-size: 14px;
+        color: #888;
+        border-top: 2px solid var(--primary-blue);
+    }
+
+    .race-name {
+        text-decoration: none;
+        color: var(--text-light);
+        cursor: pointer;
+    }
+
+    .race-name:hover {
+        color: var(--primary-blue);
+    }
+</style>
+<script>function updateCountdown() {
+  const raceTime = new Date('2024-12-25 21:30:00 CST').getTime();
+  const now = new Date().getTime();
+  const distance = raceTime - now;
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+  const minutes = Math.floor(distance % (1000 * 60 * 60) / (1000 * 60));
+  const seconds = Math.floor(distance % (1000 * 60) / 1000);
+  document.getElementById('countdown').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+  if (distance < 0) {
+    document.getElementById('countdown').innerHTML = "RACE HAS STARTED!";
+  }
+}
+setInterval(updateCountdown, 1000);</script>
+</head>
+<body>
+    <div class="top-line"></div>
+    <header>
+        <div class="header-content">
+            <div class="logo">NCK</div>
+            <nav class="nav-menu">
+                <a href="https://example.com/home" class="active">HOME</a>
+                <a href="https://example.com/portfolio">PORTFOLIO</a>
+                <a href="https://example.com/about">ABOUT</a>
+                <a href="https://example.com/contact">CONTACT</a>
+            </nav>
+            <div class="user-actions">
+                <a href="https://example.com/login" class="login-btn">LOGIN</a>
+                <a href="https://example.com/signup" class="signup-btn">SIGN UP</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <aside class="sidebar">
+            <h3>Latest Media</h3>
+            <div class="twitch-embed">
+                <iframe src="https://player.twitch.tv/?video=2334665443&amp;parent=localhost" frameborder="0" allowfullscreen="true" scrolling="no" height="200" width="100%">
+                </iframe>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="https://example.com/nck">NCK</a></li>
+                <li><a href="https://example.com/live">LIVE</a></li>
+                <li><a href="https://example.com/sponsors">SPONSORS</a></li>
+                <li><a href="https://example.com/terms">TERMS OF SERVICE</a></li>
+                <li><a href="https://example.com/about">ABOUT</a></li>
+                <li></li> <!-- Empty cell to maintain grid -->
+            </ul>
+            <a href="https://discord.gg/nck" class="discord-link">NCK RACING DISCORD</a>
+        </aside>
+
+        <section class="portfolio-grid">
+            <div class="race-countdown">
+                <h2 class="race-title">UPCOMING RACE:</h2>
+                <a href="https://mymxb.com/racing-v4/?r4p=raceinfo&amp;champid=1026&amp;courseid=5890" class="race-name">SWEDISH MIDSUMMER CARNAGE 2 - ELIMINATION RACE</a>
+                <div>9:30 PM CST</div>
+                <div id="countdown" class="countdown-timer">Loading...</div>
+            </div>
+
+            <h2 class="section-title">Current Work</h2>
+            
+            <div class="portfolio-items-container">
+                <div class="portfolio-item">
+                    <div class="portfolio-item-title">
+                        <h3>NCK DECALS</h3>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-item-title">
+                        <h3>NCK MEDIA</h3>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-item-title">
+                        <h3>Kevin Moranz</h3>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-item-title">
+                        <h3>Dirtmoto</h3>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-item-title">
+                        <h3>Euphoria MX</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="news-sidebar">
+            <h3>Latest News</h3>
+            <div class="news-content">
+                <div class="news-item">
+                    <h4>New Design Collection</h4>
+                    <p>Fresh MX designs now available</p>
+                </div>
+                <div class="news-item">
+                    <h4>Photography Session</h4>
+                    <p>New photo shoots scheduled</p>
+                </div>
+                <div class="news-item">
+                    <h4>Discord Event</h4>
+                    <p>Join our weekend community event</p>
+                </div>
+                <div class="news-item">
+                    <h4>Website Update</h4>
+                    <p>New portfolio features added</p>
+                </div>
+                <div class="news-item">
+                    <h4>Race Results</h4>
+                    <p>Check out the latest race highlights</p>
+                </div>
+                <div class="news-item">
+                    <h4>Community Spotlight</h4>
+                    <p>Featured rider of the month announced</p>
+                </div>
+                <div class="news-item">
+                    <h4>Merchandise Update</h4>
+                    <p>New clothing line coming soon</p>
+                </div>
+                <div class="news-item">
+                    <h4>Track Day Event</h4>
+                    <p>Join us for the next community track day</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <p>© 2024 NCK All Rights Reserved | Created by NCK/KARASSY</p>
+    </footer>
+
+</body></html>
