@@ -896,113 +896,47 @@ tr.dragging {
     max-width: 280px;
   }
 }
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pagination button {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.pagination button:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--accent-blue);
+}
+
+.pagination span {
+  color: var(--text-light);
+  font-size: 14px;
+}
 </style>
 <script>
-(function hookGeo(eventName){
-  // Long geo location script provided by user
-})();
-</script>
-<meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NCK Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="top-line"></div>
+const ITEMS_PER_PAGE = 10; // Number of championships per page
+let currentPage = 1;
 
-<div class="racing" align="center">
-    <h3>Championship List</h3>
-            
-    <div id="racingmenubuttons">
-        <a class="btnmenu" href="https://example.com/add">Add a championship</a>
-        <a class="btnmenu" href="https://example.com/races">Races</a>
-        <a class="btnmenu" href="https://example.com/streamers">Streamers</a>
-        <a class="btnmenu" href="https://example.com/points">Points Tables</a>
-        <a class="btnmenu" href="https://example.com/servers">My servers</a>
-        <a class="btnmenu" href="https://example.com/help">Help</a>
-        <button class="btnmenu" onclick="clearAllChampionships()">Clear All Championships</button>
-        <a class="btnmenu" onclick="refreshChampionshipList()">Refresh Series</a>
-    </div>
-
-    <table id="raceList" style="display: table;">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Series Name</th>
-                <th>Start Date</th>  
-                <th>Status</th>
-                <th>Standings</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="championshipListBody">
-            <!-- Championships will be added here dynamically -->
-        </tbody>
-    </table>
-</div>
-
-<div class="series-manager">
-  <div class="series-controls">
-    <button class="btn btn-primary" onclick="createSeries()">New Series</button>
-    <button class="btn btn-primary" onclick="uploadScript()">Upload Script</button>
-  </div>
-  
-  <div class="series-list">
-    <!-- Series entries will be added here dynamically -->
-  </div>
-</div>
-
-<div class="editor-overlay">
-  <div class="series-editor">
-    <h3>Edit Series</h3>
-    <form class="edit-form" onsubmit="saveSeries(event)">
-      <div class="form-group">
-        <label>Series Name</label>
-        <input type="text" name="seriesName" required="">
-      </div>
-      <div class="form-group">
-        <label>Series Link</label>
-        <input type="url" name="seriesLink" required="">
-      </div>
-      <div class="form-group">
-        <label>Start Date</label>
-        <input type="date" name="startDate" required="">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select name="status">
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
-      
-      <h4>Standings</h4>
-      <div class="standings-inputs">
-        <div class="form-group">
-          <label>2nd Place</label>
-          <input type="text" name="second_name" placeholder="Name" required="">
-          <input type="number" name="second_points" placeholder="Points" required="">
-        </div>
-        <div class="form-group">
-          <label>1st Place</label>
-          <input type="text" name="first_name" placeholder="Name" required="">
-          <input type="number" name="first_points" placeholder="Points" required="">
-        </div>
-        <div class="form-group">
-          <label>3rd Place</label>
-          <input type="text" name="third_name" placeholder="Name" required="">
-          <input type="number" name="third_points" placeholder="Points" required="">
-        </div>
-      </div>
-      
-      <div class="button-group">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <button type="button" class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
 function updateIndexContent(series) {
   try {
     localStorage.setItem('series', JSON.stringify(series));
@@ -1106,13 +1040,15 @@ function closeEditor() {
   const editor = document.querySelector('.series-editor');
   const overlay = document.querySelector('.editor-overlay');
   
-  overlay.innerHTML = '';
-  
   if (editor) editor.classList.remove('active');
-  overlay.classList.remove('active');
+  if (overlay) {
+    overlay.classList.remove('active');
+    overlay.innerHTML = ''; // Clear overlay content
+  }
   
   window.uploadedSeries = null;
   
+  // Clear any file inputs
   const fileInputs = document.querySelectorAll('input[type="file"]');
   fileInputs.forEach(input => input.value = '');
 }
@@ -1353,12 +1289,7 @@ function saveAllSeries() {
   const previewItems = document.querySelectorAll('.series-preview-item');
   const remainingSeries = Array.from(previewItems).map(item => {
     const seriesName = item.querySelector('span').textContent;
-    const series = window.uploadedSeries.find(s => s.name === seriesName);
-    if (series) {
-      series.status = 'active'; 
-      return series;
-    }
-    return null;
+    return window.uploadedSeries.find(s => s.name === seriesName);
   }).filter(s => s);
 
   newSeries.push(...remainingSeries);
@@ -1366,9 +1297,7 @@ function saveAllSeries() {
 
   showToast(`Successfully saved ${remainingSeries.length} series`, 'success');
   refreshChampionshipList();
-
   closeEditor();
-  window.uploadedSeries = null;
 }
 
 function showToast(message, type = 'success') {
@@ -1399,8 +1328,14 @@ function refreshChampionshipList() {
       tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No active series found</td></tr>';
       return;
     }
+
+    // Calculate pagination
+    const totalPages = Math.ceil(activeSeries.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
     
     activeSeries.sort((a,b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+      .slice(startIndex, endIndex)
       .forEach(series => {
         const row = document.createElement('tr');
         row.dataset.id = series.id;
@@ -1467,7 +1402,36 @@ function refreshChampionshipList() {
         `;
         tbody.appendChild(row);
       });
-      
+
+    // Add pagination controls
+    const paginationDiv = document.createElement('div');
+    paginationDiv.className = 'pagination-controls';
+    paginationDiv.innerHTML = `
+      <div class="pagination">
+        <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
+          &lt;&lt;
+        </button>
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+          &lt;
+        </button>
+        <span>Page ${currentPage} of ${totalPages}</span>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+          &gt;
+        </button>
+        <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
+          &gt;&gt;
+        </button>
+      </div>
+    `;
+    
+    // Add the pagination controls after the table
+    const table = document.getElementById('raceList');
+    if (table.nextSibling) {
+      table.parentNode.insertBefore(paginationDiv, table.nextSibling);
+    } else {
+      table.parentNode.appendChild(paginationDiv);
+    }
+    
     showToast('Series list refreshed', 'success');
   }, 500);
 }
@@ -1543,5 +1507,187 @@ function updateOverlayCSS() {
   `;
   document.head.appendChild(style);
 }
+
+async function saveToIndex() {
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  
+  // Split series into active and completed
+  const activeSeries = storedSeries.filter(s => s.status !== 'completed');
+  const completedSeries = storedSeries.filter(s => s.status === 'completed');
+  
+  let seriesContent = '';
+  
+  // Add active series
+  activeSeries.forEach(series => {
+    seriesContent += generateSeriesHTML(series);
+  });
+  
+  // Add completed section
+  if (completedSeries.length > 0) {
+    seriesContent += '<h3 class="standings-section-title">Completed...</h3>';
+    completedSeries.forEach(series => {
+      seriesContent += generateSeriesHTML(series);
+    });
+  }
+
+  try {
+    const response = await fetch('/api/update-index', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        content: seriesContent
+      })
+    });
+    
+    if (response.ok) {
+      showToast('Index page updated successfully', 'success');
+    } else {
+      throw new Error('Failed to update index page');
+    }
+  } catch (error) {
+    console.error('Error updating index:', error);
+    showToast('Failed to update index page', 'error');
+  }
+}
+
+function generateSeriesHTML(series) {
+  return `
+    <div class="series-item">
+      <h4><a href="${series.seriesLink}" target="_blank">${series.name}</a></h4>
+      <div class="podium">
+        <div class="podium-place">
+          <div class="podium-2"></div>
+          <div class="place-number">2</div>
+          <div class="podium-text">${series.standings[1]?.name || 'N/A'}<span class="points">${series.standings[1]?.points || '0'}pts</span></div>
+        </div>
+        <div class="podium-place">
+          <div class="podium-1"></div>
+          <div class="place-number">1</div>
+          <div class="podium-text">${series.standings[0]?.name || 'N/A'}<span class="points points-leader">${series.standings[0]?.points || '0'}pts</span></div>
+        </div>
+        <div class="podium-place">
+          <div class="podium-3"></div>
+          <div class="place-number">3</div>
+          <div class="podium-text">${series.standings[2]?.name || 'N/A'}<span class="points">${series.standings[2]?.points || '0'}pts</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function changePage(newPage) {
+  if (newPage < 1) return;
+  
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  const totalPages = Math.ceil(storedSeries.length / ITEMS_PER_PAGE);
+  
+  if (newPage > totalPages) return;
+  
+  currentPage = newPage;
+  refreshChampionshipList();
+}
 </script>
+<meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NCK Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="top-line"></div>
+
+<div class="racing" align="center">
+    <h3>Championship List</h3>
+            
+    <div id="racingmenubuttons">
+        <a class="btnmenu" href="https://example.com/add">Add a championship</a>
+        <a class="btnmenu" href="https://example.com/races">Races</a>
+        <a class="btnmenu" href="https://example.com/streamers">Streamers</a>
+        <a class="btnmenu" href="https://example.com/points">Points Tables</a>
+        <a class="btnmenu" href="https://example.com/servers">My servers</a>
+        <a class="btnmenu" href="https://example.com/help">Help</a>
+        <button class="btnmenu" onclick="clearAllChampionships()">Clear All Championships</button>
+        <button class="btnmenu" onclick="refreshChampionshipList()">Refresh Series</button>
+        <button class="btnmenu" onclick="saveToIndex()">Save to Index</button>
+    </div>
+
+    <table id="raceList" style="display: table;">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Series Name</th>
+                <th>Start Date</th>  
+                <th>Status</th>
+                <th>Standings</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="championshipListBody">
+            <!-- Championships will be added here dynamically -->
+        </tbody>
+    </table>
+</div>
+
+<div class="series-manager">
+  <div class="series-controls">
+    <button class="btn btn-primary" onclick="createSeries()">New Series</button>
+    <button class="btn btn-primary" onclick="uploadScript()">Upload Script</button>
+  </div>
+  
+  <div class="series-list">
+    <!-- Series entries will be added here dynamically -->
+  </div>
+</div>
+
+<div class="editor-overlay">
+  <div class="series-editor">
+    <h3>Edit Series</h3>
+    <form class="edit-form" onsubmit="saveSeries(event)">
+      <div class="form-group">
+        <label>Series Name</label>
+        <input type="text" name="seriesName" required="">
+      </div>
+      <div class="form-group">
+        <label>Series Link</label>
+        <input type="url" name="seriesLink" required="">
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" name="startDate" required="">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      
+      <h4>Standings</h4>
+      <div class="standings-inputs">
+        <div class="form-group">
+          <label>2nd Place</label>
+          <input type="text" name="second_name" placeholder="Name" required="">
+          <input type="number" name="second_points" placeholder="Points" required="">
+        </div>
+        <div class="form-group">
+          <label>1st Place</label>
+          <input type="text" name="first_name" placeholder="Name" required="">
+          <input type="number" name="first_points" placeholder="Points" required="">
+        </div>
+        <div class="form-group">
+          <label>3rd Place</label>
+          <input type="text" name="third_name" placeholder="Name" required="">
+          <input type="number" name="third_points" placeholder="Points" required="">
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </body></html>
