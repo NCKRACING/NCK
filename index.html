@@ -234,6 +234,55 @@
 .portfolio-item-title h3 a:visited {
   color: var(--text-light);
 }
+@media screen and (max-width: 767px) {
+    .header-content {
+        padding: 0;
+        background-color: #0a0a0a;
+    }
+}
+@media screen and (max-width: 767px) {
+  .race-countdown {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .countdown-timer {
+    font-size: 1.5em;
+    padding: 10px;
+    min-width: unset;
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+    word-wrap: break-word;
+  }
+
+  .race-name, 
+  .series-name {
+    font-size: 1em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .navigation-arrows {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .next-race-btn {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    margin-top: 10px;
+    width: auto;
+  }
+}
 </style><script>
 let tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -673,90 +722,74 @@ function updateCountdown() {
   const countdownEl = document.getElementById('countdown');
   const statusEl = document.getElementById('race-status');
 
-  if (!countdownEl || !statusEl) return;
-
-  if (isNaN(distance)) {
-    countdownEl.innerHTML = 'Loading...';
-    setTimeout(updateCountdown, 500);
+  if (!countdownEl || !statusEl) {
+    console.log('Countdown elements not found');
     return;
   }
 
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  const isMobile = window.innerWidth <= 767;
-  let displayText;
-  
-  if (isMobile) {
-    displayText = `${days}d ${hours}h\n${minutes}m ${seconds}s`;
-    if (countdownEl) {
-      countdownEl.style.fontSize = '1.5em';
-      countdownEl.style.padding = '10px';
-      countdownEl.style.minWidth = 'auto';
-      countdownEl.style.width = '100%';
+  try {
+    if (isNaN(distance)) {
+      countdownEl.innerHTML = 'Loading...';
+      setTimeout(updateCountdown, 500);
+      return;
     }
-  } else {
-    displayText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    if (countdownEl) {
-      countdownEl.style.fontSize = '';
-      countdownEl.style.padding = '';
-      countdownEl.style.minWidth = '';
-      countdownEl.style.width = '';
-    }
-  }
 
-  if (distance < 0) {
-    const minutesPassed = Math.abs(Math.floor(distance / (1000 * 60)));
-    if (minutesPassed <= 15) {
-      countdownEl.innerHTML = '00:00';
-      statusEl.innerHTML = 'Qualifying';
-    } else if (minutesPassed <= 30) {
-      countdownEl.innerHTML = '00:00';
-      statusEl.innerHTML = 'Race Live';
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const isMobile = window.innerWidth <= 767;
+    let displayText;
+    
+    if (isMobile) {
+      displayText = `${days}d ${hours}h\n${minutes}m ${seconds}s`;
     } else {
-      races[currentRaceIndex].visible = false;
-      const nextVisibleIndex = races.findIndex((race, index) => 
-        index > currentRaceIndex && 
-        race.visible && 
-        new Date(race.date).getTime() - now > -30 * 60 * 1000
-      );
-      
-      if (nextVisibleIndex !== -1) {
-        currentRaceIndex = nextVisibleIndex;
-        updateRaceDisplay();
+      displayText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    if (distance < 0) {
+      const minutesPassed = Math.abs(Math.floor(distance / (1000 * 60)));
+      if (minutesPassed <= 15) {
+        countdownEl.innerHTML = '00:00';
+        statusEl.innerHTML = 'Qualifying';
+      } else if (minutesPassed <= 30) {
+        countdownEl.innerHTML = '00:00';
+        statusEl.innerHTML = 'Race Live';
       } else {
-        const container = document.querySelector('.portfolio-grid');
-        const raceCountdown = container.querySelector('.race-countdown');
-        if (raceCountdown) {
-          raceCountdown.style.display = 'none';
+        races[currentRaceIndex].visible = false;
+        const nextVisibleIndex = races.findIndex((race, index) => 
+          index > currentRaceIndex && 
+          race.visible && 
+          new Date(race.date).getTime() - now > -30 * 60 * 1000
+        );
+        
+        if (nextVisibleIndex !== -1) {
+          currentRaceIndex = nextVisibleIndex;
+          updateRaceDisplay();
         }
       }
+    } else {
+      countdownEl.innerHTML = displayText;
+      statusEl.innerHTML = '';
     }
-  } else {
-    countdownEl.innerHTML = displayText;
-    statusEl.innerHTML = '';
-  }
-  
-  // Only update every second if countdown is less than an hour
-  const timeLeft = raceTime - now;
-  if (timeLeft < 3600000) { // Less than 1 hour
-    if (!countdownInterval) {
-      countdownInterval = setInterval(updateCountdown, 1000);
-    }
-  } else {
-    clearInterval(countdownInterval);
-    countdownInterval = setInterval(updateCountdown, 60000); // Update every minute
+  } catch (err) {
+    console.error('Error in updateCountdown:', err);
   }
 }
-let countdownInterval;
 
-function navigateRace(direction) {
-  const newIndex = currentRaceIndex + direction;
-  if (newIndex >= 0 && newIndex < races.length && races[newIndex].visible) {
+function updateRaceDisplay() {
+  try {
     const container = document.querySelector('.portfolio-grid');
+    if (!container) return;
+
     const currentRaceElement = container.querySelector('.race-countdown');
+    if (!currentRaceElement) return;
+
+    const newRaceElement = document.createElement('div');
+    newRaceElement.className = 'race-countdown new';
+
+    // Rest of the function remains the same...
     const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
     const navigationControls = isFirstRace ? 
       `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
@@ -766,15 +799,18 @@ function navigateRace(direction) {
        </div>`;
 
     currentRaceElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    currentRaceElement.style.transform = direction > 0 ? 'translateX(-100%)' : 'translateX(100%)';
+    currentRaceElement.style.transform = 'translateX(100%)';
     currentRaceElement.style.opacity = '0';
     setTimeout(() => {
-      currentRaceIndex = newIndex;
-      updateRaceDisplay();
+      currentRaceIndex = currentRaceIndex;
+      updateRaceDisplay2();
     }, 500);
+  } catch (err) {
+    console.error('Error in updateRaceDisplay:', err);
   }
 }
-function updateRaceDisplay() {
+
+function updateRaceDisplay2() {
   const container = document.querySelector('.portfolio-grid');
   const currentRaceElement = container.querySelector('.race-countdown');
   const newRaceElement = document.createElement('div');
@@ -802,6 +838,29 @@ function updateRaceDisplay() {
   newRaceElement.classList.remove('new');
   newRaceElement.style.opacity = '1';
   newRaceElement.style.transform = 'translateX(0)';
+}
+
+function navigateRace(direction) {
+  const newIndex = currentRaceIndex + direction;
+  if (newIndex >= 0 && newIndex < races.length && races[newIndex].visible) {
+    const container = document.querySelector('.portfolio-grid');
+    const currentRaceElement = container.querySelector('.race-countdown');
+    const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
+    const navigationControls = isFirstRace ? 
+      `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
+      `<div class="navigation-arrows">
+        <button class="nav-arrow prev-btn" onclick="navigateRace(-1)"><span>←</span></button>
+        <button class="nav-arrow next-btn" onclick="navigateRace(1)" ${currentRaceIndex === races.length - 1 ? 'disabled' : ''}><span>→</span></button>
+       </div>`;
+
+    currentRaceElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    currentRaceElement.style.transform = direction > 0 ? 'translateX(-100%)' : 'translateX(100%)';
+    currentRaceElement.style.opacity = '0';
+    setTimeout(() => {
+      currentRaceIndex = newIndex;
+      updateRaceDisplay();
+    }, 500);
+  }
 }
 function updateTimeDisplay(targetTimezone) {
   if (!targetTimezone) return; 
