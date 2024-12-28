@@ -3,420 +3,8 @@
 									function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}}))}
 								)();
 								</script>
-							<head><base href="." name="viewport" content="width=device-width, initial-scale=1">
-<style>
-:root {
-    --primary-blue: #007bff;
-    --dark-bg: transparent;
-    --header-bg: #1c1c1c; 
-    --text-light: #ffffff;
-    --border-color: #333;
-    --accent-blue: #0066cc;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    min-width: 800px;
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow-x: auto;
-    -webkit-text-size-adjust: 100%;
-    background-color: #111111;
-    color: var(--text-light);
-    line-height: 1.6;
-    background-image: url('https://i.ibb.co/1fskJCB/Asset-4.png');
-    background-repeat: repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    position: relative;
-    padding: 0 20px;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-/* Add header styles */
-.header {
-    width: 100vw;
-    margin-left: calc(-1 * (100vw - 100%)/2); 
-    position: relative;
-    left: 50%;
-    right: 50%;
-    transform: translateX(-50%);
-    background-color: var(--header-bg);
-    border-bottom: 1px solid #222;
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0.4rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-}
-
-.logo {
-    width: 180px;
-    height: 70px;
-    font-size: 0;
-    font-weight: normal;
-    color: transparent;
-    text-transform: none;
-    font-style: normal;
-    background-image: url('https://i.ibb.co/ByP7Br9/Asset-6.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: 0;
-}
-
-.nav-menu {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: auto;
-}
-
-.nav-menu a {
-    color: #888;
-    text-decoration: none;
-    font-size: 16px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    font-style: italic;
-    padding: 5px 10px;
-    transform: skew(-15deg);
-    display: inline-block;
-}
-
-.nav-menu a span {
-    display: inline-block;
-    transform: skew(15deg);
-}
-
-.nav-menu a:hover {
-    color: var(--text-light);
-    background-color: var(--primary-blue);
-    border-radius: 0;
-}
-
-.nav-menu a.active {
-    color: var(--text-light);
-    background-color: var(--primary-blue);
-    border: none;
-    border-radius: 0;
-    font-style: italic;
-    padding: 5px 10px;
-}
-
-.user-actions {
-    display: flex;
-    gap: 1rem;
-    font-size: 16px;
-    margin: 0;
-    width: auto;
-    justify-content: flex-end;
-}
-
-.user-actions a {
-    text-decoration: none;
-    padding: 5px 10px;
-    font-style: italic;
-    transform: skew(-15deg);
-    transition: color 0.2s;
-}
-
-.user-actions a span {
-    display: inline-block;
-    transform: skew(15deg);
-}
-
-.login-btn, .signup-btn {
-    color: #888;
-}
-
-.login-btn:hover, .signup-btn:hover {
-    color: var(--text-light);
-    background-color: var(--primary-blue);
-}
-
-.hamburger-container, 
-.hamburger-menu {
-    display: none;
-}
-
-.top-line {
-    width: 100vw;
-    margin-left: calc(-1 * (100vw - 100%)/2);
-    position: relative;
-    left: 50%;
-    right: 50%;
-    transform: translateX(-50%);
-    height: 2px;
-    background-color: var(--primary-blue);
-}
-
-/* Timezone selector styles */
-.timezone-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-    width: 100%;
-    font-size: 12px;
-    padding: 0 20px;
-}
-
-#timezone-select {
-    max-width: 200px;
-    background-color: transparent;
-    color: #888;
-    border: 1px solid #333;
-    padding: 2px 5px;
-}
-
-#timezone-select option {
-    background-color: #1c1c1c;
-    color: #888;
-}
-
-/* Add footer styles */
-footer {
-    background-color: #000000;
-    padding: 0.4rem;
-    text-align: center;
-    font-size: 14px;
-    color: #888;
-    border-top: 2px solid var(--primary-blue);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    margin-top: auto;
-    position: relative;
-    width: calc(100vw);
-    margin-left: calc(-50vw + 50%);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-}
-
-footer p {
-    margin: 0;
-    padding: 5px 0;
-    width: 100%;
-    text-align: center;
-}
-
-#racingmenubuttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px auto;
-    max-width: 800px;
-}
-
-.btnmenu {
-    background: #007bff;
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background 0.3s;
-}
-
-.btnmenu:hover {
-    background: #0056b3;
-}
-
-.race-creator,
-.form-group,
-.submit-btn,
-.alert-warning {
-    display: none;
-}
-
-/* New table styles */
-#raceList {
-  width: 100%;
-  max-width: 1200px;
-  margin: 20px auto;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 8px;
-  background: var(--header-bg);
-}
-
-#raceList th {
-  background: var(--primary-blue);
-  color: var(--text-light);
-  padding: 12px 15px;
-  text-align: left;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-}
-
-#raceList td {
-  padding: 15px;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-light);
-  font-size: 13px;
-}
-
-/* Info tooltip styles */
-.race-info-tooltip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-}
-
-.tooltip-content {
-  display: none;
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 15px;
-  background: var(--header-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 250px;
-  z-index: 1000;
-  margin-bottom: 10px;
-}
-
-.tooltip-content:after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 10px 10px 0;
-  border-style: solid;
-  border-color: var(--header-bg) transparent transparent;
-}
-
-.race-info-tooltip:hover .tooltip-content {
-  display: block;
-}
-
-.server-link {
-  display: block;
-  padding: 8px;
-  margin: 4px 0;
-  background: rgba(0, 123, 255, 0.1);
-  color: var(--text-light);
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-
-.server-link:hover {
-  background: rgba(0, 123, 255, 0.2);
-}
-
-.action-cell {
-  display: flex; 
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.emoji-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.quick-edit-form {
-  position: absolute;
-  left: 0;
-  top: 100%;
-  z-index: 100;
-  width: 300px;
-}
-
-/* Make table columns more compact */
-#raceList th:nth-child(1),
-#raceList td:nth-child(1) {
-  width: 25%;
-}
-
-#raceList th:nth-child(2),
-#raceList td:nth-child(2),
-#raceList th:nth-child(3),
-#raceList td:nth-child(3) {
-  width: 15%;
-}
-
-#raceList th:nth-child(4), 
-#raceList td:nth-child(4),
-#raceList th:nth-child(5),
-#raceList td:nth-child(5) {
-  width: 15%;
-}
-
-#raceList th:nth-child(6),
-#raceList td:nth-child(6) {
-  width: 99%;
-  text-align: center;
-}
-
-.racing {
-    flex: 1; 
-    margin-bottom: 2rem; 
-}
-
-@media screen and (max-width: 900px) {
-  #raceList {
-    font-size: 13px;
-  }
-  
-  #raceList th,
-  #raceList td {
-    padding: 10px;
-  }
-  
-  .action-cell {
-    flex-wrap: wrap;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  body {
-    min-width: auto;
-    padding: 0 10px;
-  }
-
-  .racing {
-    padding: 10px;
-  }
-
-  #raceList {
-    font-size: 14px;
-  }
-}
-
-@media screen and (max-width: 767px) {
+							<head><base href=""><meta charset="UTF-8"><meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>NCK Portfolio</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="preconnect" href="https://i.ibb.co"><link rel="preconnect" href="https://raw.githubusercontent.com"><link rel="preconnect" href="https://www.youtube.com"><link rel="preconnect" href="https://discord.com"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script><script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script><style>:root {--primary-blue: #007bff;--dark-bg: transparent;--header-bg: #1c1c1c; --text-light: #ffffff;--border-color: #333;--accent-blue: #0066cc;}* {margin: 0;padding: 0;box-sizing: border-box;font-family: 'Roboto', sans-serif;}body {min-width: 1200px;overflow-x: auto;-webkit-text-size-adjust: 100%;background-color: transparent;color: var(--text-light); line-height: 1.6;display: flex;flex-direction: column;min-height: 100vh;background-image: url('https://i.ibb.co/1fskJCB/Asset-4.png');background-repeat: repeat;background-size: cover;background-attachment: fixed;position: relative;}body::before {content: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;background-color: rgba(17, 17, 17, 1); opacity: 1; z-index: -1;}.top-line,header,.main-content,footer {position: relative;z-index: 1;}.top-line {height: 2px;background-color: var(--primary-blue);}.header {background-color: var(--header-bg);border-bottom: 1px solid #222;}.header-content {max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 0; align-items: center; padding: 0.4rem 1rem; position: relative;}.logo {width: 180px;height: 70px;font-size: 0;font-weight: normal;color: transparent;text-transform: none;font-style: normal;background-image: url('https://i.ibb.co/ByP7Br9/Asset-6.png');background-size: contain;background-repeat: no-repeat;background-position: center;margin: 0;}.nav-menu {display: flex;flex-wrap: wrap;justify-content: center;width: auto;}.nav-menu a {color: #888;text-decoration: none;font-size: 16px;text-transform: uppercase;transition: color 0.2s;font-style: italic;padding: 5px 10px;transform: skew(-15deg); display: inline-block;}.nav-menu a span {display: inline-block;transform: skew(15deg);}.nav-menu a:hover {color: var(--text-light);background-color: var(--primary-blue);border-radius: 0;}.nav-menu a.active {color: var(--text-light);background-color: var(--primary-blue);border: none;border-radius: 0;font-style: italic;padding: 5px 10px;}.user-actions {display: flex;gap: 1rem;font-size: 16px;margin: 0;width: auto;justify-content: flex-end;}.user-actions a {text-decoration: none;padding: 5px 10px;font-style: italic;transform: skew(-15deg);transition: color 0.2s;}.user-actions a span {display: inline-block;transform: skew(15deg);}.login-btn, .signup-btn {color: #888;}.login-btn:hover, .signup-btn:hover {color: var(--text-light);background-color: var(--primary-blue);}.main-content {max-width: 1800px;margin: 2rem auto;padding: 0 2rem;}.skin-management {display: grid;grid-template-columns: 1fr 2fr 2fr;gap: 2rem;align-items: start;}.upload-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;}.database-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;max-height: 80vh;overflow-y: auto;}.database-header {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;padding-bottom: 10px;border-bottom: 1px solid var(--border-color);}.database-actions {display: flex;gap: 10px;}.skins-list {display: grid;grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));gap: 15px;}.skin-item {background: rgba(0,0,0,0.6);padding: 15px;border-radius: 3px;border: 1px solid var(--border-color);transition: transform 0.2s;}.skin-item:hover {transform: translateY(-2px);}.skin-item h4 {color: var(--text-light);margin-bottom: 10px;font-size: 1.1em;}.skin-item p {color: #888;margin: 5px 0;font-size: 0.9em;}#3d-viewer {background: rgba(0,0,0,0.8);border-radius: 5px;height: 80vh;position: relative;}.skin-item {cursor: pointer;transition: all 0.2s ease;}.skin-item:hover, .skin-item.selected {background: rgba(0, 123, 255, 0.2);transform: translateY(-2px);}.skin-item .download-btn {background: var(--primary-blue);color: var(--text-light);text-decoration: none;padding: 5px 10px;border-radius: 3px;display: inline-block;margin-top: 10px;font-size: 0.9em;transition: background 0.2s;}.skin-item .download-btn:hover {background: var(--accent-blue);}.countdown-container {position: relative;display: flex;flex-direction: column;align-items: center;}.race-status {position: absolute;bottom: 5px;font-size: 0.6em;opacity: 0.8;margin-top: 5px;}.countdown-timer {display: flex;justify-content: center;align-items: center;}.qualifying-text {display: none;}.twitch-embed {position: relative;width: 100%;padding-bottom: 56.25%; /* 16:9 Aspect Ratio */height: 0;overflow: hidden;}.twitch-embed iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: 0;}.series-leaderboard {flex: 1;background-color: transparent;border-radius: 3px;overflow: hidden;}.series-content {max-height: calc(100vh - 440px);overflow-y: auto;scrollbar-width: thin;scrollbar-color: var(--primary-blue) rgba(0, 123, 255, 0.1);padding: 10px;margin-bottom: 10px;-webkit-overflow-scrolling: touch;}.series-content::-webkit-scrollbar {width: 8px;}.series-content::-webkit-scrollbar-track {background: rgba(0, 123, 255, 0.1);border-radius: 4px;}.series-content::-webkit-scrollbar-thumb {background: var(--primary-blue);border-radius: 4px;box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);}.series-content::-webkit-scrollbar-thumb:hover {background: var(--accent-blue);}.series-item {margin-bottom: 25px;padding: 15px;border-bottom: 1px solid #222;}.series-item:last-child {margin-bottom: 10px;}.series-item h4 {font-size: 18px;margin-bottom: 15px;text-align: center;font-style: italic;color: var(--text-light);}.podium {display: flex;justify-content: center;align-items: flex-end;height: 120px;gap: 5px;margin-top: 10px;}.podium-place {display: flex;flex-direction: column;align-items: center;text-align: center;}.podium-1 {height: 73px;width: 80px;background: linear-gradient(45deg, #FFD700, #FFA500);order: 2;}.podium-2 {height: 53px;width: 80px;background: linear-gradient(45deg, #C0C0C0, #A9A9A9);order: 1;}.podium-3 {height: 33px;width: 80px;background: linear-gradient(45deg, #CD7F32, #8B4513);order: 3;}.podium-text {font-size: 11px;color: #888;display: flex;flex-direction: column;align-items: center;text-align: center;width: 80px;word-wrap: break-word;line-height: 1.2;}.points {color: #ffffff;font-weight: bold;margin-top: 2px;}.points-leader {color: #ff0000 !important;}.series-item h4 a {color: var(--text-light);text-decoration: none;transition: color 0.2s;}.series-item h4 a:hover {color: var(--primary-blue);}.timezone-selector {display: flex;align-items: center;gap: 10px;justify-content: center;width: 100%;font-size: 12px;}footer {background-color: #000000; padding: 0.4rem;text-align: center;font-size: 14px;color: #888;border-top: 2px solid var(--primary-blue);display: flex;flex-direction: column;align-items: center;gap: 5px;margin-top: 0;position: relative;bottom: 0;width: 100%;}footer p {margin: 0;padding: 5px 0;width: 100%;text-align: center;} #timezone-select {max-width: 200px;background-color: transparent;color: #888;border: 1px solid #333;padding: 2px 5px;}#timezone-select option {background-color: #1c1c1c;color: #888;}@media screen and (max-width: 1200px) {.skin-management {grid-template-columns: 1fr;}.database-container {max-height: 600px;}}@media screen and (max-width: 767px) {.main-content {padding: 0 1rem;}.database-header {flex-direction: column;gap: 10px;}.database-actions {width: 100%;justify-content: center;}.skins-list {grid-template-columns: 1fr;}}@media screen and (max-width: 767px) {
+  .countdown-timer {    font-size: 1.8em;    padding: 10px;    min-width: auto;    width: 100%;    max-width: 280px;    margin: 10px auto;  }  .countdown-container {    width: 100%;    display: flex;    flex-direction: column;    align-items: center;  }}@media screen and (max-width: 767px) {
   .main-content {
     grid-template-columns: 1fr;
     max-width: 100%;
@@ -470,7 +58,7 @@ footer p {
     background: var(--header-bg);
     z-index: 1000;
   }
-  
+
   .nav-menu a,
   .user-actions a {
     width: 100%;
@@ -515,7 +103,6 @@ footer p {
     font-size: 10px;
   }
 }
-
 @media screen and (max-width: 767px) {
   .timezone-selector {
     flex-direction: column;
@@ -530,1035 +117,1131 @@ footer p {
     max-width: 280px;
   }
 }
-
-.quick-edit-form input {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background: var(--dark-bg);
+.user-actions .user-name {
   color: var(--text-light);
+  font-style: italic;
+  padding: 5px 10px;
+  transform: skew(-15deg);
+  display: inline-block;
 }
 
-.quick-edit-form label {
-  color: var(--text-light);
-  font-size: 12px;
+.user-actions .user-name span {
+  display: inline-block;
+  transform: skew(15deg);
 }
-
-@media screen and (max-width: 767px) {
-    .hamburger-container {
-        display: none;
-    }
-
-    .header-content {
-        flex-direction: row;
-        padding: 0.4rem 1rem;
-    }
-
-    .logo {
-        width: 180px;
-        height: 70px;
-        margin: 0;
-    }
-
-    .nav-menu, .user-actions {
-        display: flex;
-    }
-
-    .nav-menu a,
-    .user-actions a {
-        width: auto;
-        text-align: center;
-        padding: 5px 10px;
-    }
-
-    body {
-        min-width: auto;
-        width: 100%;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .racing {
-        flex: 1;
-        margin-bottom: 2rem;
-    }
-}
-
-/* Add new styles for the series management interface */
-.series-manager {
-  padding: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.series-editor {
-  background: var(--header-bg);
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  display: none;
+.loading-spinner {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid transparent;
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loaded {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.loading-video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  overflow: hidden;
+  transition: opacity 0.3s;
+}
+
+.loading-video-background.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#youtube-player {
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 600px;
-  z-index: 1000;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
 }
-
-.series-editor.active {
-  display: block;
-}
-
-.editor-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  z-index: 999;
-}
-
-.editor-overlay.active {
-  display: block;
-}
-
-.series-controls {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.series-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.series-entry {
-  background: var(--header-bg);
-  padding: 15px;
-  border-radius: 4px;
-  position: relative;
-}
-
-.series-actions {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.series-date {
-  color: #888;
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-.standings-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 5px 0;
-}
-
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  margin-bottom: 15px;
 }
 
 .form-group label {
+  display: block;
   color: var(--text-light);
+  margin-bottom: 5px;
+  font-style: italic;
 }
 
-.form-group input {
-  padding: 8px;
-  border-radius: 4px;
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(17, 17, 17, 0.7);
   border: 1px solid var(--border-color);
-  background: #222;
   color: var(--text-light);
+  border-radius: 3px;
+  transition: all 0.2s;
 }
 
-.btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
+.form-group select:focus,
+.form-group input[type="text"]:focus {
+  border-color: var(--primary-blue);
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.form-group input[type="file"] {
+  border: 1px dashed var(--border-color);
   cursor: pointer;
-  font-weight: bold;
+  padding: 15px;
+}
+
+.upload-btn {
+  background: var(--primary-blue);
+  color: var(--text-light);
+  border: none;
+  padding: 10px 20px;
+  font-style: italic;
+  cursor: pointer;
+  transform: skew(-15deg);
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.upload-btn span {
+  display: inline-block;
+  transform: skew(15deg);
+}
+
+.upload-btn:hover {
+  background-color: var(--accent-blue);
+}
+
+.upload-btn.loading {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.upload-btn.loading span::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 10px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+.database-header h3 {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.refresh-btn,
+.download-btn {
+  background: var(--primary-blue);
+  color: var(--text-light);
+  border: none;
+  padding: 8px 15px;
+  font-style: italic;
+  cursor: pointer;
+  transform: skew(-15deg);
   transition: background-color 0.2s;
 }
 
-.btn-primary {
-  background: var(--primary-blue);
-  color: white;
+.refresh-btn span,
+.download-btn span {
+  display: inline-block;
+  transform: skew(15deg);
 }
 
-.btn-secondary {
-  background: #666;
-  color: white;
+.refresh-btn:hover,
+.download-btn:hover {
+  background-color: var(--accent-blue);
 }
 
-.btn-danger {
-  background: #dc3545;
-  color: white;
+.skin-item .download-btn {
+  display: inline-block;
+  text-decoration: none;
+  margin-top: 10px;
+  font-size: 0.9em;
 }
-
-.podium-place {
-  display: flex;
-  flex-direction: column;
+.skin-item {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+  gap: 10px;
   align-items: center;
-  justify-content: center;
-  margin: 10px;
+  padding: 10px;
 }
 
-.podium-1 {
-  width: 60px;
-  height: 60px;
-  background-color: #ffd700;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  color: #111;
+.skin-item p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.podium-2 {
-  width: 60px;
-  height: 60px;
-  background-color: #b1b1b1;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  color: #111;
+.database-container table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.podium-3 {
-  width: 60px;
-  height: 60px;
-  background-color: #cd7f32;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  color: #111;
+.database-container th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
 }
 
-.place-number {
-  font-size: 24px;
-  margin: 10px;
-}
-
-.podium-text {
-  font-size: 16px;
-  text-align: center;
-}
-
-.points {
-  font-size: 14px;
+.database-container td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
   color: #888;
 }
+</style><script>
+let tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+let firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-/* Add styles for the confirmation dialog */
-.script-confirm-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1100;
+let player;
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtube-player', {
+    videoId: 'qLOOFqOwuOs', 
+    playerVars: {
+      autoplay: 1,
+      loop: 1,
+      controls: 0,
+      showinfo: 0,
+      mute: 1,
+      playsinline: 1
+    },
+    events: {
+      'onReady': onPlayerReady
+    }
+  });
 }
 
-.script-confirm-content {
-  background: var(--header-bg);
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
+function onPlayerReady(event) {
+  event.target.playVideo();
 }
+</script></head><body><div class="loading-spinner"><div class="spinner"></div></div><div id="loading-video-background"><div id="youtube-player"></div></div><div class="top-line"></div><header><div class="header-content"><div class="logo" aria-label="NCK"></div><div class="hamburger-container"><button class="hamburger-menu" onclick="toggleMenu()"><span></span><span></span><span></span></button></div><nav class="nav-menu"><a href="https://nckdecals.com/#" class="active"><span>HOME</span></a><a href="https://nckdecals.com/#"><span>PORTFOLIO</span></a><a href="https://nckdecals.com/#"><span>ABOUT</span></a><a href="https://nckdecals.com/#"><span>CONTACT</span></a></nav><div class="user-actions"><a href="https://nckdecals.com/login" class="login-btn"><span>LOGIN</span></a><a href="https://nckdecals.com/signup" class="signup-btn"><span>SIGN UP</span></a></div></div></header><main class="main-content"><section class="skin-upload-section">
+  <h2 class="section-title">MX Bikes Skin Upload</h2>
+  
+  <div class="skin-management">
+    <div class="upload-container">
+      <form id="skinUploadForm" class="skin-upload-form">
+        <div class="form-group">
+          <label for="ccSelect">Bike Size</label>
+          <select id="ccSelect" required="">
+            <option value="">Select CC...</option>
+          </select>
+          <input type="text" id="otherCC" placeholder="Enter CC..." style="display:none">
+        </div>
 
-.script-confirm-content pre {
-  background: #222;
-  padding: 10px;
-  border-radius: 4px;
-  max-height: 200px;
-  overflow: auto;
-  margin: 10px 0;
-  font-size: 12px;
-}
+        <div class="form-group">
+          <label for="brandSelect">Brand</label>
+          <select id="brandSelect" required="">
+            <option value="">Select Brand...</option>
+          </select>
+          <input type="text" id="otherBrand" placeholder="Enter Brand..." style="display:none">
+        </div>
 
-.script-confirm-content .button-group {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
+        <div class="form-group">
+          <label for="typeSelect">Bike Type</label>
+          <select id="typeSelect" required="">
+            <option value="">Select Type...</option>
+          </select>
+          <input type="text" id="otherType" placeholder="Enter Type..." style="display:none">
+        </div>
 
-.url-prompt-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0; 
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
+        <div class="form-group">
+          <label for="skinFile">Skin File</label>
+          <input type="file" id="skinFile" accept=".pnt,.zip" required="">
+        </div>
 
-.url-prompt-content {
-  background: var(--header-bg);
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-}
-
-.status-toggle {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.status-toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--primary-blue);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-/* Add toast styles */
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px 25px;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  z-index: 2000;
-  animation: slideIn 0.3s ease-out;
-}
-
-.toast.success {
-  background: #28a745;
-}
-
-.toast.error {
-  background: #dc3545;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.script-preview {
-  background: #222;
-  padding: 10px;
-  border-radius: 4px;
-  max-height: 200px;
-  overflow: auto;
-  margin: 10px 0;
-  font-size: 12px;
-  color: #fff;
-}
-
-.url-prompt-content input {
-  width: 100%;
-  padding: 8px;
-  margin: 10px 0;
-  border: 1px solid var(--border-color);
-  background: #222;
-  color: var(--text-light);
-  border-radius: 4px;
-}
-</style>
-<script>
-(function hookGeo(eventName){
-  // Long geo location script provided by user
-})();
-</script>
-<meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NCK Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="top-line"></div>
-
-<div class="racing" align="center">
-    <h3>Championship List</h3>
-            
-    <div id="racingmenubuttons">
-        <a class="btnmenu" href="https://example.com/add">Add a championship</a>
-        <a class="btnmenu" href="https://example.com/races">Races</a>
-        <a class="btnmenu" href="https://example.com/streamers">Streamers</a>
-        <a class="btnmenu" href="https://example.com/points">Points Tables</a>
-        <a class="btnmenu" href="https://example.com/servers">My servers</a>
-        <a class="btnmenu" href="https://example.com/help">Help</a>
+        <button type="submit" class="upload-btn">Upload Skin</button>
+      </form>
     </div>
 
-    <table id="raceList" style="display: table;">
-        <thead>
-            <tr>
-                <th>Series Name</th>
-                <th>Start Date</th>  
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="championshipListBody">
-            <!-- Championships will be added here dynamically -->
-        </tbody>
-    </table>
-</div>
-
-<div class="racing" align="center">
-  <h3>Series Standings</h3>
-  <div class="series-content">
-    <!-- Live standings from index.html will be displayed here -->
-  </div>
-</div>
-
-<div class="series-manager">
-  <div class="series-controls">
-    <button class="btn btn-primary" onclick="createSeries()">New Series</button>
-    <button class="btn btn-primary" onclick="uploadScript()">Upload Script</button>
-  </div>
-  
-  <div class="series-list">
-    <!-- Series entries will be added here dynamically -->
-  </div>
-</div>
-
-<div class="editor-overlay">
-  <div class="series-editor">
-    <h3>Edit Series</h3>
-    <form class="edit-form" onsubmit="saveSeries(event)">
-      <div class="form-group">
-        <label>Series Name</label>
-        <input type="text" name="seriesName" required="">
-      </div>
-      <div class="form-group">
-        <label>Series Link</label>
-        <input type="url" name="seriesLink" required="">
-      </div>
-      <div class="form-group">
-        <label>Start Date</label>
-        <input type="date" name="startDate" required="">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select name="status">
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
-      
-      <h4>Standings</h4>
-      <div class="standings-inputs">
-        <div class="form-group">
-          <label>2nd Place</label>
-          <input type="text" name="second_name" placeholder="Name" required="">
-          <input type="number" name="second_points" placeholder="Points" required="">
-        </div>
-        <div class="form-group">
-          <label>1st Place</label>
-          <input type="text" name="first_name" placeholder="Name" required="">
-          <input type="number" name="first_points" placeholder="Points" required="">
-        </div>
-        <div class="form-group">
-          <label>3rd Place</label>
-          <input type="text" name="third_name" placeholder="Name" required="">
-          <input type="number" name="third_points" placeholder="Points" required="">
+    <div class="database-container">
+      <div class="database-header">
+        <h3>Skin Database</h3>
+        <div class="database-actions">
+          <button id="refreshSkins" class="refresh-btn">
+            <span class="refresh-icon">↻</span> Refresh
+          </button>
+          <button id="downloadAll" class="download-btn">
+            Download All Skins
+          </button>
         </div>
       </div>
-      
-      <div class="button-group">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <button type="button" class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+      <div id="skinsList" class="skins-list">
+        <!-- Table will be inserted here -->
       </div>
-    </form>
+    </div>
+    
+    <div id="3d-viewer"></div>
   </div>
-</div>
-
+</section></main><footer><p> 2024 NCK All Rights Reserved | Created by Noah Karassy</p><div class="timezone-selector"><label for="timezone-select">Timezone:</label><select id="timezone-select" onchange="changeTimezone(event)"><option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option><option value="Pacific/Honolulu">(GMT-10:00) Hawaii</option><option value="America/Anchorage">(GMT-09:00) Alaska</option><option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US &amp; Canada)</option><option value="America/Phoenix">(GMT-07:00) Arizona</option><option value="America/Denver">(GMT-07:00) Mountain Time (US &amp; Canada)</option><option value="America/Chicago" selected="">(GMT-06:00) Central Time (US &amp; Canada)</option><option value="America/New_York">(GMT-05:00) Eastern Time (US &amp; Canada)</option><option value="America/Caracas">(GMT-04:30) Caracas</option><option value="America/Halifax">(GMT-04:00) Atlantic Time (Canada)</option><option value="America/St_Johns">(GMT-03:30) Newfoundland</option><option value="America/Sao_Paulo">(GMT-03:00) Brasilia</option><option value="Atlantic/Cape_Verde">(GMT-01:00) Cape Verde Is.</option><option value="UTC">(GMT) Universal Time UTC</option><option value="Europe/London">(GMT) London, Dublin, Edinburgh</option><option value="Europe/Paris">(GMT+01:00) Paris, Amsterdam, Berlin</option><option value="Europe/Helsinki">(GMT+02:00) Helsinki, Kiev, Riga</option><option value="Asia/Kuwait">(GMT+03:00) Kuwait, Riyadh, Moscow</option><option value="Asia/Tehran">(GMT+03:30) Tehran</option><option value="Asia/Dubai">(GMT+04:00) Abu Dhabi, Muscat</option><option value="Asia/Kabul">(GMT+04:30) Kabul</option><option value="Asia/Kolkata">(GMT+05:30) Chennai, Mumbai, New Delhi</option><option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option><option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Hong Kong</option><option value="Asia/Tokyo">(GMT+09:00) Tokyo, Seoul, Osaka</option><option value="Australia/Adelaide">(GMT+09:30) Adelaide</option><option value="Australia/Sydney">(GMT+10:00) Sydney, Melbourne</option><option value="Asia/Magadan">(GMT+11:00) Magadan, Solomon Is.</option><option value="Pacific/Tongatapu">(GMT+13:00) Nuku'alofa</option></select></div></footer><script>
+                              (function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}})))
+                             )();
+                              </script>
 <script>
-function toggleMenu() {
-    const hamburger = document.querySelector('.hamburger-menu');
-    const nav = document.querySelector('.nav-menu');
-    const userActions = document.querySelector('.user-actions');
-    const body = document.body;
-    
-    hamburger.classList.toggle('active');
-    nav.classList.toggle('active');
-    userActions.classList.toggle('active');
-    body.classList.toggle('menu-open');
-    
-    if (window.innerWidth <= 767) {
-        const totalMenuHeight = nav.classList.contains('active') ? 
-            nav.scrollHeight + userActions.scrollHeight : 0;
-        const mainContent = document.querySelector('.main-content');
-        
-        mainContent.style.transition = 'transform 0.3s ease';
-        if (nav.classList.contains('active')) {
-            mainContent.style.transform = `translateY(${totalMenuHeight}px)`;
-        } else {
-            mainContent.style.transform = 'none';
-        }
-    }
-}
-
-function updateTimeDisplay(targetTimezone) {
-    // Keep existing timezone update logic
-}
-
-function changeTimezone(event) {
-    if (!event || !event.target) return;
-    const selectedZone = event.target.value;
-    updateTimeDisplay(selectedZone);
-}
-
+let currentRaceIndex = 0;
 const races = [{
-  name: "Round 5 - WW Ranch 2022",
-  series: "2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.30.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5632",
-  date: "2024-12-30 21:30:00 CST",
-  class: "[OPEN OEM]",
-  qualifyingStart: "2024-12-30T21:30:00",
-  qualifyingEnd: "2024-12-30T21:45:00",
-  raceStart: "2024-12-30T22:00:00",
-  visible: true
-}, {
-  name: "PARKER MX - OEMS VS. AKITS",
-  series: "2024 FUN RACES",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
-  time: "Time: 9:30 PM CST 12.28.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5891",
-  date: "2024-12-28 21:30:00 CST",
-  class: "[OPEN]",
-  qualifyingStart: "2024-12-28T21:30:00",
-  qualifyingEnd: "2024-12-28T21:45:00",
-  raceStart: "2024-12-28T22:00:00",
-  visible: true
-}, {
-  name: "Round 5",
-  series: "125CC ARENACROSS",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1025",
-  time: "Time: 9:30 PM CST 12.27.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-27 21:30:00 CST",
-  class: "[MX2-2t OEM]",
-  qualifyingStart: "2024-12-27T21:30:00",
-  qualifyingEnd: "2024-12-27T21:45:00",
-  raceStart: "2024-12-27T22:00:00",
-  visible: true
-}, {
-  name: "Round 4 - Baja Brawl 2024",
-  series: "2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.26.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-26 21:30:00 CST",
-  class: "[OPEN OEM]",
-  qualifyingStart: "2024-12-26T21:30:00",
-  qualifyingEnd: "2024-12-26T21:45:00",
-  raceStart: "2024-12-26T22:00:00",
-  visible: false
-}, {
   name: "SCRUB DIRTY - ELIMINATION RACE",
-  series: "2024 FUN RACES",
+  series: "Series: 2024 FUN RACES",
   seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
   time: "Time: 12:00 AM CST 12.26.24",
   link: "https://mymxb.com/racing-v4/?r4p=raceinfo&champid=1026&courseid=5890",
   date: "2024-12-26 00:00:00 CST",
-  class: "[OPEN]",
-  qualifyingStart: "2024-12-26T00:00:00",
-  qualifyingEnd: "2024-12-26T00:15:00",
-  raceStart: "2024-12-26T00:30:00",
   visible: false
+}, {
+  name: "Round 4 - Baja Brawl 2024",
+  series: "Series: 2024 Stock Track | Open",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
+  time: "Time: 9:30 PM CST 12.26.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
+  date: "2024-12-26 21:30:00 CST",
+  visible: false
+}, {
+  name: "Round 5",
+  series: "Series: 125CC ARENACROSS",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1025",
+  time: "Time: 9:30 PM CST 12.27.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
+  date: "2024-12-27 21:30:00 CST",
+  visible: true
+}, {
+  name: "PARKER MX - OEMS VS. AKITS",
+  series: "Series: 2024 FUN RACES",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
+  time: "Time: 9:30 PM CST 12.28.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5891",
+  date: "2024-12-28 21:30:00 CST",
+  visible: true
+}, {
+  name: "Round 5 - WW Ranch 2022",
+  series: "Series: 2024 Stock Track | Open",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
+  time: "Time: 9:30 PM CST 12.30.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5632",
+  date: "2024-12-30 21:30:00 CST",
+  visible: true
 }];
+const seriesData = {
+  series: [{
+    name: "2024 Amateur Classics | Open Pro Sport",
+    standings: [{
+      place: 1,
+      name: "Sweatyz",
+      points: 132
+    }, {
+      place: 2,
+      name: "T-Moss | RC x EXTC",
+      points: 128
+    }, {
+      place: 3,
+      name: "Nacho | EC x SPX",
+      points: 120
+    }]
+  }, {
+    name: "2024 Amateur Classics | 250 B/C",
+    standings: [{
+      place: 1,
+      name: "aZtech | Privateer",
+      points: 101
+    }, {
+      place: 2,
+      name: "DrGio | FFR x CBFS",
+      points: 79
+    }, {
+      place: 3,
+      name: "JTA | SHG",
+      points: 53
+    }]
+  }, {
+    name: "2024 AUS SX | 250 AKIT",
+    standings: [{
+      place: 1,
+      name: "KrazyKoko | NCK",
+      points: 98
+    }, {
+      place: 2,
+      name: "Scrallex | GG",
+      points: 85
+    }, {
+      place: 3,
+      name: "Chilly | TPR",
+      points: 80
+    }]
+  }, {
+    name: "2024 AUS SX | OPEN OEMS",
+    standings: [{
+      place: 1,
+      name: "Mando | SV x AEO",
+      points: 86
+    }, {
+      place: 2,
+      name: "KrazyKoko | NCK",
+      points: 45
+    }, {
+      place: 3,
+      name: "McLovin | CH",
+      points: 42
+    }]
+  }, {
+    name: "2 STROKE NATIONALS",
+    standings: [{
+      place: 1,
+      name: "MOTO | TPR",
+      points: 206
+    }, {
+      place: 2,
+      name: "Prada | RR X JFS",
+      points: 167
+    }, {
+      place: 3,
+      name: "McLovin | CH",
+      points: 113
+    }]
+  }, {
+    name: "2024 STOCK TRACK | OPEN",
+    standings: [{
+      place: 1,
+      name: "Ethan | SLSA",
+      points: 87
+    }, {
+      place: 2,
+      name: "GARY | GPK",
+      points: 65
+    }, {
+      place: 3,
+      name: "Stricksy | NCK",
+      points: 63
+    }]
+  }, {
+    name: "2024 FUN RACES",
+    standings: [{
+      place: 1,
+      name: "Alex Nagy | MXB",
+      points: 127
+    }, {
+      place: 2,
+      name: "KRAZYKOKO | NCK",
+      points: 126
+    }, {
+      place: 3,
+      name: "Skib | OF Racing",
+      points: 94
+    }]
+  }, {
+    name: "125CC ARENACROSS",
+    standings: [{
+      place: 1,
+      name: "Prada",
+      points: 73
+    }, {
+      place: 2,
+      name: "Neff | ND",
+      points: 72
+    }, {
+      place: 3,
+      name: "COKE | ADR",
+      points: 55
+    }]
+  }, {
+    name: "DASH FOR CASH",
+    standings: [{
+      place: 1,
+      name: "Brad | GMX",
+      points: 50
+    }, {
+      place: 2,
+      name: "Ethan | AEO",
+      points: 44
+    }, {
+      place: 3,
+      name: "C-Walk | NORMZ",
+      points: 38
+    }]
+  }]
+};
+let isLoggedIn = false;
+let loggedInUser = null;
 
-function duplicateRace(button) {
-  const row = button.closest('tr');
-  const raceData = races[row.rowIndex - 1];
-  const newRace = {
-    ...raceData,
-    name: `${raceData.name} (copy)`,
-    visible: true
-  };
-  races.push(newRace);
-  addRaceToTable(); // Refresh the table
+function handleLogin(username) {
+  isLoggedIn = true;
+  loggedInUser = username;
+  updateUserDisplay();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  addRaceToTable();
-  refreshChampionshipList();
-  const raceList = document.getElementById('raceList');
-  if (raceList) {
-      raceList.style.display = 'table';
+function updateUserDisplay() {
+  const userActions = document.querySelector('.user-actions');
+  if (isLoggedIn && loggedInUser) {
+    userActions.innerHTML = `<span class="user-name">${loggedInUser}</span>`;
   }
-});
-
-function isQualifyingStarted(qualifyingStart) {
-  const now = new Date();
-  const qualiTime = new Date(qualifyingStart);
-  const raceTime = new Date(raceStart);
-  return now > qualiTime || now > raceTime;
 }
 
-function addRaceToTable() {
-  const tbody = document.getElementById('raceListBody');
-  tbody.innerHTML = '';
-  
-  const sortedRaces = [...races].sort((a, b) => new Date(b.date) - new Date(a.date));
-  
-  sortedRaces.forEach(race => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>
-        <div style="font-weight: bold; margin-bottom: 4px;">${race.name}</div>
-        <div style="color: #888; font-size: 12px;">${race.class}</div>
-      </td>
-      <td>
-        <a href="${race.seriesLink}" style="color: var(--primary-blue); text-decoration: none;">${race.series}</a>
-      </td>
-      <td>${race.class}</td>
-      <td>
-        <div style="color: #888; font-size: 12px;">Start:</div>
-        <div>${formatDate(race.qualifyingStart)}</div>
-      </td>
-      <td>
-        <div style="color: #888; font-size: 12px;">Start:</div>
-        <div>${formatDate(race.raceStart)}</div>
-      </td>
-      <td class="action-cell">
-        <div class="race-info-tooltip">
-          <span class="emoji-button">ℹ️</span>
-          <div class="tooltip-content">
-            <h4 style="color: var(--text-light); margin-bottom: 10px;">Race Information</h4>
-            <p style="margin-bottom: 8px;">Server Info: <a href="https://discord.gg/nck" style="color: var(--primary-blue);">Discord Link</a></p>
-            <h5 style="color: var(--text-light); margin: 8px 0;">Qualifying Servers:</h5>
-            <a href="mxbikes://..." class="server-link">Group A Server</a>
-            <a href="mxbikes://..." class="server-link">Group B Server</a>
-            <h5 style="color: var(--text-light); margin: 8px 0;">Race Server:</h5>
-            <a href="mxbikes://..." class="server-link">Main Race Server</a>
-          </div>
-        </div>
-        <span class="emoji-button" onclick="quickEdit(this)">✏️</span>
-        <span class="emoji-button" onclick="duplicateRace(this)">📋</span>
-        <span class="emoji-button" onclick="deleteRace(this)">❌</span>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-}
+function updateCountdown() {
+  const raceTime = new Date(races[currentRaceIndex].date).getTime();
+  const now = new Date().getTime(); 
+  const distance = raceTime - now;
+  const countdownEl = document.getElementById('countdown');
+  const statusEl = document.getElementById('race-status');
 
-function quickEdit(button) {
-  const row = button.closest('tr');
-  const raceIndex = row.rowIndex - 1;
-  const race = races[raceIndex];
-  
-  const quickEditForm = document.createElement('div');
-  quickEditForm.className = 'quick-edit-form';
-  quickEditForm.style.display = 'none';
-  quickEditForm.innerHTML = `
-    <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--header-bg); border-radius: 4px;">
-      <input type="text" class="edit-name" value="${race.name}" placeholder="Race Name">
-      <div>
-        <label>Qualifying Start:</label>
-        <input type="datetime-local" class="edit-quali-start" value="${race.qualifyingStart.slice(0,16)}" placeholder="Qualifying Start Time">
-      </div>
-      <div>
-        <label>Race Start:</label>  
-        <input type="datetime-local" class="edit-race-start" value="${race.raceStart.slice(0,16)}" placeholder="Race Start Time">
-      </div>
-      <div style="display: flex; gap: 8px; justify-content: flex-end;">
-        <button onclick="saveQuickEdit(this, ${raceIndex})" style="background: var(--primary-blue); color: white; border: none; padding: 4px 8px; border-radius: 4px;">Save</button>
-        <button onclick="cancelQuickEdit(this)" style="background: #666; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Cancel</button>
-      </div>
-    </div>
-  `;
-  
-  if (!row.querySelector('.quick-edit-form')) {
-    row.cells[0].appendChild(quickEditForm);
-    quickEditForm.style.display = 'block';
-  }
-}
-
-function saveQuickEdit(button, raceIndex) {
-  const form = button.closest('.quick-edit-form');
-  const race = races[raceIndex];
-  
-  race.name = form.querySelector('.edit-name').value;
-  race.qualifyingStart = form.querySelector('.edit-quali-start').value;
-  race.raceStart = form.querySelector('.edit-race-start').value;
-  
-  // Refresh table display
-  addRaceToTable();
-}
-
-function deleteRace(button) {
-  const row = button.closest('tr');
-  const raceData = races[row.rowIndex - 1];
-  const now = new Date();
-  const raceTime = new Date(raceData.raceStart);
-  if (now > raceTime) {
-    alert('Cannot delete race after race has started');
+  if (!countdownEl || !statusEl) {
+    console.log('Countdown elements not found');
     return;
   }
-  if (confirm('Are you sure you want to delete this race?')) {
-    row.remove();
-  }
-}
 
-function downloadScript(button) {
-  const link = document.createElement('a');
-  link.href = 'data:text/plain;charset=utf-8,Race_Script_Content';
-  link.download = 'race_script.txt';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+  try {
+    if (isNaN(distance)) {
+      countdownEl.innerHTML = 'Loading...';
+      setTimeout(updateCountdown, 500);
+      return;
+    }
 
-function cancelQuickEdit(button) {
-  button.closest('.quick-edit-form').remove();
-}
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleString();
-}
+    const isMobile = window.innerWidth <= 767;
+    let displayText;
+    
+    if (isMobile) {
+      displayText = `${days}d ${hours}h\n${minutes}m ${seconds}s`;
+    } else {
+      displayText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
 
-let seriesData = []; // Will store all series data
-
-function createSeries() {
-  openEditor();
-}
-
-function editSeries(seriesId) {
-  const series = seriesData.find(s => s.id === seriesId);
-  if (series) {
-    openEditor(series);
-  }
-}
-
-function openEditor(series = null) {
-  const editor = document.querySelector('.series-editor');
-  const overlay = document.querySelector('.editor-overlay');
-  const form = editor.querySelector('form');
-  
-  if (series) {
-    // Populate form with series data
-    form.elements.seriesName.value = series.name;
-    // ...populate other fields
-  } else {
-    form.reset();
-  }
-  
-  editor.classList.add('active');
-  overlay.classList.add('active');
-}
-
-function closeEditor() {
-  const editor = document.querySelector('.series-editor');
-  const overlay = document.querySelector('.editor-overlay');
-  editor.classList.remove('active');
-  overlay.classList.remove('active');
-}
-
-function parseSeriesScript(text) {
-  const lines = text.split('\n').filter(l => l.trim());
-  const series = [];
-  let currentSeries = null;
-  
-  for (const line of lines) {
-    if (line.startsWith('Series:')) {
-      if (currentSeries) {
-        series.push(currentSeries);
+    if (distance < 0) {
+      const minutesPassed = Math.abs(Math.floor(distance / (1000 * 60)));
+      if (minutesPassed <= 15) {
+        countdownEl.innerHTML = '00:00';
+        statusEl.innerHTML = 'Qualifying';
+      } else if (minutesPassed <= 30) {
+        countdownEl.innerHTML = '00:00';
+        statusEl.innerHTML = 'Race Live';
+      } else {
+        races[currentRaceIndex].visible = false;
+        const nextVisibleIndex = races.findIndex((race, index) => 
+          index > currentRaceIndex && 
+          race.visible && 
+          new Date(race.date).getTime() - now > -30 * 60 * 1000
+        );
+        
+        if (nextVisibleIndex !== -1) {
+          currentRaceIndex = nextVisibleIndex;
+          updateRaceDisplay();
+        }
       }
-      currentSeries = {
-        name: line.replace('Series:', '').trim(),
-        url: '',
-        standings: [],
-        date: new Date().toISOString(),
-        status: 'active'
-      };
-    } else if (line.match(/^\d+[a-z]{2}:/)) {
-      const [place, rest] = line.split(':');
-      const [name, points] = rest.split('—').map(s => s.trim());
-      currentSeries.standings.push({
-        place: parseInt(place),
-        name,
-        points: parseInt(points)
-      });
+    } else {
+      countdownEl.innerHTML = displayText;
+      statusEl.innerHTML = '';
     }
+  } catch (err) {
+    console.error('Error in updateCountdown:', err);
   }
-  
-  if (currentSeries) {
-    series.push(currentSeries); 
-  }
-  
-  return series;
 }
 
-function executeScript(scriptText) {
+function updateRaceDisplay() {
   try {
-    const series = parseSeriesScript(scriptText);
-    
-    const dialog = document.createElement('div');
-    dialog.className = 'url-prompt-dialog';
-    dialog.innerHTML = `
-      <div class="url-prompt-content">
-        <h3>Enter Series URL</h3>
-        <input type="text" class="series-url" placeholder="https://mymxb.com/racing-v4/?r4p=champpage&champid=xxxx">
-        <pre class="script-preview">${generateSeriesHTML(series[0])}</pre>
-        <div class="button-group">
-          <button onclick="completeSeriesImport(this, ${JSON.stringify(series[0])})" class="btn btn-primary">Complete & Execute</button>
-          <button onclick="this.closest('.url-prompt-dialog').remove()" class="btn btn-secondary">Cancel</button>
+    const container = document.querySelector('.portfolio-grid');
+    if (!container) return;
+
+    const currentRaceElement = container.querySelector('.race-countdown');
+    if (!currentRaceElement) return;
+
+    const newRaceElement = document.createElement('div');
+    newRaceElement.className = 'race-countdown new';
+
+    // Rest of the function remains the same...
+    const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
+    const navigationControls = isFirstRace ? 
+      `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
+      `<div class="navigation-arrows">
+        <button class="nav-arrow prev-btn" onclick="navigateRace(-1)"><span>←</span></button>
+        <button class="nav-arrow next-btn" onclick="navigateRace(1)" ${currentRaceIndex === races.length - 1 ? 'disabled' : ''}><span>→</span></button>
+       </div>`;
+
+    currentRaceElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    currentRaceElement.style.transform = 'translateX(100%)';
+    currentRaceElement.style.opacity = '0';
+    setTimeout(() => {
+      currentRaceIndex = currentRaceIndex;
+      updateRaceDisplay2();
+    }, 500);
+  } catch (err) {
+    console.error('Error in updateRaceDisplay:', err);
+  }
+}
+
+function updateRaceDisplay2() {
+  const container = document.querySelector('.portfolio-grid');
+  const currentRaceElement = container.querySelector('.race-countdown');
+  const newRaceElement = document.createElement('div');
+  newRaceElement.className = 'race-countdown new';
+  const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
+  const navigationControls = isFirstRace ? 
+    `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
+    `<div class="navigation-arrows">
+      <button class="nav-arrow prev-btn" onclick="navigateRace(-1)"><span>←</span></button>
+      <button class="nav-arrow next-btn" onclick="navigateRace(1)" ${currentRaceIndex === races.length - 1 ? 'disabled' : ''}><span>→</span></button>
+    </div>`;
+  newRaceElement.innerHTML = `
+        <h2 class="race-title">UPCOMING RACE:</h2>
+        <a href="${races[currentRaceIndex].link}" target="_blank" class="race-name">${races[currentRaceIndex].name}</a>
+        <a href="${races[currentRaceIndex].seriesLink}" target="_blank" class="series-name">${races[currentRaceIndex].series}</a>
+        <div class="race-time">${races[currentRaceIndex].time}</div>
+        <div class="countdown-container">
+            <div id="countdown" class="countdown-timer">Loading...</div>
+            <div id="race-status" class="race-status"></div>
         </div>
-      </div>
-    `;
-    document.body.appendChild(dialog);
-  } catch (error) {
-    const toast = document.createElement('div');
-    toast.className = 'toast error';
-    toast.innerHTML = 'Failed to parse script: ' + error.message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-  }
+        ${navigationControls}`;
+  currentRaceElement.remove();
+  container.insertBefore(newRaceElement, container.firstChild);
+  void newRaceElement.offsetWidth;
+  newRaceElement.classList.remove('new');
+  newRaceElement.style.opacity = '1';
+  newRaceElement.style.transform = 'translateX(0)';
 }
 
-function completeSeriesImport(button, seriesData) {
-  const dialog = button.closest('.url-prompt-dialog');
-  const url = dialog.querySelector('.series-url').value;
-  
-  if (!url) {
-    alert('Please enter a URL');
-    return;
-  }
-  
-  seriesData.url = url;
-  const success = updateIndexContent([seriesData]);
-  
-  if (success) {
-    // Store in localStorage
-    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-    storedSeries.push({
-      ...seriesData,
-      dateAdded: new Date().toISOString() 
-    });
-    localStorage.setItem('series', JSON.stringify(storedSeries));
-  }
+function navigateRace(direction) {
+  const newIndex = currentRaceIndex + direction;
+  if (newIndex >= 0 && newIndex < races.length && races[newIndex].visible) {
+    const container = document.querySelector('.portfolio-grid');
+    const currentRaceElement = container.querySelector('.race-countdown');
+    const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
+    const navigationControls = isFirstRace ? 
+      `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
+      `<div class="navigation-arrows">
+        <button class="nav-arrow prev-btn" onclick="navigateRace(-1)"><span>←</span></button>
+        <button class="nav-arrow next-btn" onclick="navigateRace(1)" ${currentRaceIndex === races.length - 1 ? 'disabled' : ''}><span>→</span></button>
+       </div>`;
 
-  const toast = document.createElement('div');
-  toast.className = `toast ${success ? 'success' : 'error'}`;
-  toast.innerHTML = success ? 'Series updated successfully!' : 'Failed to update series';
-  document.body.appendChild(toast);
-  
-  setTimeout(() => toast.remove(), 3000);
-  dialog.remove();
-  
-  refreshChampionshipList();
+    currentRaceElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    currentRaceElement.style.transform = direction > 0 ? 'translateX(-100%)' : 'translateX(100%)';
+    currentRaceElement.style.opacity = '0';
+    setTimeout(() => {
+      currentRaceIndex = newIndex;
+      updateRaceDisplay();
+    }, 500);
+  }
 }
-
-function updateIndexContent(series) {
+function updateTimeDisplay(targetTimezone) {
+  if (!targetTimezone) return; 
   try {
-    const seriesContent = document.querySelector('.series-content');
-    if (!seriesContent) {
-      throw new Error('Series content element not found');
-    }
-
-    let html = '';
-    const activeSeries = series.filter(s => s.status !== 'completed');
-    const completedSeries = series.filter(s => s.status === 'completed');
-
-    activeSeries.forEach(s => {
-      html += generateSeriesHTML(s);
-    });
-
-    if (completedSeries.length) {
-      html += '<h3 class="standings-section-title">Completed...</h3>';
-      completedSeries.forEach(s => {
-        html += generateSeriesHTML(s);
-      });
-    }
-
-    seriesContent.innerHTML = html;
-    return true;
-  } catch (error) {
-    console.error('Failed to update index content:', error);
-    return false;
-  }
-}
-
-function generateSeriesHTML(data) {
-  return `
-    <div class="series-item" data-series="${data.name}" data-date="${data.date}">
-      <h4>
-        <a href="${data.url}" target="_blank">${data.name}</a>
-        <label class="status-toggle">
-          <input type="checkbox" onchange="toggleStatus(this)" 
-                 ${data.status === 'completed' ? 'checked' : ''}>
-          <span class="slider"></span>
-        </label>
-      </h4>
-      <div class="podium">
-        <div class="podium-place">
-          <div class="podium-2"></div>
-          <div class="place-number">2</div>
-          <div class="podium-text">${data.standings[1].name}
-            <span class="points">${data.standings[1].points}pts</span>
-          </div>
-        </div>
-        <div class="podium-place">
-          <div class="podium-1"></div>
-          <div class="place-number">1</div>
-          <div class="podium-text">${data.standings[0].name}
-            <span class="points points-leader">${data.standings[0].points}pts</span>
-          </div>
-        </div>
-        <div class="podium-place">
-          <div class="podium-3"></div>
-          <div class="place-number">3</div>
-          <div class="podium-text">${data.standings[2].name}
-            <span class="points">${data.standings[2].points}pts</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function toggleStatus(checkbox) {
-  const series = checkbox.closest('.series-item');
-  const completed = document.querySelector('.standings-section-title');
-  
-  if (checkbox.checked) {
-    completed.after(series);
-  } else {
-    document.querySelector('.series-content').prepend(series);
-  }
-  
-  const items = [...document.querySelectorAll('.series-item')];
-  items.sort((a,b) => {
-    const dateA = new Date(a.dataset.date);
-    const dateB = new Date(b.dataset.date);
-    return dateB - dateA;
-  });
-  
-  document.querySelector('.series-content').append(...items);
-}
-
-function uploadScript() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.txt,.json';
-  
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    const text = await file.text();
+    const raceTime = new Date(races[currentRaceIndex].date);
+    const options = {
+      timeZone: targetTimezone,
+      hour: 'numeric',
+      minute: 'numeric', 
+      month: 'numeric',
+      day: 'numeric',
+      year: '2-digit',
+      timeZoneName: 'short'
+    };
     
-    executeScript(text);
-  };
-  
-  input.click();
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const localTime = formatter.format(raceTime);
+    
+    const raceTimeEl = document.querySelector('.race-time');
+    if (raceTimeEl) {
+      raceTimeEl.textContent = `Time: ${localTime}`;
+    }
+  } catch (err) {
+    console.error('Error updating time display:', err);
+  }
 }
-
-function refreshChampionshipList() {
-  const tbody = document.getElementById('championshipListBody');
-  tbody.innerHTML = '';
-  
-  // Get data from localStorage
-  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  
-  storedSeries.sort((a,b) => new Date(b.startDate) - new Date(a.startDate))
-    .forEach(series => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${series.name}</td>
-      <td>${new Date(series.startDate).toLocaleDateString()}</td>
-      <td>
-        <label class="status-toggle">
-          <input type="checkbox" onchange="toggleSeriesStatus('${series.id}')" 
-                 ${series.status === 'completed' ? 'checked' : ''}>
-          <span class="slider"></span>
-        </label>
-      </td>
-      <td class="action-cell">
-        <button onclick="editSeries('${series.id}')" class="btn btn-secondary">Edit</button>
-        <button onclick="deleteSeries('${series.id}')" class="btn btn-danger">Delete</button>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-
-  // Update series content display
-  updateIndexContent(storedSeries);
+function changeTimezone(event) {
+  if (!event || !event.target) return; 
+  const selectedZone = event.target.value;
+  updateTimeDisplay(selectedZone);
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-  refreshChampionshipList();
+function toggleMenu() {
+  const hamburger = document.querySelector('.hamburger-menu');
+  const nav = document.querySelector('.nav-menu');
+  const userActions = document.querySelector('.user-actions');
+  const body = document.body;
+  hamburger.classList.toggle('active');
+  nav.classList.toggle('active');
+  userActions.classList.toggle('active');
+  body.classList.toggle('menu-open');
+  if (window.innerWidth <= 767) {
+    const totalMenuHeight = nav.classList.contains('active') ? nav.scrollHeight + userActions.scrollHeight : 0;
+    const mainContent = document.querySelector('.main-content');
+    mainContent.style.transition = 'transform 0.3s ease';
+    if (nav.classList.contains('active')) {
+      mainContent.style.transform = `translateY(${totalMenuHeight}px)`;
+    } else {
+      mainContent.style.transform = 'none';
+    }
+  }
+}
+window.addEventListener('resize', () => {
+  updateCountdown();
 });
-</script>
-</body></html>
+window.addEventListener('load', () => {
+  hideLoadingSpinner();
+});
+function hideLoadingSpinner() {
+  const spinner = document.querySelector('.loading-spinner');
+  const videoBackground = document.getElementById('loading-video-background');
+  
+  if (spinner && videoBackground) {
+    spinner.classList.add('loaded');
+    videoBackground.classList.add('loaded');
+    
+    // Stop and cleanup YouTube player after fade out
+    setTimeout(() => {
+      if (player && typeof player.destroy === 'function') {
+        player.destroy();
+      }
+    }, 300);
+  }
+}
+setInterval(updateCountdown, 1000);
+setInterval(function () {
+  const now = new Date().getTime();
+  races.forEach((race, index) => {
+    const raceTime = new Date(race.date).getTime();
+    if (now - raceTime > 30 * 60 * 1000) {
+      race.visible = false;
+    }
+  });
+  if (!races[currentRaceIndex].visible) {
+    const nextVisibleIndex = races.findIndex((race, index) => 
+      index > currentRaceIndex && 
+      race.visible && 
+      new Date(race.date).getTime() - now > -30 * 60 * 1000
+    );
+    
+    if (nextVisibleIndex !== -1) {
+      currentRaceIndex = nextVisibleIndex;
+      updateRaceDisplay();
+    }
+  }
+}, 60000);
+window.addEventListener('orientationchange', function () {
+  setTimeout(function () {
+    if (window.innerWidth <= 767) {
+      const viewport = document.querySelector('meta[name="viewport"]');
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    } else {
+      const viewport = document.querySelector('meta[name="viewport"]');
+      viewport.setAttribute('content', 'width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+    window.scrollTo(0, 0);
+    updateRaceDisplay();
+  }, 200);
+});
+document.addEventListener('touchstart', function () {}, {
+  passive: true
+});
+function updateSeriesStandings() {
+  
+}
+window.addEventListener('resize', () => {
+  const isMobile = window.innerWidth <= 767;
+  if (isMobile) {
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  
+  document.head.innerHTML += `
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://i.ibb.co">
+  <link rel="preconnect" href="https://raw.githubusercontent.com">
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://discord.com">
+`;
+  
+  const images = document.querySelectorAll('img');
+  images.forEach(img => {
+    img.loading = 'lazy';
+  });
+
+  const deferredScripts = document.querySelectorAll('script:not([src*="critical"])');
+  deferredScripts.forEach(script => {
+    script.defer = true;
+  });
+  
+  const spinner = document.querySelector('.loading-spinner');
+  const videoBackground = document.getElementById('loading-video-background');
+  if (spinner && videoBackground) {
+    spinner.classList.remove('loaded');
+    videoBackground.classList.remove('loaded'); 
+  }
+});
+const skinCategories = {
+  cc_options: [
+    "125cc",
+    "250cc", 
+    "350cc",
+    "450cc",
+    "300cc",
+    "Other"
+  ],
+  brands: [
+    "Honda",
+    "Yamaha", 
+    "Kawasaki",
+    "Suzuki",
+    "KTM",
+    "Husqvarna",
+    "GasGas",
+    "Beta",
+    "TM",
+    "Other"
+  ],
+  types: [
+    "OEM Project",
+    "Project Items",
+    "AKits",
+    "Factory Bikes", 
+    "Pit Bikes",
+    "Other"
+  ]
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Populate dropdowns
+  const populateDropdown = (selectId, options) => {
+    const select = document.getElementById(selectId);
+    options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt;
+      option.textContent = opt;
+      select.appendChild(option);
+    });
+  };
+
+  populateDropdown('ccSelect', skinCategories.cc_options);
+  populateDropdown('brandSelect', skinCategories.brands);
+  populateDropdown('typeSelect', skinCategories.types);
+
+  // Handle "Other" selections
+  const handleOtherOption = (selectId, inputId) => {
+    const select = document.getElementById(selectId);
+    const input = document.getElementById(inputId);
+    
+    select.addEventListener('change', () => {
+      input.style.display = select.value === 'Other' ? 'block' : 'none';
+      input.required = select.value === 'Other';
+    });
+  };
+
+  handleOtherOption('ccSelect', 'otherCC');
+  handleOtherOption('brandSelect', 'otherBrand');
+  handleOtherOption('typeSelect', 'otherType');
+
+  // Handle form submission
+  document.getElementById('skinUploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('skinFile');
+    const file = fileInput.files[0];
+    
+    // Validate file extension
+    const validExtensions = ['.pnt', '.zip'];
+    const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    if (!validExtensions.includes(fileExt)) {
+      alert('Please upload only .pnt or .zip files');
+      return;
+    }
+
+    try {
+      // Upload file to Dropbox
+      await uploadToDropbox(file);
+
+      // Reset form
+      e.target.reset();
+      
+      // Auto refresh database display
+      refreshSkinsList();
+
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Error uploading skin: ' + error.message);
+    }
+  });
+
+  // Refresh skins list
+  const refreshSkinsList = async () => {
+    try {
+      const skins = await room.collection('skins').getList();
+      const skinsList = document.getElementById('skinsList');
+      
+      skinsList.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>CC</th>
+              <th>Brand</th> 
+              <th>File URL</th>
+              <th>Filename</th>
+              <th>Upload Date</th>
+              <th>Name</th>
+              <th>Github URL</th>
+              <th>Created At</th>
+              <th>ID</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${skins.map(skin => `
+              <tr class="skin-item" data-url="${skin.fileUrl}" onclick="selectSkin(this)">
+                <td>${skin.username || 'Anonymous'}</td>
+                <td>${skin.cc}</td>
+                <td>${skin.brand}</td>
+                <td>
+                  <a href="${skin.fileUrl}" 
+                     target="_blank"
+                     onclick="event.stopPropagation()">
+                    View File
+                  </a>
+                </td>
+                <td>${skin.filename}</td>
+                <td>${new Date(skin.uploadDate).toLocaleString()}</td>
+                <td>${skin.name || ''}</td>
+                <td>${skin.githubUrl || ''}</td>
+                <td>${new Date(skin.created_at).toLocaleString()}</td>
+                <td>${skin.id}</td>
+                <td>
+                  <a href="${skin.fileUrl}" 
+                     class="download-btn"
+                     download="${skin.filename}"
+                     onclick="event.stopPropagation()">
+                    Download
+                  </a>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+
+    } catch (error) {
+      console.error('Error fetching skins:', error);
+    }
+  };
+
+  document.getElementById('refreshSkins').addEventListener('click', refreshSkinsList);
+  
+  // Initial load
+  refreshSkinsList();
+
+  // Download all skins
+  document.getElementById('downloadAll').addEventListener('click', async () => {
+    try {
+      const skins = await room.collection('skins').getList();
+      
+      // Initialize Dropbox client
+      const dbx = new Dropbox.Dropbox({ 
+        accessToken: 'sl.u.AFeUVI9mqzqKDSmsGkMD6wwB4XAEGkPleiZXeRpI2dJACxYmNHN1aGNLsOxCchidsoVAo0csB9qIMoHHJTmWg5v8X08rkSm1ODx4-WD4kV_Lbf7i2u1jiBKbBaCdasOi-dZQqf7p9BjxBNuXF1qvOg8l_WsQa_Kr1NFgOtl6hYxyDlxDymvg4qo3do6ngv7PyPtmEXrHxT7vp7DoZol64hFCktp496_qQz7ZGzqB3rQGf7_OK1Sg2VF-gTgXEO1WkbA-AYYugiAmzHCJjjCmNMn23wNYPmHzIQjMPsKHNGPrtSFh6Z8IRMa1a51GLfIsDWDqjx4gYSnUl3Eor1lG9MxbNbcD1qlit3o5cP0uOoIHZbrfmcqhlDn64q72ARfYxqzrO-z5txNbdqSdp345EtSfyLtOTf6tBKvj-MWpnWaBSOT3LQE_3Ay77p1_3_2hI8fQjST81OHBLpbXE0uVZW-rh5PSQzCTvpdCbhHfFtRLesT3hj02UKalDKPOBDE0hFqGlhr696FI3V7g3JlZ_yqBGURXMv0qdrAHhmRYIURXJfG8rCSa48rI66pM-MoPH9r8fIeN889vlvCR50SUyTr0aApqwx_MGfjWaRFk_5e2BIRAQoXMqOFOLkGaMrjD6QTvqTiaVROv1Z_xGyWt1IEnp9SrQx3qgnkaQo3qf9Pv1Udl8C4kPbxwTZ47SBV1W5mZRlB0JKR9vvSoLFSrjoIcgQmtKlisUBGRA98_Rd-Hl26sfbx1AVcBtTlDryKjqYZKZcsE6zMYBJA1jUFObnV21EF4nKJ0PH6-TQb-s8HTm7JwnQI9qdN4gcLUoRrrBFmuHgnHU89mPDMUiBj5jqBP18b5HqcyUTOw7QVgaV85Uks4phEV-O9dwYRS_cxfElAbzVjGBlgyO5i-PTmR9SyQ84DeqxRSDj-NzdGKivBbAXsoQOp6V1jSh7PEbVOaDnNqtneEKI24vAtVC0927f1CpiSoC2G897_g30vw8hh5fbt1TzZax2qGUEIqtCI02qnJ5FWiQ9cmRnTFr-DPxV_14y4urCbCHslCJ8ark7B6eZ2-zyHcq59vVQtgdD5i4ChXS-XN_IVY9TI5MYa_F7nPFA8SNR2PrylmbM9Fk3GSaNwyFlxIeUzL96kX7e9xnq_vDYg-MtTYJ9juklvTErQksl-RThylbuoKQaHlxnjWOv5Hj40iKTHwX69wcE2pMcYOidPpLiK2RKVnn39os5R-m4JxVEgguEOGaxIjYQNHMQI-NB0X0jdtBjTNju4Z9y2R3gf6y4_iSALdQeb5qarQ1tcEdsUi1jMtH3a0HE4etQ'
+      });
+
+      // Group skins by folder path
+      const skinsByFolder = {};
+      skins.forEach(skin => {
+        if (!skinsByFolder[skin.folderPath]) {
+          skinsByFolder[skin.folderPath] = [];
+        }
+        skinsByFolder[skin.folderPath].push(skin);
+      });
+
+      // Download files from each folder
+      for (const folderPath in skinsByFolder) {
+        const folderSkins = skinsByFolder[folderPath];
+        
+        // Create folder structure locally
+        const folderLinks = await Promise.all(folderSkins.map(async (skin) => {
+          return {
+            name: skin.filename,
+            url: skin.fileUrl,
+            path: skin.folderPath
+          };
+        }));
+
+        // Download files
+        folderLinks.forEach(link => {
+          const a = document.createElement('a');
+          a.href = link.url; 
+          a.download = link.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        });
+      }
+    } catch (error) {
+      console.error('Error downloading skins:', error);
+      alert('Error downloading skins');
+    }
+  });
+});
+
+let viewer;
+function init3DViewer() {
+  const container = document.createElement('div');
+  container.id = '3d-viewer';
+  document.querySelector('.skin-management').appendChild(container);
+  
+  viewer = new THREE.WebGLRenderer({ antialias: true });
+  viewer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(viewer.domElement);
+  
+  // Initialize scene, camera, controls etc
+  // ... 3D viewer setup code ...
+}
+
+function selectSkin(element) {
+  // Remove previous selection
+  document.querySelectorAll('.skin-item').forEach(item => {
+    item.classList.remove('selected');
+  });
+  
+  // Add selection to clicked item
+  element.classList.add('selected');
+  
+  // Get skin URL and update 3D viewer
+  const skinUrl = element.dataset.url;
+  updateModelTexture(skinUrl);
+}
+
+function updateModelTexture(skinUrl) {
+  // Update 3D model texture
+  // ... code to update 3D model texture ...
+}
+
+const room = new WebsimSocket();
+room.collection('skins').subscribe((skins) => {
+  refreshSkinsList();
+});
+
+function uploadToDropbox(file) {
+  try {
+    // Show loading state
+    const uploadBtn = document.querySelector('.upload-btn');
+    uploadBtn.innerHTML = '<span>Uploading...</span>';
+    uploadBtn.disabled = true;
+
+    // Get folder path based on selections 
+    const cc = document.getElementById('ccSelect').value === 'Other' ? 
+              document.getElementById('otherCC').value : 
+              document.getElementById('ccSelect').value;
+    const brand = document.getElementById('brandSelect').value === 'Other' ?
+                  document.getElementById('otherBrand').value :
+                  document.getElementById('brandSelect').value;
+    const type = document.getElementById('typeSelect').value === 'Other' ?
+                 document.getElementById('otherType').value :
+                 document.getElementById('typeSelect').value;
+
+    const folderPath = `/${cc}/${brand}/${type}`;
+
+    // Upload using the content endpoint
+    fetch('https://content.dropboxapi.com/2/files/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer sl.u.AFeUVI9mqzqKDSmsGkMD6wwB4XAEGkPleiZXeRpI2dJACxYmNHN1aGNLsOxCchidsoVAo0csB9qIMoHHJTmWg5v8X08rkSm1ODx4-WD4kV_Lbf7i2u1jiBKbBaCdasOi-dZQqf7p9BjxBNuXF1qvOg8l_WsQa_Kr1NFgOtl6hYxyDlxDymvg4qo3do6ngv7PyPtmEXrHxT7vp7DoZol64hFCktp496_qQz7ZGzqB3rQGf7_OK1Sg2VF-gTgXEO1WkbA-AYYugiAmzHCJjjCmNMn23wNYPmHzIQjMPsKHNGPrtSFh6Z8IRMa1a51GLfIsDWDqjx4gYSnUl3Eor1lG9MxbNbcD1qlit3o5cP0uOoIHZbrfmcqhlDn64q72ARfYxqzrO-z5txNbdqSdp345EtSfyLtOTf6tBKvj-MWpnWaBSOT3LQE_3Ay77p1_3_2hI8fQjST81OHBLpbXE0uVZW-rh5PSQzCTvpdCbhHfFtRLesT3hj02UKalDKPOBDE0hFqGlhr696FI3V7g3JlZ_yqBGURXMv0qdrAHhmRYIURXJfG8rCSa48rI66pM-MoPH9r8fIeN889vlvCR50SUyTr0aApqwx_MGfjWaRFk_5e2BIRAQoXMqOFOLkGaMrjD6QTvqTiaVROv1Z_xGyWt1IEnp9SrQx3qgnkaQo3qf9Pv1Udl8C4kPbxwTZ47SBV1W5mZRlB0JKR9vvSoLFSrjoIcgQmtKlisUBGRA98_Rd-Hl26sfbx1AVcBtTlDryKjqYZKZcsE6zMYBJA1jUFObnV21EF4nKJ0PH6-TQb-s8HTm7JwnQI9qdN4gcLUoRrrBFmuHgnHU89mPDMUiBj5jqBP18b5HqcyUTOw7QVgaV85Uks4phEV-O9dwYRS_cxfElAbzVjGBlgyO5i-PTmR9SyQ84DeqxRSDj-NzdGKivBbAXsoQOp6V1jSh7PEbVOaDnNqtneEKI24vAtVC0927f1CpiSoC2G897_g30vw8hh5fbt1TzZax2qGUEIqtCI02qnJ5FWiQ9cmRnTFr-DPxV_14y4urCbCHslCJ8ark7B6eZ2-zyHcq59vVQtgdD5i4ChXS-XN_IVY9TI5MYa_F7nPFA8SNR2PrylmbM9Fk3GSaNwyFlxIeUzL96kX7e9xnq_vDYg-MtTYJ9juklvTErQksl-RThylbuoKQaHlxnjWOv5Hj40iKTHwX69wcE2pMcYOidPpLiK2RKVnn39os5R-m4JxVEgguEOGaxIjYQNHMQI-NB0X0jdtBjTNju4Z9y2R3gf6y4_iSALdQeb5qarQ1tcEdsUi1jMtH3a0HE4etQ',
+        'Dropbox-API-Arg': JSON.stringify({
+          'path': folderPath + '/' + file.name,
+          'mode': 'add',
+          'autorename': true,
+          'mute': false
+        }),
+        'Content-Type': 'application/octet-stream'
+      },
+      body: file
+    })
+    .then(response => response.json())
+    .then(async (data) => {
+      console.log('File uploaded:', data);
+
+      // Get shareable link
+      const shareResponse = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer sl.u.AFeUVI9mqzqKDSmsGkMD6wwB4XAEGkPleiZXeRpI2dJACxYmNHN1aGNLsOxCchidsoVAo0csB9qIMoHHJTmWg5v8X08rkSm1ODx4-WD4kV_Lbf7i2u1jiBKbBaCdasOi-dZQqf7p9BjxBNuXF1qvOg8l_WsQa_Kr1NFgOtl6hYxyDlxDymvg4qo3do6ngv7PyPtmEXrHxT7vp7DoZol64hFCktp496_qQz7ZGzqB3rQGf7_OK1Sg2VF-gTgXEO1WkbA-AYYugiAmzHCJjjCmNMn23wNYPmHzIQjMPsKHNGPrtSFh6Z8IRMa1a51GLfIsDWDqjx4gYSnUl3Eor1lG9MxbNbcD1qlit3o5cP0uOoIHZbrfmcqhlDn64q72ARfYxqzrO-z5txNbdqSdp345EtSfyLtOTf6tBKvj-MWpnWaBSOT3LQE_3Ay77p1_3_2hI8fQjST81OHBLpbXE0uVZW-rh5PSQzCTvpdCbhHfFtRLesT3hj02UKalDKPOBDE0hFqGlhr696FI3V7g3JlZ_yqBGURXMv0qdrAHhmRYIURXJfG8rCSa48rI66pM-MoPH9r8fIeN889vlvCR50SUyTr0aApqwx_MGfjWaRFk_5e2BIRAQoXMqOFOLkGaMrjD6QTvqTiaVROv1Z_xGyWt1IEnp9SrQx3qgnkaQo3qf9Pv1Udl8C4kPbxwTZ47SBV1W5mZRlB0JKR9vvSoLFSrjoIcgQmtKlisUBGRA98_Rd-Hl26sfbx1AVcBtTlDryKjqYZKZcsE6zMYBJA1jUFObnV21EF4nKJ0PH6-TQb-s8HTm7JwnQI9qdN4gcLUoRrrBFmuHgnHU89mPDMUiBj5jqBP18b5HqcyUTOw7QVgaV85Uks4phEV-O9dwYRS_cxfElAbzVjGBlgyO5i-PTmR9SyQ84DeqxRSDj-NzdGKivBbAXsoQOp6V1jSh7PEbVOaDnNqtneEKI24vAtVC0927f1CpiSoC2G897_g30vw8hh5fbt1TzZax2qGUEIqtCI02qnJ5FWiQ9cmRnTFr-DPxV_14y4urCbCHslCJ8ark7B6eZ2-zyHcq59vVQtgdD5i4ChXS-XN_IVY9TI5MYa_F7nPFA8SNR2PrylmbM9Fk3GSaNwyFlxIeUzL96kX7e9xnq_vDYg-MtTYJ9juklvTErQksl-RThylbuoKQaHlxnjWOv5Hj40iKTHwX69wcE2pMcYOidPpLiK2RKVnn39os5R-m4JxVEgguEOGaxIjYQNHMQI-NB0X0jdtBjTNju4Z9y2R3gf6y4_iSALdQeb5qarQ1tcEdsUi1jMtH3a0HE4etQ',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'path': data.path_display,
+          'settings': {
+            'requested_visibility': 'public'
+          }
+        })
+      }).then(res => res.json());
+
+      const downloadUrl = shareResponse.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+
+      // Create skin record in database
+      await room.collection('skins').create({
+        cc: cc,
+        brand: brand,
+        type: type, 
+        fileUrl: downloadUrl,
+        filename: file.name,
+        uploadDate: new Date().toISOString(),
+        name: file.name.split('.')[0],
+        githubUrl: '',
+        author: room.party.client.username,
+        folderPath: folderPath
+      });
+
+      // Reset form and refresh list
+      document.getElementById('skinUploadForm').reset();
+      refreshSkinsList();
+      
+      uploadBtn.innerHTML = '<span>Upload Skin</span>';
+      uploadBtn.disabled = false;
+
+    })
+    .catch(error => {
+      console.error('Error uploading file:', error);
+      uploadBtn.innerHTML = '<span>Upload Failed</span>';
+      uploadBtn.disabled = false;
+      alert('Error uploading file: ' + error.message);
+    });
+
+  } catch (error) {
+    console.error('Error in upload function:', error);
+    alert('Upload error: ' + error.message);
+  }
+}
+</script></body></html>
