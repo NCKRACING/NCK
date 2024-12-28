@@ -285,11 +285,12 @@ footer p {
   width: auto;
 }
 
-#raceList th:nth-child(1) { width: 25%; }
-#raceList th:nth-child(2) { width: 15%; }
-#raceList th:nth-child(3) { width: 10%; }
-#raceList th:nth-child(4) { width: 30%; }
-#raceList th:nth-child(5) { width: 20%; }
+#raceList th:nth-child(1) { width: 20px; }
+#raceList th:nth-child(2) { width: 25%; }
+#raceList th:nth-child(3) { width: 15%; }
+#raceList th:nth-child(4) { width: 10%; }
+#raceList th:nth-child(5) { width: 30%; }
+#raceList th:nth-child(6) { width: 20%; }
 
 /* Info tooltip styles */
 .race-info-tooltip {
@@ -565,44 +566,61 @@ footer p {
 /* Add styles for the confirmation dialog */
 .script-confirm-dialog {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--header-bg);
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
   z-index: 1100;
 }
 
 .script-confirm-content {
-  background: var(--header-bg);
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.script-confirm-content pre {
-  background: #222;
-  padding: 10px;
-  border-radius: 4px;
-  max-height: 200px;
-  overflow: auto;
-  margin: 10px 0;
-  font-size: 12px;
+#series-preview {
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 20px 0;
 }
 
-.script-confirm-content .button-group {
+.series-preview-item {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+
+.button-group {
+  display: flex;
   gap: 10px;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
-/* Add styles for multiple series URL inputs */
-/* Removed series-content styles */
+.script-confirm-dialog .button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.script-confirm-dialog .btn-secondary {
+  background: #666;
+  color: white;
+  cursor: pointer;
+}
+
+.script-confirm-dialog .btn-secondary:hover {
+  background: #555;
+}
 
 /* Add toast styles */
 .toast {
@@ -681,22 +699,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-.series-preview-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 4px;
-}
-
-#series-preview {
-  max-height: 400px;
-  overflow-y: auto;
-  margin: 20px 0;
-}
-
 .standings-display {
   display: flex;
   flex-direction: column;
@@ -714,6 +716,40 @@ input:checked + .slider:before {
 .racing {
     flex: 1; 
     margin-bottom: 2rem; 
+}
+
+/* Add sortable styles */
+.series-preview-item {
+  cursor: move;
+  user-select: none;
+  position: relative;
+  border: 1px solid var(--border-color);
+}
+
+.series-preview-item.dragging {
+  opacity: 0.5;
+  background: rgba(0, 123, 255, 0.1);
+}
+
+.drag-handle {
+  width: 20px;
+  background: #333;
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color);
+}
+
+.drag-handle::after {
+  content: "⋮";
+  color: #666;
+  font-size: 20px;
+}
+
+tr.dragging {
+  opacity: 0.5;
+  background: rgba(0, 123, 255, 0.1);
 }
 
 @media screen and (max-width: 900px) {
@@ -890,6 +926,7 @@ input:checked + .slider:before {
     <table id="raceList" style="display: table;">
         <thead>
             <tr>
+                <th></th>
                 <th>Series Name</th>
                 <th>Start Date</th>  
                 <th>Status</th>
@@ -994,6 +1031,8 @@ function toggleSeriesStatus(id) {
 document.addEventListener('DOMContentLoaded', function() {
   const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
   refreshChampionshipList();
+  updateOverlayCSS();
+  document.getElementById('championshipListBody').addEventListener('dragover', handleTableDragOver);
 });
 
 function saveQuickEdit(seriesId, button) {
@@ -1066,8 +1105,16 @@ function cancelQuickEdit(button) {
 function closeEditor() {
   const editor = document.querySelector('.series-editor');
   const overlay = document.querySelector('.editor-overlay');
-  editor.classList.remove('active');
+  
+  overlay.innerHTML = '';
+  
+  if (editor) editor.classList.remove('active');
   overlay.classList.remove('active');
+  
+  window.uploadedSeries = null;
+  
+  const fileInputs = document.querySelectorAll('input[type="file"]');
+  fileInputs.forEach(input => input.value = '');
 }
 
 function createSeries() {
@@ -1181,25 +1228,29 @@ function handleScriptUpload(event) {
     const series = parseScriptContent(content);
     
     if (series) {
+      const preview = series.map((s, index) => `
+        <div class="series-preview-item" draggable="true" data-index="${index}">
+          <span>${s.name}</span>
+          <button onclick="this.parentElement.remove()" class="btn btn-danger">Delete</button>
+        </div>
+      `).join('');
+
       const dialog = document.createElement('div');
-      dialog.className = 'series-editor active';
+      dialog.className = 'script-confirm-dialog';
       dialog.innerHTML = `
-        <h3>Upload Series</h3>
-        <div style="position: absolute; top: 20px; right: 20px; color: var(--text-light);">
-          ${series.length} Championships Have Been Uploaded
-        </div>
-        <div id="series-preview">
-          ${series.map(s => `
-            <div class="series-preview-item">
-              <span>${s.name}</span>
-              <button onclick="this.parentElement.remove()" class="btn btn-danger">Delete</button>
-            </div>
-          `).join('')}
-        </div>
-        <div class="button-group">
-          <button onclick="saveAllSeries()" class="btn btn-primary">Save All</button>
-          <button onclick="deleteAllSeries()" class="btn btn-danger">Delete All</button>
-          <button onclick="closeEditor()" class="btn btn-secondary">Cancel</button>
+        <div class="script-confirm-content">
+          <h3>Upload Series</h3>
+          <div style="margin-bottom: 10px;">
+            ${series.length} Championships Have Been Uploaded
+          </div>
+          <div id="series-preview">
+            ${preview}
+          </div>
+          <div class="button-group">
+            <button onclick="saveAllSeries()" class="btn btn-primary">Save All</button>
+            <button onclick="deleteAllSeries()" class="btn btn-danger">Delete All</button>
+            <button onclick="closeEditor()" class="btn btn-secondary">Cancel</button>
+          </div>
         </div>
       `;
       
@@ -1209,6 +1260,11 @@ function handleScriptUpload(event) {
       overlay.classList.add('active');
       
       window.uploadedSeries = series;
+      
+      const previewContainer = document.getElementById('series-preview');
+      previewContainer.addEventListener('dragstart', handleDragStart);
+      previewContainer.addEventListener('dragover', handleDragOver);
+      previewContainer.addEventListener('drop', handleDrop);
     }
   };
   reader.readAsText(file);
@@ -1285,6 +1341,36 @@ function clearAllChampionships() {
   }
 }
 
+function saveAllSeries() {
+  if (!window.uploadedSeries || window.uploadedSeries.length === 0) {
+    showToast('No series to save', 'error');
+    return;
+  }
+
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  const newSeries = [...storedSeries];
+  
+  const previewItems = document.querySelectorAll('.series-preview-item');
+  const remainingSeries = Array.from(previewItems).map(item => {
+    const seriesName = item.querySelector('span').textContent;
+    const series = window.uploadedSeries.find(s => s.name === seriesName);
+    if (series) {
+      series.status = 'active'; 
+      return series;
+    }
+    return null;
+  }).filter(s => s);
+
+  newSeries.push(...remainingSeries);
+  localStorage.setItem('series', JSON.stringify(newSeries));
+
+  showToast(`Successfully saved ${remainingSeries.length} series`, 'success');
+  refreshChampionshipList();
+
+  closeEditor();
+  window.uploadedSeries = null;
+}
+
 function showToast(message, type = 'success') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
@@ -1295,7 +1381,7 @@ function showToast(message, type = 'success') {
 
 function refreshChampionshipList() {
   const tbody = document.getElementById('championshipListBody');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Refreshing...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Refreshing...</td></tr>';
   
   setTimeout(() => {
     tbody.innerHTML = '';
@@ -1310,7 +1396,7 @@ function refreshChampionshipList() {
     });
     
     if (activeSeries.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No active series found</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No active series found</td></tr>';
       return;
     }
     
@@ -1318,6 +1404,10 @@ function refreshChampionshipList() {
       .forEach(series => {
         const row = document.createElement('tr');
         row.dataset.id = series.id;
+        row.setAttribute('draggable', 'true');
+        row.addEventListener('dragstart', handleTableDragStart);
+        row.addEventListener('dragend', handleTableDragEnd);
+        
         const seriesDateTime = new Date(series.dateAdded).toLocaleString('en-US', {
           timeZone: 'America/Chicago',
           dateStyle: 'medium',
@@ -1325,6 +1415,7 @@ function refreshChampionshipList() {
         });
         
         row.innerHTML = `
+          <td class="drag-handle"></td>
           <td>
             <div class="series-name">${series.name}</div>
             <div class="quick-edit-form" style="display: none;">
@@ -1338,7 +1429,7 @@ function refreshChampionshipList() {
           <td>
             <label class="status-toggle">
               <input type="checkbox" onchange="toggleSeriesStatus('${series.id}')" 
-                     ${series.status === 'completed' ? 'checked' : ''}>
+                     ${series.status !== 'completed' ? 'checked' : ''}>
               <span class="slider"></span>
             </label>
           </td>
@@ -1379,6 +1470,78 @@ function refreshChampionshipList() {
       
     showToast('Series list refreshed', 'success');
   }, 500);
+}
+
+function handleTableDragStart(e) {
+  e.target.classList.add('dragging');
+}
+
+function handleTableDragEnd(e) {
+  e.target.classList.remove('dragging');
+}
+
+function handleTableDragOver(e) {
+  e.preventDefault();
+  const tbody = document.getElementById('championshipListBody');
+  const draggingRow = document.querySelector('tr.dragging');
+  if (!draggingRow) return;
+
+  const siblings = [...tbody.querySelectorAll('tr:not(.dragging)')];
+  const nextSibling = siblings.find(sibling => {
+    const box = sibling.getBoundingClientRect();
+    const offset = e.clientY - box.top - box.height / 2;
+    return offset < 0;
+  });
+
+  if (nextSibling) {
+    tbody.insertBefore(draggingRow, nextSibling);
+  } else {
+    tbody.appendChild(draggingRow);
+  }
+  
+  // Update stored series order
+  const rows = [...tbody.querySelectorAll('tr')];
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  
+  const newOrder = rows.map(row => {
+    const seriesId = row.dataset.id;
+    return storedSeries.find(s => s.id === seriesId);
+  }).filter(s => s);
+
+  // Update timestamps based on order
+  const baseTime = new Date();
+  baseTime.setHours(21, 30, 0);
+  
+  newOrder.forEach((series, index) => {
+    const newTime = new Date(baseTime);
+    newTime.setMinutes(newTime.getMinutes() - (index * 1));
+    series.dateAdded = newTime.toISOString();
+  });
+
+  localStorage.setItem('series', JSON.stringify(newOrder));
+}
+
+function updateOverlayCSS() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .script-confirm-dialog .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .script-confirm-dialog .btn-secondary {
+      background: #666;
+      color: white;
+      cursor: pointer;
+    }
+
+    .script-confirm-dialog .btn-secondary:hover {
+      background: #555;
+    }
+  `;
+  document.head.appendChild(style);
 }
 </script>
 </body></html>
