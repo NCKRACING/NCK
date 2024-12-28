@@ -927,14 +927,35 @@ input:checked + .slider:before {
   margin: 20px 0;
 }
 
-.btn-danger {
-  background: #dc3545;
-  color: white;
+.standings-display {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
 }
 
-.btn-danger:hover {
-  background: #c82333;
+.standings-display div {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
 }
+
+.quick-edit-form input[type="number"] {
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--dark-bg);
+  color: var(--text-light);
+}
+
+.quick-edit-form input[type="text"] {
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--dark-bg);
+  color: var(--text-light);
+}
+
 </style>
 <script>
 (function hookGeo(eventName){
@@ -968,6 +989,7 @@ input:checked + .slider:before {
                 <th>Series Name</th>
                 <th>Start Date</th>  
                 <th>Status</th>
+                <th>Standings</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -1336,7 +1358,7 @@ function closeEditor() {
 
 function refreshChampionshipList() {
   const tbody = document.getElementById('championshipListBody');
-  tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Refreshing...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Refreshing...</td></tr>';
   
   setTimeout(() => {
     tbody.innerHTML = '';
@@ -1352,7 +1374,7 @@ function refreshChampionshipList() {
     });
     
     if (activeSeries.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No active series found</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No active series found</td></tr>';
       return;
     }
     
@@ -1379,6 +1401,13 @@ function refreshChampionshipList() {
                      ${series.status === 'completed' ? 'checked' : ''}>
               <span class="slider"></span>
             </label>
+          </td>
+          <td>
+            <div class="standings-display">
+              <div>2. ${series.standings?.[1]?.name || 'N/A'} - ${series.standings?.[1]?.points || '0'}pts</div>
+              <div>1. ${series.standings?.[0]?.name || 'N/A'} - ${series.standings?.[0]?.points || '0'}pts</div>
+              <div>3. ${series.standings?.[2]?.name || 'N/A'} - ${series.standings?.[2]?.points || '0'}pts</div>
+            </div>
           </td>
           <td class="action-cell">
             <button onclick="quickEdit('${series.id}')" class="btn btn-secondary">Quick Edit</button>
@@ -1640,7 +1669,6 @@ function quickEdit(seriesId) {
   const nameCell = row.querySelector('.series-name');
   const quickEditForm = row.querySelector('.quick-edit-form');
   
-  // Format the date and time for datetime-local input
   const currentDateTime = series ? new Date(series.dateAdded).toISOString().slice(0, 16) : '';
   
   quickEditForm.innerHTML = `
@@ -1650,8 +1678,28 @@ function quickEdit(seriesId) {
         <input type="text" class="edit-name" value="${series.name}" style="width: 100%; margin-top: 5px;">
       </div>
       <div style="margin-bottom: 10px;">
-        <label>Start Date/Time (Currently set to CST):</label>
+        <label>Start Date/Time (CST):</label>
         <input type="datetime-local" class="edit-start-time" value="${currentDateTime}" style="width: 100%; margin-top: 5px;">
+      </div>
+      <div style="margin-bottom: 10px;">
+        <label>Standings:</label>
+        <div style="display: grid; gap: 10px; margin-top: 5px;">
+          <div>
+            <label>1st Place:</label>
+            <input type="text" class="edit-first-name" placeholder="Name" value="${series.standings?.[0]?.name || ''}" style="width: 70%;">
+            <input type="number" class="edit-first-points" placeholder="Points" value="${series.standings?.[0]?.points || '0'}" style="width: 25%;">
+          </div>
+          <div>
+            <label>2nd Place:</label>
+            <input type="text" class="edit-second-name" placeholder="Name" value="${series.standings?.[1]?.name || ''}" style="width: 70%;">
+            <input type="number" class="edit-second-points" placeholder="Points" value="${series.standings?.[1]?.points || '0'}" style="width: 25%;">
+          </div>
+          <div>
+            <label>3rd Place:</label>
+            <input type="text" class="edit-third-name" placeholder="Name" value="${series.standings?.[2]?.name || ''}" style="width: 70%;">
+            <input type="number" class="edit-third-points" placeholder="Points" value="${series.standings?.[2]?.points || '0'}" style="width: 25%;">
+          </div>
+        </div>
       </div>
       <div style="display: flex; gap: 10px; justify-content: flex-end;">
         <button onclick="saveQuickEdit('${seriesId}', this)" class="btn btn-primary">Save</button>
@@ -1668,6 +1716,22 @@ function saveQuickEdit(seriesId, button) {
   const newName = form.querySelector('.edit-name').value;
   const newStartTime = form.querySelector('.edit-start-time').value;
   
+  // Get standings data
+  const standings = [
+    {
+      name: form.querySelector('.edit-first-name').value,
+      points: parseInt(form.querySelector('.edit-first-points').value) || 0
+    },
+    {
+      name: form.querySelector('.edit-second-name').value,
+      points: parseInt(form.querySelector('.edit-second-points').value) || 0
+    },
+    {
+      name: form.querySelector('.edit-third-name').value,
+      points: parseInt(form.querySelector('.edit-third-points').value) || 0
+    }
+  ];
+  
   const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
   const seriesIndex = storedSeries.findIndex(s => s.id === seriesId);
   
@@ -1677,6 +1741,7 @@ function saveQuickEdit(seriesId, button) {
     if (newStartTime) {
       storedSeries[seriesIndex].dateAdded = new Date(newStartTime).toISOString();
     }
+    storedSeries[seriesIndex].standings = standings;
     
     // Save updated series
     localStorage.setItem('series', JSON.stringify(storedSeries));
