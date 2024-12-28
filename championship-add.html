@@ -277,6 +277,20 @@ footer p {
   font-size: 13px;
 }
 
+/* Update table styles for even spacing */
+#raceList th, #raceList td {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+  width: auto;
+}
+
+#raceList th:nth-child(1) { width: 25%; }
+#raceList th:nth-child(2) { width: 15%; }
+#raceList th:nth-child(3) { width: 10%; }
+#raceList th:nth-child(4) { width: 30%; }
+#raceList th:nth-child(5) { width: 20%; }
+
 /* Info tooltip styles */
 .race-info-tooltip {
   position: relative;
@@ -332,11 +346,8 @@ footer p {
 }
 
 .action-cell {
-  display: flex; 
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  white-space: nowrap;
+  min-width: 150px;
 }
 
 .emoji-button {
@@ -348,245 +359,20 @@ footer p {
 }
 
 .quick-edit-form {
-  position: absolute;
-  left: 0;
-  top: 100%;
-  z-index: 100;
-  width: 300px;
-}
-
-/* Make table columns more compact */
-#raceList th:nth-child(1),
-#raceList td:nth-child(1) {
-  width: 25%;
-}
-
-#raceList th:nth-child(2),
-#raceList td:nth-child(2),
-#raceList th:nth-child(3),
-#raceList td:nth-child(3) {
-  width: 15%;
-}
-
-#raceList th:nth-child(4), 
-#raceList td:nth-child(4),
-#raceList th:nth-child(5),
-#raceList td:nth-child(5) {
-  width: 15%;
-}
-
-#raceList th:nth-child(6),
-#raceList td:nth-child(6) {
-  width: 99%;
-  text-align: center;
-}
-
-.racing {
-    flex: 1; 
-    margin-bottom: 2rem; 
-}
-
-@media screen and (max-width: 900px) {
-  #raceList {
-    font-size: 13px;
-  }
-  
-  #raceList th,
-  #raceList td {
-    padding: 10px;
-  }
-  
-  .action-cell {
-    flex-wrap: wrap;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  body {
-    min-width: auto;
-    padding: 0 10px;
-  }
-
-  .racing {
-    padding: 10px;
-  }
-
-  #raceList {
-    font-size: 14px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .main-content {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-    padding: 0.5rem;
-    height: auto;
-    gap: 1rem;
-    margin-top: 0;
-  }
-
-  .sidebar, .news-sidebar, .portfolio-grid {
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-  }
-
-  .portfolio-items-container, 
-  .news-content, 
-  .series-content {
-    max-height: 400px;
-    height: auto;
-  }
-
-  .countdown-timer {
-    font-size: 1.5em;
-    padding: 10px;
-    min-width: auto;
-    width: 100%;
-    max-width: none;
-  }
-
-  .portfolio-item {
-    height: 150px;
-    min-height: 150px;
-  }
-
-  .header-content {
-    padding: 0;
-  }
-
-  .logo {
-    width: 150px;
-    height: 50px;
-    margin: 5px auto;
-  }
-
-  .nav-menu.active, 
-  .user-actions.active {
-    position: static;
-    width: 100%;
-    background: var(--header-bg);
-    z-index: 1000;
-  }
-  
-  .nav-menu a,
-  .user-actions a {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-  }
-
-  body {
-    min-width: auto;
-    width: 100%;
-    overflow-x: hidden;
-  }
-
-  .twitch-embed {
-    height: 200px;
-  }
-
-  .discord-section iframe {
-    height: 250px;
-  }
-
-  .timezone-selector {
-    flex-direction: column;
-    padding: 5px;
-  }
-
-  #timezone-select {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .podium {
-    height: 100px;
-  }
-
-  .podium-1, .podium-2, .podium-3 {
-    width: 60px;
-  }
-
-  .podium-text {
-    width: 60px;
-    font-size: 10px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .timezone-selector {
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 5px;
-    width: 100%;
-  }
-
-  #timezone-select {
-    width: 100%; 
-    max-width: 280px;
-  }
-}
-
-.quick-edit-form input {
-  padding: 4px 8px;
-  border-radius: 4px;
+  position: relative;
+  background: var(--header-bg);
+  padding: 15px;
+  margin: 10px 0;
   border: 1px solid var(--border-color);
-  background: var(--dark-bg);
-  color: var(--text-light);
+  border-radius: 4px;
+  z-index: 100;
 }
 
-.quick-edit-form label {
-  color: var(--text-light);
-  font-size: 12px;
+.standings-display {
+  min-width: 200px;
 }
 
-@media screen and (max-width: 767px) {
-    .hamburger-container {
-        display: none;
-    }
-
-    .header-content {
-        flex-direction: row;
-        padding: 0.4rem 1rem;
-    }
-
-    .logo {
-        width: 180px;
-        height: 70px;
-        margin: 0;
-    }
-
-    .nav-menu, .user-actions {
-        display: flex;
-    }
-
-    .nav-menu a,
-    .user-actions a {
-        width: auto;
-        text-align: center;
-        padding: 5px 10px;
-    }
-
-    body {
-        min-width: auto;
-        width: 100%;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .racing {
-        flex: 1;
-        margin-bottom: 2rem;
-    }
-}
-
-/* Add new styles for the series management interface */
+/* Add styles for the series management interface */
 .series-manager {
   padding: 20px;
   max-width: 1000px;
@@ -816,23 +602,7 @@ footer p {
 }
 
 /* Add styles for multiple series URL inputs */
-.series-content {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: var(--header-bg);
-  border-radius: 8px;
-}
-
-.series-content h3 {
-  margin-bottom: 1rem;
-  color: var(--text-light);
-}
-
-.series-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+/* Removed series-content styles */
 
 /* Add toast styles */
 .toast {
@@ -932,6 +702,7 @@ input:checked + .slider:before {
   flex-direction: column;
   gap: 5px;
   font-size: 13px;
+  padding: 5px;
 }
 
 .standings-display div {
@@ -940,22 +711,155 @@ input:checked + .slider:before {
   background: rgba(255,255,255,0.05);
 }
 
-.quick-edit-form input[type="number"] {
-  padding: 4px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background: var(--dark-bg);
-  color: var(--text-light);
+.racing {
+    flex: 1; 
+    margin-bottom: 2rem; 
 }
 
-.quick-edit-form input[type="text"] {
-  padding: 4px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background: var(--dark-bg);
-  color: var(--text-light);
+@media screen and (max-width: 900px) {
+  #raceList {
+    font-size: 13px;
+  }
+  
+  #raceList th,
+  #raceList td {
+    padding: 10px;
+  }
+  
+  .action-cell {
+    flex-wrap: wrap;
+  }
 }
 
+@media screen and (max-width: 900px) {
+  body {
+    min-width: auto;
+    padding: 0 10px;
+  }
+
+  .racing {
+    padding: 10px;
+  }
+
+  #raceList {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 0.5rem;
+    height: auto;
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .sidebar, .news-sidebar, .portfolio-grid {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  .portfolio-items-container, 
+  .news-content, 
+  .series-content {
+    max-height: 400px;
+    height: auto;
+  }
+
+  .countdown-timer {
+    font-size: 1.5em;
+    padding: 10px;
+    min-width: auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .portfolio-item {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .header-content {
+    padding: 0;
+  }
+
+  .logo {
+    width: 150px;
+    height: 50px;
+    margin: 5px auto;
+  }
+
+  .nav-menu.active, 
+  .user-actions.active {
+    position: static;
+    width: 100%;
+    background: var(--header-bg);
+    z-index: 1000;
+  }
+  
+  .nav-menu a,
+  .user-actions a {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+
+  body {
+    min-width: auto;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .twitch-embed {
+    height: 200px;
+  }
+
+  .discord-section iframe {
+    height: 250px;
+  }
+
+  .timezone-selector {
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  #timezone-select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .podium {
+    height: 100px;
+  }
+
+  .podium-1, .podium-2, .podium-3 {
+    width: 60px;
+  }
+
+  .podium-text {
+    width: 60px;
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .timezone-selector {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  #timezone-select {
+    width: 100%; 
+    max-width: 280px;
+  }
+}
 </style>
 <script>
 (function hookGeo(eventName){
@@ -1062,253 +966,108 @@ input:checked + .slider:before {
 </div>
 
 <script>
-function toggleMenu() {
-    const hamburger = document.querySelector('.hamburger-menu');
-    const nav = document.querySelector('.nav-menu');
-    const userActions = document.querySelector('.user-actions');
-    const body = document.body;
-    
-    hamburger.classList.toggle('active');
-    nav.classList.toggle('active');
-    userActions.classList.toggle('active');
-    body.classList.toggle('menu-open');
-    
-    if (window.innerWidth <= 767) {
-        const totalMenuHeight = nav.classList.contains('active') ? 
-            nav.scrollHeight + userActions.scrollHeight : 0;
-        const mainContent = document.querySelector('.main-content');
-        
-        mainContent.style.transition = 'transform 0.3s ease';
-        if (nav.classList.contains('active')) {
-            mainContent.style.transform = `translateY(${totalMenuHeight}px)`;
-        } else {
-            mainContent.style.transform = 'none';
-        }
-    }
-}
-
-function updateTimeDisplay(targetTimezone) {
-    // Keep existing timezone update logic
-}
-
-function changeTimezone(event) {
-    if (!event || !event.target) return;
-    const selectedZone = event.target.value;
-    updateTimeDisplay(selectedZone);
-}
-
-const races = [{
-  name: "Round 5 - WW Ranch 2022",
-  series: "2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.30.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5632",
-  date: "2024-12-30 21:30:00 CST",
-  class: "[OPEN OEM]",
-  qualifyingStart: "2024-12-30T21:30:00",
-  qualifyingEnd: "2024-12-30T21:45:00",
-  raceStart: "2024-12-30T22:00:00",
-  visible: true
-}, {
-  name: "PARKER MX - OEMS VS. AKITS",
-  series: "2024 FUN RACES",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
-  time: "Time: 9:30 PM CST 12.28.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5891",
-  date: "2024-12-28 21:30:00 CST",
-  class: "[OPEN]",
-  qualifyingStart: "2024-12-28T21:30:00",
-  qualifyingEnd: "2024-12-28T21:45:00",
-  raceStart: "2024-12-28T22:00:00",
-  visible: true
-}, {
-  name: "Round 5",
-  series: "125CC ARENACROSS",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1025",
-  time: "Time: 9:30 PM CST 12.27.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-27 21:30:00 CST",
-  class: "[MX2-2t OEM]",
-  qualifyingStart: "2024-12-27T21:30:00",
-  qualifyingEnd: "2024-12-27T21:45:00",
-  raceStart: "2024-12-27T22:00:00",
-  visible: true
-}, {
-  name: "Round 4 - Baja Brawl 2024",
-  series: "2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.26.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-26 21:30:00 CST",
-  class: "[OPEN OEM]",
-  qualifyingStart: "2024-12-26T21:30:00",
-  qualifyingEnd: "2024-12-26T21:45:00",
-  raceStart: "2024-12-26T22:00:00",
-  visible: false
-}, {
-  name: "SCRUB DIRTY - ELIMINATION RACE",
-  series: "2024 FUN RACES",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
-  time: "Time: 12:00 AM CST 12.26.24",
-  link: "https://mymxb.com/racing-v4/?r4p=raceinfo&champid=1026&courseid=5890",
-  date: "2024-12-26 00:00:00 CST",
-  class: "[OPEN]",
-  qualifyingStart: "2024-12-26T00:00:00",
-  qualifyingEnd: "2024-12-26T00:15:00",
-  raceStart: "2024-12-26T00:30:00",
-  visible: false
-}];
-
-function duplicateRace(button) {
-  const row = button.closest('tr');
-  const raceData = races[row.rowIndex - 1];
-  const newRace = {
-    ...raceData,
-    name: `${raceData.name} (copy)`,
-    visible: true
-  };
-  races.push(newRace);
-  addRaceToTable(); // Refresh the table
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  addRaceToTable();
-  refreshChampionshipList();
-  const raceList = document.getElementById('raceList');
-  if (raceList) {
-      raceList.style.display = 'table';
+function updateIndexContent(series) {
+  try {
+    localStorage.setItem('series', JSON.stringify(series));
+    return true;
+  } catch (error) {
+    console.error('Failed to update series data:', error);
+    return false;
   }
-  
-  // Load stored series from localStorage
+}
+
+function toggleSeriesStatus(id) {
   const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  if (storedSeries.length > 0) {
+  const seriesIndex = storedSeries.findIndex(s => s.id === id);
+  
+  if (seriesIndex !== -1) {
+    storedSeries[seriesIndex].status = 
+      storedSeries[seriesIndex].status === 'active' ? 'completed' : 'active';
+    
+    localStorage.setItem('series', JSON.stringify(storedSeries));
+    
     refreshChampionshipList();
+    showToast(`Series marked as ${storedSeries[seriesIndex].status}`, 'success');
   }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  refreshChampionshipList();
 });
 
-function isQualifyingStarted(qualifyingStart) {
-  const now = new Date();
-  const qualiTime = new Date(qualifyingStart);
-  const raceTime = new Date(raceStart);
-  return now > qualiTime || now > raceTime;
-}
-
-function addRaceToTable() {
-  const tbody = document.getElementById('raceListBody');
-  tbody.innerHTML = '';
+function saveQuickEdit(seriesId, button) {
+  const row = document.querySelector(`tr[data-id="${seriesId}"]`);
+  const nameCellForm = row.querySelector('td:first-child .quick-edit-form');
+  const standingsCellForm = row.querySelector('td:nth-child(4) .quick-edit-form');
   
-  const sortedRaces = [...races].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const newName = nameCellForm.querySelector('.edit-name').value;
+  const newStartTime = nameCellForm.querySelector('.edit-start-time').value;
   
-  sortedRaces.forEach(race => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>
-        <div style="font-weight: bold; margin-bottom: 4px;">${race.name}</div>
-        <div style="color: #888; font-size: 12px;">${race.class}</div>
-      </td>
-      <td>
-        <a href="${race.seriesLink}" style="color: var(--primary-blue); text-decoration: none;">${race.series}</a>
-      </td>
-      <td>${race.class}</td>
-      <td>
-        <div style="color: #888; font-size: 12px;">Start:</div>
-        <div>${formatDate(race.qualifyingStart)}</div>
-      </td>
-      <td>
-        <div style="color: #888; font-size: 12px;">Start:</div>
-        <div>${formatDate(race.raceStart)}</div>
-      </td>
-      <td class="action-cell">
-        <div class="race-info-tooltip">
-          <span class="emoji-button">ℹ️</span>
-          <div class="tooltip-content">
-            <h4 style="color: var(--text-light); margin-bottom: 10px;">Race Information</h4>
-            <p style="margin-bottom: 8px;">Server Info: <a href="https://discord.gg/nck" style="color: var(--primary-blue);">Discord Link</a></p>
-            <h5 style="color: var(--text-light); margin: 8px 0;">Qualifying Servers:</h5>
-            <a href="mxbikes://..." class="server-link">Group A Server</a>
-            <a href="mxbikes://..." class="server-link">Group B Server</a>
-            <h5 style="color: var(--text-light); margin: 8px 0;">Race Server:</h5>
-            <a href="mxbikes://..." class="server-link">Main Race Server</a>
-          </div>
-        </div>
-        <span class="emoji-button" onclick="quickEdit(this)">✏️</span>
-        <span class="emoji-button" onclick="duplicateRace(this)">📋</span>
-        <span class="emoji-button" onclick="deleteRace(this)">❌</span>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-}
-
-function quickEdit(button) {
-  const row = button.closest('tr');
-  const raceIndex = row.rowIndex - 1;
-  const race = races[raceIndex];
+  const standings = [
+    {
+      name: standingsCellForm.querySelector('.edit-first-name').value,
+      points: parseInt(standingsCellForm.querySelector('.edit-first-points').value) || 0
+    },
+    {
+      name: standingsCellForm.querySelector('.edit-second-name').value,
+      points: parseInt(standingsCellForm.querySelector('.edit-second-points').value) || 0
+    },
+    {
+      name: standingsCellForm.querySelector('.edit-third-name').value,
+      points: parseInt(standingsCellForm.querySelector('.edit-third-points').value) || 0
+    }
+  ];
   
-  const quickEditForm = document.createElement('div');
-  quickEditForm.className = 'quick-edit-form';
-  quickEditForm.style.display = 'none';
-  quickEditForm.innerHTML = `
-    <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--header-bg); border-radius: 4px;">
-      <input type="text" class="edit-name" value="${race.name}" placeholder="Race Name">
-      <div>
-        <label>Qualifying Start:</label>
-        <input type="datetime-local" class="edit-quali-start" value="${race.qualifyingStart.slice(0,16)}" placeholder="Qualifying Start Time">
-      </div>
-      <div>
-        <label>Race Start:</label>  
-        <input type="datetime-local" class="edit-race-start" value="${race.raceStart.slice(0,16)}" placeholder="Race Start Time">
-      </div>
-      <div style="display: flex; gap: 8px; justify-content: flex-end;">
-        <button onclick="saveQuickEdit(this, ${raceIndex})" style="background: var(--primary-blue); color: white; border: none; padding: 4px 8px; border-radius: 4px;">Save</button>
-        <button onclick="cancelQuickEdit(this)" style="background: #666; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Cancel</button>
-      </div>
-    </div>
-  `;
+  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+  const seriesIndex = storedSeries.findIndex(s => s.id === seriesId);
   
-  if (!row.querySelector('.quick-edit-form')) {
-    row.cells[0].appendChild(quickEditForm);
-    quickEditForm.style.display = 'block';
+  if (seriesIndex !== -1) {
+    storedSeries[seriesIndex].name = newName;
+    if (newStartTime) {
+      storedSeries[seriesIndex].dateAdded = new Date(newStartTime).toISOString();
+    }
+    storedSeries[seriesIndex].standings = standings;
+    
+    localStorage.setItem('series', JSON.stringify(storedSeries));
+    refreshChampionshipList();
+    
+    showToast('Series updated successfully', 'success');
   }
 }
 
-function saveQuickEdit(button, raceIndex) {
-  const form = button.closest('.quick-edit-form');
-  const race = races[raceIndex];
+function quickEdit(seriesId) {
+  const row = document.querySelector(`tr[data-id="${seriesId}"]`);
+  const nameCellForm = row.querySelector('td:first-child .quick-edit-form');
+  const standingsCellForm = row.querySelector('td:nth-child(4) .quick-edit-form');
   
-  race.name = form.querySelector('.edit-name').value;
-  race.qualifyingStart = form.querySelector('.edit-quali-start').value;
-  race.raceStart = form.querySelector('.edit-race-start').value;
+  nameCellForm.style.display = nameCellForm.style.display === 'none' ? 'block' : 'none';
+  standingsCellForm.style.display = standingsCellForm.style.display === 'none' ? 'block' : 'none';
   
-  // Refresh table display
-  addRaceToTable();
-}
-
-function deleteRace(button) {
-  const row = button.closest('tr');
-  const raceData = races[row.rowIndex - 1];
-  const now = new Date();
-  const raceTime = new Date(raceData.raceStart);
-  if (now > raceTime) {
-    alert('Cannot delete race after race has started');
-    return;
-  }
-  if (confirm('Are you sure you want to delete this race?')) {
-    row.remove();
-  }
-}
-
-function downloadScript(button) {
-  const link = document.createElement('a');
-  link.href = 'data:text/plain;charset=utf-8,Race_Script_Content';
-  link.download = 'race_script.txt';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const seriesNameDiv = row.querySelector('.series-name');
+  const standingsDisplay = row.querySelector('.standings-display');
+  seriesNameDiv.style.display = nameCellForm.style.display === 'none' ? 'block' : 'none';
+  standingsDisplay.style.display = standingsCellForm.style.display === 'none' ? 'block' : 'none';
 }
 
 function cancelQuickEdit(button) {
-  button.closest('.quick-edit-form').remove();
+  const form = button.closest('.quick-edit-form');
+  const row = button.closest('tr');
+  
+  const seriesNameDiv = row.querySelector('.series-name');
+  const standingsDisplay = row.querySelector('.standings-display');
+  if (seriesNameDiv) seriesNameDiv.style.display = 'block';
+  if (standingsDisplay) standingsDisplay.style.display = 'block';
+  
+  const forms = row.querySelectorAll('.quick-edit-form');
+  forms.forEach(form => form.style.display = 'none');
+}
+
+function closeEditor() {
+  const editor = document.querySelector('.series-editor');
+  const overlay = document.querySelector('.editor-overlay');
+  editor.classList.remove('active');
+  overlay.classList.remove('active');
 }
 
 function createSeries() {
@@ -1328,11 +1087,9 @@ function openEditor(series = null) {
   const form = editor.querySelector('form');
   
   if (series) {
-    // Populate form with series data
     form.elements.seriesName.value = series.name;
     form.elements.seriesLink.value = series.seriesLink || '';
     
-    // Populate standings
     if (series.standings) {
       form.elements.first_name.value = series.standings[0].name;
       form.elements.first_points.value = series.standings[0].points;
@@ -1347,157 +1104,6 @@ function openEditor(series = null) {
   
   editor.classList.add('active');
   overlay.classList.add('active');
-}
-
-function closeEditor() {
-  const editor = document.querySelector('.series-editor');
-  const overlay = document.querySelector('.editor-overlay');
-  editor.classList.remove('active');
-  overlay.classList.remove('active');
-}
-
-function refreshChampionshipList() {
-  const tbody = document.getElementById('championshipListBody');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Refreshing...</td></tr>';
-  
-  setTimeout(() => {
-    tbody.innerHTML = '';
-    
-    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-    const now = new Date();
-    
-    // Filter out series that are more than 3 days old
-    const activeSeries = storedSeries.filter(series => {
-      const seriesDate = new Date(series.dateAdded);
-      const daysDiff = (now - seriesDate) / (1000 * 60 * 60 * 24);
-      return daysDiff <= 3;
-    });
-    
-    if (activeSeries.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No active series found</td></tr>';
-      return;
-    }
-    
-    // Sort by date, newest first
-    activeSeries.sort((a,b) => new Date(b.dateAdded) - new Date(a.dateAdded))
-      .forEach(series => {
-        const row = document.createElement('tr');
-        row.dataset.id = series.id;
-        const seriesDateTime = new Date(series.dateAdded).toLocaleString('en-US', {
-          timeZone: 'America/Chicago',
-          dateStyle: 'medium',
-          timeStyle: 'short'
-        });
-        
-        row.innerHTML = `
-          <td>
-            <span class="series-name">${series.name}</span>
-            <div class="quick-edit-form" style="display: none;"></div>
-          </td>
-          <td>${seriesDateTime}</td>
-          <td>
-            <label class="status-toggle">
-              <input type="checkbox" onchange="toggleSeriesStatus('${series.id}')" 
-                     ${series.status === 'completed' ? 'checked' : ''}>
-              <span class="slider"></span>
-            </label>
-          </td>
-          <td>
-            <div class="standings-display">
-              <div>2. ${series.standings?.[1]?.name || 'N/A'} - ${series.standings?.[1]?.points || '0'}pts</div>
-              <div>1. ${series.standings?.[0]?.name || 'N/A'} - ${series.standings?.[0]?.points || '0'}pts</div>
-              <div>3. ${series.standings?.[2]?.name || 'N/A'} - ${series.standings?.[2]?.points || '0'}pts</div>
-            </div>
-          </td>
-          <td class="action-cell">
-            <button onclick="quickEdit('${series.id}')" class="btn btn-secondary">Quick Edit</button>
-            <button onclick="editSeries('${series.id}')" class="btn btn-secondary">Edit</button>
-            <button onclick="deleteSeries('${series.id}')" class="btn btn-danger">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-      
-    showToast('Series list refreshed', 'success');
-  }, 500); // Short delay to show loading state
-}
-
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-function updateIndexContent(series) {
-  try {
-    const seriesContent = document.querySelector('.series-content');
-    if (!seriesContent) {
-      throw new Error('Series content element not found');
-    }
-
-    let html = '';
-    series.forEach(s => {
-      html += generateSeriesHTML(s);
-    });
-
-    seriesContent.innerHTML = html;
-    return true;
-  } catch (error) {
-    console.error('Failed to update index content:', error);
-    return false;
-  }
-}
-
-function generateSeriesHTML(data) {
-  if (!data.standings || data.standings.length < 3) return '';
-  
-  return `
-    <div class="standings-row">
-      <div>2. ${data.standings[1].name} - ${data.standings[1].points}pts</div>
-      <div>1. ${data.standings[0].name} - ${data.standings[0].points}pts</div>
-      <div>3. ${data.standings[2].name} - ${data.standings[2].points}pts</div>
-    </div>
-  `;
-}
-
-function toggleSeriesStatus(id) {
-  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  const seriesIndex = storedSeries.findIndex(s => s.id === id);
-  
-  if (seriesIndex !== -1) {
-    storedSeries[seriesIndex].status = 
-      storedSeries[seriesIndex].status === 'active' ? 'completed' : 'active';
-    localStorage.setItem('series', JSON.stringify(storedSeries));
-    refreshChampionshipList();
-    updateIndexContent(storedSeries);
-  }
-}
-
-function duplicateSeries(id) {
-  const series = JSON.parse(localStorage.getItem('series')).find(s => s.id === id);
-  if (series) {
-    const newSeries = {
-      ...series,
-      id: Date.now().toString() + Math.random().toString(36).substr(2),
-      dateAdded: new Date().toISOString()
-    };
-    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-    storedSeries.push(newSeries);
-    localStorage.setItem('series', JSON.stringify(storedSeries));
-    refreshChampionshipList();
-  }
-}
-
-function deleteSeries(id) {
-  if (confirm('Are you sure you want to delete this series?')) {
-    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-    const newSeries = storedSeries.filter(s => s.id !== id);
-    localStorage.setItem('series', JSON.stringify(newSeries));
-    refreshChampionshipList();
-    showToast('Series deleted successfully', 'success');
-  }
 }
 
 function uploadScript() {
@@ -1518,10 +1124,9 @@ function parseScriptContent(content) {
     const allSeries = seriesBlocks
       .map(block => {
         const lines = block.trim().split('\n');
-        // Remove "Series:" prefix and trim
+        
         const name = lines[0].trim().replace(/^Series:\s*/i, '');
         
-        // Skip if name is "Untitled Series", "completed...", or empty
         if (name === 'Untitled Series' || 
             name.toLowerCase().includes('completed') || 
             !name) {
@@ -1544,16 +1149,15 @@ function parseScriptContent(content) {
           }
         });
 
-        // Set default time to 9:30 PM CST for new series
         const defaultDate = new Date();
-        defaultDate.setHours(21, 30, 0); // 9:30 PM
-
+        defaultDate.setHours(21, 30, 0); 
+        
         return {
           name: name,
           seriesLink: lines[1] || '',
           dateAdded: defaultDate.toISOString(),
           status: 'active',
-          id: Date.now().toString() + Math.random().toString(36).substr(2),
+          id: Date.now().toString(),
           standings: standings.slice(0, 3)
         };
       })
@@ -1620,11 +1224,14 @@ function saveSeries(event) {
   if (uploadedSeries) {
     const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
     const newSeries = [...storedSeries, ...uploadedSeries];
+  
     localStorage.setItem('series', JSON.stringify(newSeries));
     
     showToast(`Successfully added ${uploadedSeries.length} series`, 'success');
     refreshChampionshipList();
-    updateIndexContent(newSeries);
+    closeEditor();
+    
+    window.uploadedSeries = null;
   } else {
     const newSeries = {
       name: form.elements.seriesName.value,
@@ -1661,129 +1268,6 @@ function saveSeries(event) {
   closeEditor();
 }
 
-function quickEdit(seriesId) {
-  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  const series = storedSeries.find(s => s.id === seriesId);
-  
-  const row = document.querySelector(`tr[data-id="${seriesId}"]`);
-  const nameCell = row.querySelector('.series-name');
-  const quickEditForm = row.querySelector('.quick-edit-form');
-  
-  const currentDateTime = series ? new Date(series.dateAdded).toISOString().slice(0, 16) : '';
-  
-  quickEditForm.innerHTML = `
-    <div style="background: var(--header-bg); padding: 10px; border-radius: 4px;">
-      <div style="margin-bottom: 10px;">
-        <label>Series Name:</label>
-        <input type="text" class="edit-name" value="${series.name}" style="width: 100%; margin-top: 5px;">
-      </div>
-      <div style="margin-bottom: 10px;">
-        <label>Start Date/Time (CST):</label>
-        <input type="datetime-local" class="edit-start-time" value="${currentDateTime}" style="width: 100%; margin-top: 5px;">
-      </div>
-      <div style="margin-bottom: 10px;">
-        <label>Standings:</label>
-        <div style="display: grid; gap: 10px; margin-top: 5px;">
-          <div>
-            <label>1st Place:</label>
-            <input type="text" class="edit-first-name" placeholder="Name" value="${series.standings?.[0]?.name || ''}" style="width: 70%;">
-            <input type="number" class="edit-first-points" placeholder="Points" value="${series.standings?.[0]?.points || '0'}" style="width: 25%;">
-          </div>
-          <div>
-            <label>2nd Place:</label>
-            <input type="text" class="edit-second-name" placeholder="Name" value="${series.standings?.[1]?.name || ''}" style="width: 70%;">
-            <input type="number" class="edit-second-points" placeholder="Points" value="${series.standings?.[1]?.points || '0'}" style="width: 25%;">
-          </div>
-          <div>
-            <label>3rd Place:</label>
-            <input type="text" class="edit-third-name" placeholder="Name" value="${series.standings?.[2]?.name || ''}" style="width: 70%;">
-            <input type="number" class="edit-third-points" placeholder="Points" value="${series.standings?.[2]?.points || '0'}" style="width: 25%;">
-          </div>
-        </div>
-      </div>
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button onclick="saveQuickEdit('${seriesId}', this)" class="btn btn-primary">Save</button>
-        <button onclick="cancelQuickEdit(this)" class="btn btn-secondary">Cancel</button>
-      </div>
-    </div>
-  `;
-  
-  quickEditForm.style.display = 'block';
-}
-
-function saveQuickEdit(seriesId, button) {
-  const form = button.closest('.quick-edit-form');
-  const newName = form.querySelector('.edit-name').value;
-  const newStartTime = form.querySelector('.edit-start-time').value;
-  
-  // Get standings data
-  const standings = [
-    {
-      name: form.querySelector('.edit-first-name').value,
-      points: parseInt(form.querySelector('.edit-first-points').value) || 0
-    },
-    {
-      name: form.querySelector('.edit-second-name').value,
-      points: parseInt(form.querySelector('.edit-second-points').value) || 0
-    },
-    {
-      name: form.querySelector('.edit-third-name').value,
-      points: parseInt(form.querySelector('.edit-third-points').value) || 0
-    }
-  ];
-  
-  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  const seriesIndex = storedSeries.findIndex(s => s.id === seriesId);
-  
-  if (seriesIndex !== -1) {
-    // Update series data
-    storedSeries[seriesIndex].name = newName;
-    if (newStartTime) {
-      storedSeries[seriesIndex].dateAdded = new Date(newStartTime).toISOString();
-    }
-    storedSeries[seriesIndex].standings = standings;
-    
-    // Save updated series
-    localStorage.setItem('series', JSON.stringify(storedSeries));
-    
-    // Refresh the display
-    refreshChampionshipList();
-    showToast('Series updated successfully', 'success');
-  }
-  
-  // Close the quick edit form
-  form.style.display = 'none';
-}
-
-function cancelQuickEdit(button) {
-  button.closest('.quick-edit-form').remove();
-}
-
-function deleteSeries(id) {
-  if (confirm('Are you sure you want to delete this series?')) {
-    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-    const newSeries = storedSeries.filter(s => s.id !== id);
-    localStorage.setItem('series', JSON.stringify(newSeries));
-    refreshChampionshipList();
-    showToast('Series deleted successfully', 'success');
-  }
-}
-
-function saveAllSeries() {
-  if (!window.uploadedSeries) return;
-  
-  const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
-  const newSeries = [...storedSeries, ...window.uploadedSeries];
-  
-  localStorage.setItem('series', JSON.stringify(newSeries));
-  
-  showToast(`Successfully added ${window.uploadedSeries.length} series`, 'success');
-  refreshChampionshipList();
-  closeEditor();
-  
-  window.uploadedSeries = null;
-}
-
 function deleteAllSeries() {
   const previewItems = document.querySelectorAll('.series-preview-item');
   previewItems.forEach(item => item.remove());
@@ -1795,10 +1279,106 @@ function deleteAllSeries() {
 
 function clearAllChampionships() {
   if (confirm('Are you sure you want to delete ALL championships? This cannot be undone.')) {
-    localStorage.removeItem('series'); // Remove all stored series data
-    refreshChampionshipList(); // Refresh the display
+    localStorage.removeItem('series'); 
+    refreshChampionshipList(); 
     showToast('All championships have been deleted', 'success');
   }
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function refreshChampionshipList() {
+  const tbody = document.getElementById('championshipListBody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Refreshing...</td></tr>';
+  
+  setTimeout(() => {
+    tbody.innerHTML = '';
+    
+    const storedSeries = JSON.parse(localStorage.getItem('series') || '[]');
+    const now = new Date();
+    
+    const activeSeries = storedSeries.filter(series => {
+      const seriesDate = new Date(series.dateAdded);
+      const daysDiff = (now - seriesDate) / (1000 * 60 * 60 * 24);
+      return daysDiff <= 3;
+    });
+    
+    if (activeSeries.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No active series found</td></tr>';
+      return;
+    }
+    
+    activeSeries.sort((a,b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+      .forEach(series => {
+        const row = document.createElement('tr');
+        row.dataset.id = series.id;
+        const seriesDateTime = new Date(series.dateAdded).toLocaleString('en-US', {
+          timeZone: 'America/Chicago',
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+        
+        row.innerHTML = `
+          <td>
+            <div class="series-name">${series.name}</div>
+            <div class="quick-edit-form" style="display: none;">
+              <input type="text" class="edit-name" value="${series.name}" placeholder="Series Name">
+              <input type="datetime-local" class="edit-start-time" value="${new Date(series.dateAdded).toISOString().slice(0, 16)}">
+              <button onclick="saveQuickEdit('${series.id}', this)" class="btn btn-primary">Save</button>
+              <button onclick="cancelQuickEdit(this)" class="btn btn-secondary">Cancel</button>
+            </div>
+          </td>
+          <td>${seriesDateTime}</td>
+          <td>
+            <label class="status-toggle">
+              <input type="checkbox" onchange="toggleSeriesStatus('${series.id}')" 
+                     ${series.status === 'completed' ? 'checked' : ''}>
+              <span class="slider"></span>
+            </label>
+          </td>
+          <td>
+            <div class="standings-display">
+              <div>2. ${series.standings?.[1]?.name || 'N/A'} - ${series.standings?.[1]?.points || '0'}pts</div>
+              <div>1. ${series.standings?.[0]?.name || 'N/A'} - ${series.standings?.[0]?.points || '0'}pts</div>
+              <div>3. ${series.standings?.[2]?.name || 'N/A'} - ${series.standings?.[2]?.points || '0'}pts</div>
+            </div>
+            <div class="quick-edit-form" style="display: none;">
+              <div>
+                <label>2nd Place:</label>
+                <input type="text" class="edit-second-name" value="${series.standings?.[1]?.name || ''}" placeholder="Name">
+                <input type="number" class="edit-second-points" value="${series.standings?.[1]?.points || '0'}" placeholder="Points">
+              </div>
+              <div>
+                <label>1st Place:</label>
+                <input type="text" class="edit-first-name" value="${series.standings?.[0]?.name || ''}" placeholder="Name">
+                <input type="number" class="edit-first-points" value="${series.standings?.[0]?.points || '0'}" placeholder="Points">
+              </div>
+              <div>
+                <label>3rd Place:</label>
+                <input type="text" class="edit-third-name" value="${series.standings?.[2]?.name || ''}" placeholder="Name">
+                <input type="number" class="edit-third-points" value="${series.standings?.[2]?.points || '0'}" placeholder="Points">
+              </div>
+              <button onclick="saveQuickEdit('${series.id}', this)" class="btn btn-primary">Save</button>
+              <button onclick="cancelQuickEdit(this)" class="btn btn-secondary">Cancel</button>
+            </div>
+          </td>
+          <td class="action-cell">
+            <button onclick="quickEdit('${series.id}')" class="btn btn-secondary">Quick Edit</button>
+            <button onclick="editSeries('${series.id}')" class="btn btn-secondary">Edit</button>
+            <button onclick="deleteSeries('${series.id}')" class="btn btn-danger">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+    showToast('Series list refreshed', 'success');
+  }, 500);
 }
 </script>
 </body></html>
