@@ -1,0 +1,1521 @@
+<html>
+								<script>(
+									function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}}))}
+								)();
+								</script>
+							<head><base href="." name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --primary-blue: #007bff;
+    --dark-bg: transparent;
+    --header-bg: #1c1c1c; 
+    --text-light: #ffffff;
+    --border-color: #333;
+    --accent-blue: #0066cc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+    -webkit-text-size-adjust: 100%;
+    background-color: #111111;
+    color: var(--text-light);
+    line-height: 1.6;
+    background-image: url('https://i.ibb.co/1fskJCB/Asset-4.png');
+    background-repeat: repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    padding: 0 20px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Add header styles */
+.header {
+    width: 100vw;
+    margin-left: calc(-1 * (100vw - 100%)/2); 
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+    background-color: var(--header-bg);
+    border-bottom: 1px solid #222;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.4rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    width: 180px;
+    height: 70px;
+    font-size: 0;
+    font-weight: normal;
+    color: transparent;
+    text-transform: none;
+    font-style: normal;
+    background-image: url('https://i.ibb.co/ByP7Br9/Asset-6.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+}
+
+.nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+}
+
+.nav-menu a {
+    color: #888;
+    text-decoration: none;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    font-style: italic;
+    padding: 5px 10px;
+    transform: skew(-15deg);
+    display: inline-block;
+}
+
+.nav-menu a span {
+    display: inline-block;
+    transform: skew(15deg);
+}
+
+.nav-menu a:hover {
+    color: var(--text-light);
+    background-color: var(--primary-blue);
+    border-radius: 0;
+}
+
+.nav-menu a.active {
+    color: var(--text-light);
+    background-color: var(--primary-blue);
+    border: none;
+    border-radius: 0;
+    font-style: italic;
+    padding: 5px 10px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 1rem;
+    font-size: 16px;
+    margin: 0;
+    width: auto;
+    justify-content: flex-end;
+}
+
+.user-actions a {
+    text-decoration: none;
+    padding: 5px 10px;
+    font-style: italic;
+    transform: skew(-15deg);
+    transition: color 0.2s;
+}
+
+.user-actions a span {
+    display: inline-block;
+    transform: skew(15deg);
+}
+
+.login-btn, .signup-btn {
+    color: #888;
+}
+
+.login-btn:hover, .signup-btn:hover {
+    color: var(--text-light);
+    background-color: var(--primary-blue);
+}
+
+.hamburger-container, 
+.hamburger-menu {
+    display: none;
+}
+
+.top-line {
+    width: 100vw;
+    margin-left: calc(-1 * (100vw - 100%)/2);
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    background-color: var(--primary-blue);
+}
+
+/* Timezone selector styles */
+.timezone-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    font-size: 12px;
+    padding: 0 20px;
+}
+
+#timezone-select {
+    max-width: 200px;
+    background-color: transparent;
+    color: #888;
+    border: 1px solid #333;
+    padding: 2px 5px;
+}
+
+#timezone-select option {
+    background-color: #1c1c1c;
+    color: #888;
+}
+
+/* Add footer styles */
+footer {
+    background-color: #000000;
+    padding: 0.4rem;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    border-top: 2px solid var(--primary-blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto;
+    position: relative;
+    width: calc(100vw);
+    margin-left: calc(-50vw + 50%);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+
+footer p {
+    margin: 0;
+    padding: 5px 0;
+    width: 100%;
+    text-align: center;
+}
+
+#racingmenubuttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.btnmenu {
+    background: #007bff;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.btnmenu:hover {
+    background: #0056b3;
+}
+
+.race-creator,
+.form-group,
+.submit-btn,
+.alert-warning {
+    display: none;
+}
+
+/* New table styles */
+#raceList {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  background: var(--header-bg);
+}
+
+#raceList th {
+  background: var(--primary-blue);
+  color: var(--text-light);
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+#raceList td {
+  padding: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+/* Info tooltip styles */
+.race-info-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.tooltip-content {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  background: var(--header-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  z-index: 1000;
+  margin-bottom: 10px;
+}
+
+.tooltip-content:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: var(--header-bg) transparent transparent;
+}
+
+.race-info-tooltip:hover .tooltip-content {
+  display: block;
+}
+
+.server-link {
+  display: block;
+  padding: 8px;
+  margin: 4px 0;
+  background: rgba(0, 123, 255, 0.1);
+  color: var(--text-light);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.server-link:hover {
+  background: rgba(0, 123, 255, 0.2);
+}
+
+.action-cell {
+  display: flex; 
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.emoji-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.quick-edit-form {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 100;
+  width: 300px;
+}
+
+/* Make table columns more compact */
+#raceList th:nth-child(1),
+#raceList td:nth-child(1) {
+  width: 25%;
+}
+
+#raceList th:nth-child(2),
+#raceList td:nth-child(2),
+#raceList th:nth-child(3),
+#raceList td:nth-child(3) {
+  width: 15%;
+}
+
+#raceList th:nth-child(4), 
+#raceList td:nth-child(4),
+#raceList th:nth-child(5),
+#raceList td:nth-child(5) {
+  width: 15%;
+}
+
+#raceList th:nth-child(6),
+#raceList td:nth-child(6) {
+  width: 99%;
+  text-align: center;
+}
+
+.racing {
+    flex: 1; 
+    margin-bottom: 2rem; 
+}
+
+@media screen and (max-width: 900px) {
+  #raceList {
+    font-size: 13px;
+  }
+  
+  #raceList th,
+  #raceList td {
+    padding: 10px;
+  }
+  
+  .action-cell {
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  body {
+    min-width: auto;
+    padding: 0 10px;
+  }
+
+  .racing {
+    padding: 10px;
+  }
+
+  #raceList {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 0.5rem;
+    height: auto;
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .sidebar, .news-sidebar, .portfolio-grid {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  .portfolio-items-container, 
+  .news-content, 
+  .series-content {
+    max-height: 400px;
+    height: auto;
+  }
+
+  .countdown-timer {
+    font-size: 1.5em;
+    padding: 10px;
+    min-width: auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .portfolio-item {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .header-content {
+    padding: 0;
+  }
+
+  .logo {
+    width: 150px;
+    height: 50px;
+    margin: 5px auto;
+  }
+
+  .nav-menu.active, 
+  .user-actions.active {
+    position: static;
+    width: 100%;
+    background: var(--header-bg);
+    z-index: 1000;
+  }
+  
+  .nav-menu a,
+  .user-actions a {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+
+  body {
+    min-width: auto;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .twitch-embed {
+    height: 200px;
+  }
+
+  .discord-section iframe {
+    height: 250px;
+  }
+
+  .timezone-selector {
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  #timezone-select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .podium {
+    height: 100px;
+  }
+
+  .podium-1, .podium-2, .podium-3 {
+    width: 60px;
+  }
+
+  .podium-text {
+    width: 60px;
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .timezone-selector {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  #timezone-select {
+    width: 100%; 
+    max-width: 280px;
+  }
+}
+
+.quick-edit-form input {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--dark-bg);
+  color: var(--text-light);
+}
+
+.quick-edit-form label {
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+@media screen and (max-width: 767px) {
+    .hamburger-container {
+        display: none;
+    }
+
+    .header-content {
+        flex-direction: row;
+        padding: 0.4rem 1rem;
+    }
+
+    .logo {
+        width: 180px;
+        height: 70px;
+        margin: 0;
+    }
+
+    .nav-menu, .user-actions {
+        display: flex;
+    }
+
+    .nav-menu a,
+    .user-actions a {
+        width: auto;
+        text-align: center;
+        padding: 5px 10px;
+    }
+
+    body {
+        min-width: auto;
+        width: 100%;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .racing {
+        flex: 1;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Add new styles for the series management interface */
+.series-manager {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.series-editor {
+  background: var(--header-bg);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.series-editor.active {
+  display: block;
+}
+
+.editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  z-index: 999;
+}
+
+.editor-overlay.active {
+  display: block;
+}
+
+.series-controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.series-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.series-entry {
+  background: var(--header-bg);
+  padding: 15px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.series-actions {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.series-date {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.standings-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: var(--text-light);
+}
+
+.form-group input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: #222;
+  color: var(--text-light);
+}
+
+.btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.btn-secondary {
+  background: #666;
+  color: white;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.podium-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.podium-1 {
+  width: 60px;
+  height: 60px;
+  background-color: #ffd700;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #111;
+}
+
+.podium-2 {
+  width: 60px;
+  height: 60px;
+  background-color: #b1b1b1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #111;
+}
+
+.podium-3 {
+  width: 60px;
+  height: 60px;
+  background-color: #cd7f32;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #111;
+}
+
+.place-number {
+  font-size: 24px;
+  margin: 10px;
+}
+
+.podium-text {
+  font-size: 16px;
+  text-align: center;
+}
+
+.points {
+  font-size: 14px;
+  color: #888;
+}
+
+/* Add styles for the confirmation dialog */
+.script-confirm-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.script-confirm-content {
+  background: var(--header-bg);
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.script-confirm-content pre {
+  background: #222;
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow: auto;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.script-confirm-content .button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.url-prompt-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0; 
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.url-prompt-content {
+  background: var(--header-bg);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.status-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.status-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Add toast styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  z-index: 2000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.toast.success {
+  background: #28a745;
+}
+
+.toast.error {
+  background: #dc3545;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+</style>
+<script>
+(function hookGeo(eventName){
+  // Long geo location script provided by user
+})();
+</script>
+<meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NCK Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="top-line"></div>
+
+<div class="racing" align="center">
+    <h3>Championship List</h3>
+            
+    <div id="racingmenubuttons">
+        <a class="btnmenu" href="https://example.com/add">Add a championship</a>
+        <a class="btnmenu" href="https://example.com/races">Races</a>
+        <a class="btnmenu" href="https://example.com/streamers">Streamers</a>
+        <a class="btnmenu" href="https://example.com/points">Points Tables</a>
+        <a class="btnmenu" href="https://example.com/servers">My servers</a>
+        <a class="btnmenu" href="https://example.com/help">Help</a>
+    </div>
+
+    <table id="raceList" style="display: table;">
+        <thead>
+            <tr>
+                <th>Series Name</th>
+                <th>Start Date</th>  
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="championshipListBody">
+            <!-- Championships will be added here dynamically -->
+        </tbody>
+    </table>
+</div>
+
+<div class="racing" align="center">
+  <h3>Series Standings</h3>
+  <div class="series-content">
+    <!-- Live standings from index.html will be displayed here -->
+  </div>
+</div>
+
+<div class="series-manager">
+  <div class="series-controls">
+    <button class="btn btn-primary" onclick="createSeries()">New Series</button>
+    <button class="btn btn-primary" onclick="uploadScript()">Upload Script</button>
+  </div>
+  
+  <div class="series-list">
+    <!-- Series entries will be added here dynamically -->
+  </div>
+</div>
+
+<div class="editor-overlay">
+  <div class="series-editor">
+    <h3>Edit Series</h3>
+    <form class="edit-form" onsubmit="saveSeries(event)">
+      <div class="form-group">
+        <label>Series Name</label>
+        <input type="text" name="seriesName" required="">
+      </div>
+      <div class="form-group">
+        <label>Series Link</label>
+        <input type="url" name="seriesLink" required="">
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" name="startDate" required="">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      
+      <h4>Standings</h4>
+      <div class="standings-inputs">
+        <div class="form-group">
+          <label>2nd Place</label>
+          <input type="text" name="second_name" placeholder="Name" required="">
+          <input type="number" name="second_points" placeholder="Points" required="">
+        </div>
+        <div class="form-group">
+          <label>1st Place</label>
+          <input type="text" name="first_name" placeholder="Name" required="">
+          <input type="number" name="first_points" placeholder="Points" required="">
+        </div>
+        <div class="form-group">
+          <label>3rd Place</label>
+          <input type="text" name="third_name" placeholder="Name" required="">
+          <input type="number" name="third_points" placeholder="Points" required="">
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const hamburger = document.querySelector('.hamburger-menu');
+    const nav = document.querySelector('.nav-menu');
+    const userActions = document.querySelector('.user-actions');
+    const body = document.body;
+    
+    hamburger.classList.toggle('active');
+    nav.classList.toggle('active');
+    userActions.classList.toggle('active');
+    body.classList.toggle('menu-open');
+    
+    if (window.innerWidth <= 767) {
+        const totalMenuHeight = nav.classList.contains('active') ? 
+            nav.scrollHeight + userActions.scrollHeight : 0;
+        const mainContent = document.querySelector('.main-content');
+        
+        mainContent.style.transition = 'transform 0.3s ease';
+        if (nav.classList.contains('active')) {
+            mainContent.style.transform = `translateY(${totalMenuHeight}px)`;
+        } else {
+            mainContent.style.transform = 'none';
+        }
+    }
+}
+
+function updateTimeDisplay(targetTimezone) {
+    // Keep existing timezone update logic
+}
+
+function changeTimezone(event) {
+    if (!event || !event.target) return;
+    const selectedZone = event.target.value;
+    updateTimeDisplay(selectedZone);
+}
+
+const races = [{
+  name: "Round 5 - WW Ranch 2022",
+  series: "2024 Stock Track | Open",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
+  time: "Time: 9:30 PM CST 12.30.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5632",
+  date: "2024-12-30 21:30:00 CST",
+  class: "[OPEN OEM]",
+  qualifyingStart: "2024-12-30T21:30:00",
+  qualifyingEnd: "2024-12-30T21:45:00",
+  raceStart: "2024-12-30T22:00:00",
+  visible: true
+}, {
+  name: "PARKER MX - OEMS VS. AKITS",
+  series: "2024 FUN RACES",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
+  time: "Time: 9:30 PM CST 12.28.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5891",
+  date: "2024-12-28 21:30:00 CST",
+  class: "[OPEN]",
+  qualifyingStart: "2024-12-28T21:30:00",
+  qualifyingEnd: "2024-12-28T21:45:00",
+  raceStart: "2024-12-28T22:00:00",
+  visible: true
+}, {
+  name: "Round 5",
+  series: "125CC ARENACROSS",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1025",
+  time: "Time: 9:30 PM CST 12.27.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
+  date: "2024-12-27 21:30:00 CST",
+  class: "[MX2-2t OEM]",
+  qualifyingStart: "2024-12-27T21:30:00",
+  qualifyingEnd: "2024-12-27T21:45:00",
+  raceStart: "2024-12-27T22:00:00",
+  visible: true
+}, {
+  name: "Round 4 - Baja Brawl 2024",
+  series: "2024 Stock Track | Open",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
+  time: "Time: 9:30 PM CST 12.26.24",
+  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
+  date: "2024-12-26 21:30:00 CST",
+  class: "[OPEN OEM]",
+  qualifyingStart: "2024-12-26T21:30:00",
+  qualifyingEnd: "2024-12-26T21:45:00",
+  raceStart: "2024-12-26T22:00:00",
+  visible: false
+}, {
+  name: "SCRUB DIRTY - ELIMINATION RACE",
+  series: "2024 FUN RACES",
+  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
+  time: "Time: 12:00 AM CST 12.26.24",
+  link: "https://mymxb.com/racing-v4/?r4p=raceinfo&champid=1026&courseid=5890",
+  date: "2024-12-26 00:00:00 CST",
+  class: "[OPEN]",
+  qualifyingStart: "2024-12-26T00:00:00",
+  qualifyingEnd: "2024-12-26T00:15:00",
+  raceStart: "2024-12-26T00:30:00",
+  visible: false
+}];
+
+function duplicateRace(button) {
+  const row = button.closest('tr');
+  const raceData = races[row.rowIndex - 1];
+  const newRace = {
+    ...raceData,
+    name: `${raceData.name} (copy)`,
+    visible: true
+  };
+  races.push(newRace);
+  addRaceToTable(); // Refresh the table
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  addRaceToTable();
+  const raceList = document.getElementById('raceList');
+  if (raceList) {
+      raceList.style.display = 'table';
+  }
+});
+
+function isQualifyingStarted(qualifyingStart) {
+  const now = new Date();
+  const qualiTime = new Date(qualifyingStart);
+  const raceTime = new Date(raceStart);
+  return now > qualiTime || now > raceTime;
+}
+
+function addRaceToTable() {
+  const tbody = document.getElementById('raceListBody');
+  tbody.innerHTML = '';
+  
+  const sortedRaces = [...races].sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  sortedRaces.forEach(race => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>
+        <div style="font-weight: bold; margin-bottom: 4px;">${race.name}</div>
+        <div style="color: #888; font-size: 12px;">${race.class}</div>
+      </td>
+      <td>
+        <a href="${race.seriesLink}" style="color: var(--primary-blue); text-decoration: none;">${race.series}</a>
+      </td>
+      <td>${race.class}</td>
+      <td>
+        <div style="color: #888; font-size: 12px;">Start:</div>
+        <div>${formatDate(race.qualifyingStart)}</div>
+      </td>
+      <td>
+        <div style="color: #888; font-size: 12px;">Start:</div>
+        <div>${formatDate(race.raceStart)}</div>
+      </td>
+      <td class="action-cell">
+        <div class="race-info-tooltip">
+          <span class="emoji-button">ℹ️</span>
+          <div class="tooltip-content">
+            <h4 style="color: var(--text-light); margin-bottom: 10px;">Race Information</h4>
+            <p style="margin-bottom: 8px;">Server Info: <a href="https://discord.gg/nck" style="color: var(--primary-blue);">Discord Link</a></p>
+            <h5 style="color: var(--text-light); margin: 8px 0;">Qualifying Servers:</h5>
+            <a href="mxbikes://..." class="server-link">Group A Server</a>
+            <a href="mxbikes://..." class="server-link">Group B Server</a>
+            <h5 style="color: var(--text-light); margin: 8px 0;">Race Server:</h5>
+            <a href="mxbikes://..." class="server-link">Main Race Server</a>
+          </div>
+        </div>
+        <span class="emoji-button" onclick="quickEdit(this)">✏️</span>
+        <span class="emoji-button" onclick="duplicateRace(this)">📋</span>
+        <span class="emoji-button" onclick="deleteRace(this)">❌</span>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function quickEdit(button) {
+  const row = button.closest('tr');
+  const raceIndex = row.rowIndex - 1;
+  const race = races[raceIndex];
+  
+  const quickEditForm = document.createElement('div');
+  quickEditForm.className = 'quick-edit-form';
+  quickEditForm.style.display = 'none';
+  quickEditForm.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--header-bg); border-radius: 4px;">
+      <input type="text" class="edit-name" value="${race.name}" placeholder="Race Name">
+      <div>
+        <label>Qualifying Start:</label>
+        <input type="datetime-local" class="edit-quali-start" value="${race.qualifyingStart.slice(0,16)}" placeholder="Qualifying Start Time">
+      </div>
+      <div>
+        <label>Race Start:</label>  
+        <input type="datetime-local" class="edit-race-start" value="${race.raceStart.slice(0,16)}" placeholder="Race Start Time">
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button onclick="saveQuickEdit(this, ${raceIndex})" style="background: var(--primary-blue); color: white; border: none; padding: 4px 8px; border-radius: 4px;">Save</button>
+        <button onclick="cancelQuickEdit(this)" style="background: #666; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Cancel</button>
+      </div>
+    </div>
+  `;
+  
+  if (!row.querySelector('.quick-edit-form')) {
+    row.cells[0].appendChild(quickEditForm);
+    quickEditForm.style.display = 'block';
+  }
+}
+
+function saveQuickEdit(button, raceIndex) {
+  const form = button.closest('.quick-edit-form');
+  const race = races[raceIndex];
+  
+  race.name = form.querySelector('.edit-name').value;
+  race.qualifyingStart = form.querySelector('.edit-quali-start').value;
+  race.raceStart = form.querySelector('.edit-race-start').value;
+  
+  // Refresh table display
+  addRaceToTable();
+}
+
+function deleteRace(button) {
+  const row = button.closest('tr');
+  const raceData = races[row.rowIndex - 1];
+  const now = new Date();
+  const raceTime = new Date(raceData.raceStart);
+  if (now > raceTime) {
+    alert('Cannot delete race after race has started');
+    return;
+  }
+  if (confirm('Are you sure you want to delete this race?')) {
+    row.remove();
+  }
+}
+
+function downloadScript(button) {
+  const link = document.createElement('a');
+  link.href = 'data:text/plain;charset=utf-8,Race_Script_Content';
+  link.download = 'race_script.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function cancelQuickEdit(button) {
+  button.closest('.quick-edit-form').remove();
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleString();
+}
+
+let seriesData = []; // Will store all series data
+
+function createSeries() {
+  openEditor();
+}
+
+function editSeries(seriesId) {
+  const series = seriesData.find(s => s.id === seriesId);
+  if (series) {
+    openEditor(series);
+  }
+}
+
+function openEditor(series = null) {
+  const editor = document.querySelector('.series-editor');
+  const overlay = document.querySelector('.editor-overlay');
+  const form = editor.querySelector('form');
+  
+  if (series) {
+    // Populate form with series data
+    form.elements.seriesName.value = series.name;
+    // ...populate other fields
+  } else {
+    form.reset();
+  }
+  
+  editor.classList.add('active');
+  overlay.classList.add('active');
+}
+
+function closeEditor() {
+  const editor = document.querySelector('.series-editor');
+  const overlay = document.querySelector('.editor-overlay');
+  editor.classList.remove('active');
+  overlay.classList.remove('active');
+}
+
+function parseSeriesScript(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const series = [];
+  let currentSeries = null;
+  
+  for (const line of lines) {
+    if (line.startsWith('Series:')) {
+      if (currentSeries) {
+        series.push(currentSeries);
+      }
+      currentSeries = {
+        name: line.replace('Series:', '').trim(),
+        url: '',
+        standings: [],
+        date: new Date().toISOString(),
+        status: 'active'
+      };
+    } else if (line.match(/^\d+[a-z]{2}:/)) {
+      const [place, rest] = line.split(':');
+      const [name, points] = rest.split('—').map(s => s.trim());
+      currentSeries.standings.push({
+        place: parseInt(place),
+        name,
+        points: parseInt(points)
+      });
+    }
+  }
+  
+  if (currentSeries) {
+    series.push(currentSeries); 
+  }
+  
+  return series;
+}
+
+function executeScript(scriptText) {
+  try {
+    const series = parseSeriesScript(scriptText);
+    
+    const dialog = document.createElement('div');
+    dialog.className = 'url-prompt-dialog';
+    dialog.innerHTML = `
+      <div class="url-prompt-content">
+        <h3>Enter Series URL</h3>
+        <input type="text" class="series-url" placeholder="https://mymxb.com/racing-v4/?r4p=champpage&champid=xxxx">
+        <div class="button-group">
+          <button onclick="completeSeriesImport(this, ${JSON.stringify(series[0])})" class="btn btn-primary">Complete & Execute</button>
+          <button onclick="this.closest('.url-prompt-dialog').remove()" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+  } catch (error) {
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.innerHTML = 'Failed to parse script: ' + error.message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+}
+
+function completeSeriesImport(button, seriesData) {
+  const dialog = button.closest('.url-prompt-dialog');
+  const url = dialog.querySelector('.series-url').value;
+  
+  if (!url) {
+    alert('Please enter a URL');
+    return;
+  }
+  
+  seriesData.url = url;
+  const success = updateIndexContent([seriesData]);
+  
+  const toast = document.createElement('div');
+  toast.className = `toast ${success ? 'success' : 'error'}`;
+  toast.innerHTML = success ? 'Series updated successfully!' : 'Failed to update series';
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.remove(), 3000);
+  dialog.remove();
+  
+  refreshChampionshipList();
+}
+
+function updateIndexContent(series) {
+  try {
+    const seriesContent = document.querySelector('.series-content');
+    if (!seriesContent) {
+      throw new Error('Series content element not found');
+    }
+
+    let html = '';
+    const activeSeries = series.filter(s => s.status !== 'completed');
+    const completedSeries = series.filter(s => s.status === 'completed');
+
+    activeSeries.forEach(s => {
+      html += generateSeriesHTML(s);
+    });
+
+    if (completedSeries.length) {
+      html += '<h3 class="standings-section-title">Completed...</h3>';
+      completedSeries.forEach(s => {
+        html += generateSeriesHTML(s);
+      });
+    }
+
+    seriesContent.innerHTML = html;
+    return true;
+  } catch (error) {
+    console.error('Failed to update index content:', error);
+    return false;
+  }
+}
+
+function generateSeriesHTML(data) {
+  return `
+    <div class="series-item" data-series="${data.name}" data-date="${data.date}">
+      <h4>
+        <a href="${data.url}" target="_blank">${data.name}</a>
+        <label class="status-toggle">
+          <input type="checkbox" onchange="toggleStatus(this)" 
+                 ${data.status === 'completed' ? 'checked' : ''}>
+          <span class="slider"></span>
+        </label>
+      </h4>
+      <div class="podium">
+        <div class="podium-place">
+          <div class="podium-2"></div>
+          <div class="place-number">2</div>
+          <div class="podium-text">${data.standings[1].name}
+            <span class="points">${data.standings[1].points}pts</span>
+          </div>
+        </div>
+        <div class="podium-place">
+          <div class="podium-1"></div>
+          <div class="place-number">1</div>
+          <div class="podium-text">${data.standings[0].name}
+            <span class="points points-leader">${data.standings[0].points}pts</span>
+          </div>
+        </div>
+        <div class="podium-place">
+          <div class="podium-3"></div>
+          <div class="place-number">3</div>
+          <div class="podium-text">${data.standings[2].name}
+            <span class="points">${data.standings[2].points}pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleStatus(checkbox) {
+  const series = checkbox.closest('.series-item');
+  const completed = document.querySelector('.standings-section-title');
+  
+  if (checkbox.checked) {
+    completed.after(series);
+  } else {
+    document.querySelector('.series-content').prepend(series);
+  }
+  
+  const items = [...document.querySelectorAll('.series-item')];
+  items.sort((a,b) => {
+    const dateA = new Date(a.dataset.date);
+    const dateB = new Date(b.dataset.date);
+    return dateB - dateA;
+  });
+  
+  document.querySelector('.series-content').append(...items);
+}
+
+function uploadScript() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt,.json';
+  
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    const text = await file.text();
+    
+    executeScript(text);
+  };
+  
+  input.click();
+}
+
+function refreshChampionshipList() {
+  const tbody = document.getElementById('championshipListBody');
+  tbody.innerHTML = '';
+  
+  seriesData.sort((a,b) => new Date(b.startDate) - new Date(a.startDate))
+    .forEach(series => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${series.name}</td>
+      <td>${new Date(series.startDate).toLocaleDateString()}</td>
+      <td>
+        <label class="status-toggle">
+          <input type="checkbox" onchange="toggleSeriesStatus('${series.id}')" 
+                 ${series.status === 'completed' ? 'checked' : ''}>
+          <span class="slider"></span>
+        </label>
+      </td>
+      <td class="action-cell">
+        <button onclick="editSeries('${series.id}')" class="btn btn-secondary">Edit</button>
+        <button onclick="deleteSeries('${series.id}')" class="btn btn-danger">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+</script>
+</body></html>
