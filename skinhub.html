@@ -3,7 +3,8 @@
 									function hookGeo(eventName){const originalGetCurrentPosition=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),originalWatchPosition=navigator.geolocation.watchPosition.bind(navigator.geolocation),originalPermissionsQuery=navigator.permissions.query.bind(navigator.permissions),reloadHostnames=["tv.youtube.com"];let fakeGeo=!0,genLat=38.883333,genLon=-77,geolocationPermissionPrompted=!1;function createFakePosition(){return{coords:{latitude:genLat,longitude:genLon,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:(new Date).getTime()}}function waitGetCurrentPosition(){void 0!==fakeGeo?!0===fakeGeo?geolocationPermissionPrompted?originalGetCurrentPosition((()=>{geolocationPermissionPrompted=!1,geolocationProxy.tmp_successCallback(createFakePosition()),reloadHostnames.includes(window.location.hostname)&&window.location.reload()}),geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):geolocationProxy.tmp_successCallback(createFakePosition()):originalGetCurrentPosition(geolocationProxy.tmp_successCallback,geolocationProxy.tmp_errorCallback,geolocationProxy.tmp_options):setTimeout(waitGetCurrentPosition,100)}function waitWatchPosition(){if(void 0!==fakeGeo)return!0===fakeGeo?(geolocationProxy.tmp2_successCallback(createFakePosition()),Math.floor(1e4*Math.random())):originalWatchPosition(geolocationProxy.tmp2_successCallback,geolocationProxy.tmp2_errorCallback,geolocationProxy.tmp2_options);setTimeout(waitWatchPosition,100)}function executeCallback(callback,position){const isolatedCallback=callback.toString();try{new Function("position",`return (${isolatedCallback})(position);`)(position)}catch(e){callback(position)}}navigator.permissions.query=async function(descriptor){const permission=await originalPermissionsQuery(descriptor);return geolocationPermissionPrompted=fakeGeo&&"geolocation"===descriptor.name&&"prompt"===permission.state,permission};const geolocationProxy={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(successCallback,errorCallback,options){this.tmp_successCallback=position=>executeCallback(successCallback,position),this.tmp_errorCallback=errorCallback,this.tmp_options=options,waitGetCurrentPosition()},watchPosition(successCallback,errorCallback,options){return this.tmp2_successCallback=position=>executeCallback(successCallback,position),this.tmp2_errorCallback=errorCallback,this.tmp2_options=options,waitWatchPosition()}};Object.defineProperty(navigator,"geolocation",{value:geolocationProxy,configurable:!1,writable:!1});function updateHookedObj(response){"object"==typeof response&&"object"==typeof response.coords&&(genLat=response.coords.lat,genLon=response.coords.lon,fakeGeo=response.fakeIt)}Blob=function(_Blob){function secureBlob(...args){const injectableMimeTypes=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let typeEl=args.find((arg=>"object"==typeof arg&&"string"==typeof arg.type&&arg.type));if(void 0!==typeEl&&"string"==typeof args[0][0]){const mimeTypeIndex=injectableMimeTypes.findIndex((mimeType=>mimeType.mime.toLowerCase()===typeEl.type.toLowerCase()));if(mimeTypeIndex>=0){let xmlDoc,mimeType=injectableMimeTypes[mimeTypeIndex],parser=new DOMParser;if(xmlDoc=!0===mimeType.useXMLparser?parser.parseFromString(args[0].join(""),mimeType.mime):parser.parseFromString(args[0][0],mimeType.mime),0===xmlDoc.getElementsByTagName("parsererror").length){if("image/svg+xml"===typeEl.type){const scriptElem=xmlDoc.createElementNS("http://www.w3.org/2000/svg","script");scriptElem.setAttributeNS(null,"type","application/ecmascript"),scriptElem.innerHTML=`(${hookGeo})();`,xmlDoc.documentElement.insertBefore(scriptElem,xmlDoc.documentElement.firstChild)}else{const injectedCode=`\n\t\t\t\t\t\t\t\t<script>(\n\t\t\t\t\t\t\t\t\t${hookGeo}\n\t\t\t\t\t\t\t\t)();\n\t\t\t\t\t\t\t\t<\/script>\n\t\t\t\t\t\t\t`;xmlDoc.documentElement.insertAdjacentHTML("afterbegin",injectedCode)}!0===mimeType.useXMLparser?args[0]=[(new XMLSerializer).serializeToString(xmlDoc)]:args[0][0]=xmlDoc.documentElement.outerHTML}}}return((constructor,args)=>{const bind=Function.bind;return new(bind.bind(bind)(constructor,null).apply(null,args))})(_Blob,args)}let propNames=Object.getOwnPropertyNames(_Blob);for(let i=0;i<propNames.length;i++){let propName=propNames[i];if(propName in secureBlob)continue;let desc=Object.getOwnPropertyDescriptor(_Blob,propName);Object.defineProperty(secureBlob,propName,desc)}return secureBlob.prototype=_Blob.prototype,secureBlob}(Blob),"undefined"!=typeof chrome?setInterval((()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},(response=>{updateHookedObj(response)}))}),500):void 0!==eventName&&document.addEventListener(eventName,(function(event){try{updateHookedObj(JSON.parse(event.detail))}catch(ex){}}))}
 								)();
 								</script>
-							<head><base href=""><meta charset="UTF-8"><meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>NCK Portfolio</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"><style>:root {--primary-blue: #007bff;--dark-bg: transparent;--header-bg: #1c1c1c; --text-light: #ffffff;--border-color: #333;--accent-blue: #0066cc;}* {margin: 0;padding: 0;box-sizing: border-box;font-family: 'Roboto', sans-serif;}body {min-width: 1200px;overflow-x: auto;-webkit-text-size-adjust: 100%;background-color: transparent;color: var(--text-light); line-height: 1.6;display: flex;flex-direction: column;min-height: 100vh;background-image: url('https://i.ibb.co/1fskJCB/Asset-4.png');background-repeat: repeat;background-size: cover;background-attachment: fixed;position: relative;}body::before {content: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;background-color: rgba(17, 17, 17, 1); opacity: 1; z-index: -1;}.top-line,header,.main-content,footer {position: relative;z-index: 1;}.top-line {height: 2px;background-color: var(--primary-blue);}.header {background-color: var(--header-bg);border-bottom: 1px solid #222;}.header-content {max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 0; align-items: center; padding: 0.4rem 1rem; position: relative;}.logo {width: 180px;height: 70px;font-size: 0;font-weight: normal;color: transparent;text-transform: none;font-style: normal;background-image: url('https://i.ibb.co/ByP7Br9/Asset-6.png');background-size: contain;background-repeat: no-repeat;background-position: center;margin: 0;}.nav-menu {display: flex;flex-wrap: wrap;justify-content: center;width: auto;}.nav-menu a {color: #888;text-decoration: none;font-size: 16px;text-transform: uppercase;transition: color 0.2s;font-style: italic;padding: 5px 10px;transform: skew(-15deg); display: inline-block;}.nav-menu a span {display: inline-block;transform: skew(15deg);}.nav-menu a:hover {color: var(--text-light);background-color: var(--primary-blue);border-radius: 0;}.nav-menu a.active {color: var(--text-light);background-color: var(--primary-blue);border: none;border-radius: 0;font-style: italic;padding: 5px 10px;}.user-actions {display: flex;gap: 1rem;font-size: 16px;margin: 0;width: auto;justify-content: flex-end;}.user-actions a {text-decoration: none;padding: 5px 10px;font-style: italic;transform: skew(-15deg);transition: color 0.2s;}.user-actions a span {display: inline-block;transform: skew(15deg);}.login-btn, .signup-btn {color: #888;}.login-btn:hover, .signup-btn:hover {color: var(--text-light);background-color: var(--primary-blue);}.main-content {max-width: 1800px;margin: 2rem auto;padding: 0 2rem;}.skin-management {display: grid;grid-template-columns: 1fr 2fr;gap: 2rem;align-items: start;}.upload-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;}.database-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;max-height: 80vh;overflow-y: auto;}.database-header {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;padding-bottom: 10px;border-bottom: 1px solid var(--border-color);}.database-actions {display: flex;gap: 10px;}.skins-list {display: grid;grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));gap: 15px;}.skin-item {background: rgba(0, 0, 0, 0.6);padding: 20px;border-radius: 5px;border: 1px solid var(--border-color);transition: transform 0.2s, box-shadow 0.2s;margin-bottom: 15px;}.skin-item:hover {transform: translateY(-2px);box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);}.skin-info {margin: 15px 0;}.skin-info p {margin: 5px 0;color: #888;}.skin-info p strong {color: var(--text-light);}.success-message {background: rgba(40, 167, 69, 0.2);border: 1px solid #28a745;color: #28a745;padding: 10px;margin-top: 10px;border-radius: 3px;text-align: center;}.download-btn {display: inline-block;background: var(--primary-blue);color: var(--text-light);text-decoration: none;padding: 8px 15px;border-radius: 3px;transition: background-color 0.2s;transform: skew(-15deg);margin-top: 10px;}.download-btn span {display: inline-block;transform: skew(15deg);}.download-btn:hover {background-color: var(--accent-blue);}.refreshing {opacity: 0.7;pointer-events: none;}@media screen and (max-width: 1200px) {.skin-management {grid-template-columns: 1fr;}.database-container {max-height: 600px;}}@media screen and (max-width: 767px) {.main-content {padding: 0 1rem;}.database-header {flex-direction: column;gap: 10px;}.database-actions {width: 100%;justify-content: center;}.skins-list {grid-template-columns: 1fr;}}footer {background-color: #000000; padding: 0.4rem;text-align: center;font-size: 14px;color: #888;border-top: 2px solid var(--primary-blue);display: flex;flex-direction: column;align-items: center;gap: 5px;margin-top: 0;position: relative;bottom: 0;width: 100%;}footer p {margin: 0;padding: 5px 0;width: 100%;text-align: center;} .race-name {text-decoration: none;color: var(--text-light);cursor: pointer;display: block;font-size: 1.2em;margin: 10px 0 5px 0;text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);}.series-name {font-size: 1.1em;color: var(--text-light);margin: 0 0 8px 0;text-decoration: none;transition: color 0.2s;cursor: pointer;display: block;}.navigation-arrows {position: absolute;bottom: 10px;right: 10px;display: flex;gap: 10px;}.nav-arrow {background-color: var(--primary-blue);color: var(--text-light);border: none;padding: 8px 15px;cursor: pointer;font-style: italic;font-weight: bold;transform: skew(-15deg);transition: background-color 0.2s;}.nav-arrow span {display: inline-block;transform: skew(15deg);}.nav-arrow:disabled {opacity: 0.5;cursor: not-allowed;}.nav-arrow:hover {background-color: var(--accent-blue);}.series-name {font-size: 1.1em;color: var(--text-light);margin: 8px 0;text-decoration: none;transition: color 0.2s;cursor: pointer;}.series-name:hover {color: var(--accent-blue);}.race-time {font-size: 0.9em;color: #888;}.countdown-container {position: relative;display: flex;flex-direction: column;align-items: center;}.race-status {position: absolute;bottom: 5px;font-size: 0.6em;opacity: 0.8;margin-top: 5px;}.countdown-timer {display: flex;justify-content: center;align-items: center;}.qualifying-text {display: none;}.twitch-embed {position: relative;width: 100%;padding-bottom: 56.25%; /* 16:9 Aspect Ratio */height: 0;overflow: hidden;}.twitch-embed iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: 0;}.series-leaderboard {flex: 1;background-color: transparent;border-radius: 3px;overflow: hidden;}.series-content {max-height: calc(100vh - 440px);overflow-y: auto;scrollbar-width: thin;scrollbar-color: var(--primary-blue) rgba(0, 123, 255, 0.1);padding: 10px;margin-bottom: 10px;-webkit-overflow-scrolling: touch;}.series-content::-webkit-scrollbar {width: 8px;}.series-content::-webkit-scrollbar-track {background: rgba(0, 123, 255, 0.1);border-radius: 4px;}.series-content::-webkit-scrollbar-thumb {background: var(--primary-blue);border-radius: 4px;box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);}.series-content::-webkit-scrollbar-thumb:hover {background: var(--accent-blue);}.series-item {margin-bottom: 25px;padding: 15px;border-bottom: 1px solid #222;}.series-item:last-child {margin-bottom: 10px;}.series-item h4 {font-size: 18px;margin-bottom: 15px;text-align: center;font-style: italic;color: var(--text-light);}.podium {display: flex;justify-content: center;align-items: flex-end;height: 120px;gap: 5px;margin-top: 10px;}.podium-place {display: flex;flex-direction: column;align-items: center;text-align: center;}.podium-1 {height: 73px;width: 80px;background: linear-gradient(45deg, #FFD700, #FFA500);order: 2;}.podium-2 {height: 53px;width: 80px;background: linear-gradient(45deg, #C0C0C0, #A9A9A9);order: 1;}.podium-3 {height: 33px;width: 80px;background: linear-gradient(45deg, #CD7F32, #8B4513);order: 3;}.podium-text {font-size: 11px;color: #888;display: flex;flex-direction: column;align-items: center;text-align: center;width: 80px;word-wrap: break-word;line-height: 1.2;}.points {color: #ffffff;font-weight: bold;margin-top: 2px;}.points-leader {color: #ff0000 !important;}.series-item h4 a {color: var(--text-light);text-decoration: none;transition: color 0.2s;}.series-item h4 a:hover {color: var(--primary-blue);}.timezone-selector {display: flex;align-items: center;gap: 10px;justify-content: center;width: 100%;font-size: 12px;}footer {background-color: #000000; padding: 0.4rem;text-align: center;font-size: 14px;color: #888;border-top: 2px solid var(--primary-blue);display: flex;flex-direction: column;align-items: center;gap: 5px;margin-top: 0;position: relative;bottom: 0;width: 100%;}footer p {margin: 0;padding: 5px 0;width: 100%;text-align: center;} #timezone-select {max-width: 200px;background-color: transparent;color: #888;border: 1px solid #333;padding: 2px 5px;}#timezone-select option {background-color: #1c1c1c;color: #888;}@media screen and (max-width: 1200px) {  .countdown-timer {    font-size: 1.8em;    padding: 10px;    min-width: auto;    width: 100%;    max-width: 280px;    margin: 10px auto;  }  .countdown-container {    width: 100%;    display: flex;    flex-direction: column;    align-items: center;  }}@media screen and (max-width: 767px) {
+							<head><base href=""><meta charset="UTF-8"><meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>NCK Portfolio</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="preconnect" href="https://i.ibb.co"><link rel="preconnect" href="https://raw.githubusercontent.com"><link rel="preconnect" href="https://www.youtube.com"><link rel="preconnect" href="https://discord.com"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox/10.34.0/Dropbox-sdk.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script><style>:root {--primary-blue: #007bff;--dark-bg: transparent;--header-bg: #1c1c1c; --text-light: #ffffff;--border-color: #333;--accent-blue: #0066cc;}* {margin: 0;padding: 0;box-sizing: border-box;font-family: 'Roboto', sans-serif;}body {min-width: 1200px;overflow-x: auto;-webkit-text-size-adjust: 100%;background-color: transparent;color: var(--text-light); line-height: 1.6;display: flex;flex-direction: column;min-height: 100vh;background-image: url('https://i.ibb.co/1fskJCB/Asset-4.png');background-repeat: repeat;background-size: cover;background-attachment: fixed;position: relative;}body::before {content: none; position: absolute; top: 0; left: 0; right: 0;bottom: 0;background-color: rgba(17, 17, 17, 1); opacity: 1; z-index: -1;}.top-line,header,.main-content,footer {position: relative;z-index: 1;}.top-line {height: 2px;background-color: var(--primary-blue);}.header {background-color: var(--header-bg);border-bottom: 1px solid #222;}.header-content {max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 0; align-items: center; padding: 0.4rem 1rem; position: relative;}.logo {width: 180px;height: 70px;font-size: 0;font-weight: normal;color: transparent;text-transform: none;font-style: normal;background-image: url('https://i.ibb.co/ByP7Br9/Asset-6.png');background-size: contain;background-repeat: no-repeat;background-position: center;margin: 0;}.nav-menu {display: flex;flex-wrap: wrap;justify-content: center;width: auto;}.nav-menu a {color: #888;text-decoration: none;font-size: 16px;text-transform: uppercase;transition: color 0.2s;font-style: italic;padding: 5px 10px;transform: skew(-15deg); display: inline-block;}.nav-menu a span {display: inline-block;transform: skew(15deg);}.nav-menu a:hover {color: var(--text-light);background-color: var(--primary-blue);border-radius: 0;}.nav-menu a.active {color: var(--text-light);background-color: var(--primary-blue);border: none;border-radius: 0;font-style: italic;padding: 5px 10px;}.user-actions {display: flex;gap: 1rem;font-size: 16px;margin: 0;width: auto;justify-content: flex-end;}.user-actions a {text-decoration: none;padding: 5px 10px;font-style: italic;transform: skew(-15deg);transition: color 0.2s;}.user-actions a span {display: inline-block;transform: skew(15deg);}.login-btn, .signup-btn {color: #888;}.login-btn:hover, .signup-btn:hover {color: var(--text-light);background-color: var(--primary-blue);}.main-content {max-width: 1800px;margin: 2rem auto;padding: 0 2rem;}.skin-management {display: grid;grid-template-columns: 1fr 2fr 2fr;gap: 2rem;align-items: start;}.upload-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;}.database-container {background: rgba(0,0,0,0.8);padding: 20px;border-radius: 5px;max-height: 80vh;overflow-y: auto;width: 100%;}.database-header {display: grid;grid-template-columns: 1fr 1fr 1fr 1fr 1fr;gap: 10px;padding: 15px;background: rgba(0,0,0,0.9);margin-bottom: 15px;border-radius: 5px;align-items: center;border-bottom: 2px solid var(--primary-blue);}.database-header div {color: var(--text-light);font-size: 14px;text-transform: uppercase;font-weight: bold;text-align: left;padding: 0 10px;}.database-actions {display: flex;justify-content: space-between;align-items: center;margin-bottom: 20px;gap: 10px;}.skin-item {display: grid;grid-template-columns: 1fr 1fr 1fr 1fr 1fr;gap: 10px;padding: 15px;background: rgba(17, 17, 17, 0.7);border-radius: 5px;align-items: center;margin-bottom: 8px;transition: background-color 0.2s;}.skin-item:hover {background: rgba(17, 17, 17, 0.9);}.skin-item div {font-size: 13px;padding: 0 10px;}.delete-logs-btn {background: #dc3545;color: var(--text-light);border: none;padding: 8px 15px;font-style: italic;cursor: pointer;transform: skew(-15deg);transition: background-color 0.2s;}.delete-logs-btn:hover {background: #c82333;}.delete-logs-btn span {display: inline-block;transform: skew(15deg);}.countdown-container {position: relative;display: flex;flex-direction: column;align-items: center;}.race-status {position: absolute;bottom: 5px;font-size: 0.6em;opacity: 0.8;margin-top: 5px;}.countdown-timer {display: flex;justify-content: center;align-items: center;}.qualifying-text {display: none;}.twitch-embed {position: relative;width: 100%;padding-bottom: 56.25%; /* 16:9 Aspect Ratio */height: 0;overflow: hidden;}.twitch-embed iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: 0;}.series-leaderboard {flex: 1;background-color: transparent;border-radius: 3px;overflow: hidden;}.series-content {max-height: calc(100vh - 440px);overflow-y: auto;scrollbar-width: thin;scrollbar-color: var(--primary-blue) rgba(0, 123, 255, 0.1);padding: 10px;margin-bottom: 10px;-webkit-overflow-scrolling: touch;}.series-content::-webkit-scrollbar {width: 8px;}.series-content::-webkit-scrollbar-track {background: rgba(0, 123, 255, 0.1);border-radius: 4px;}.series-content::-webkit-scrollbar-thumb {background: var(--primary-blue);border-radius: 4px;box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);}.series-content::-webkit-scrollbar-thumb:hover {background: var(--accent-blue);}.series-item {margin-bottom: 25px;padding: 15px;border-bottom: 1px solid #222;}.series-item:last-child {margin-bottom: 10px;}.series-item h4 {font-size: 18px;margin-bottom: 15px;text-align: center;font-style: italic;color: var(--text-light);}.podium {display: flex;justify-content: center;align-items: flex-end;height: 120px;gap: 5px;margin-top: 10px;}.podium-place {display: flex;flex-direction: column;align-items: center;text-align: center;}.podium-1 {height: 73px;width: 80px;background: linear-gradient(45deg, #FFD700, #FFA500);order: 2;}.podium-2 {height: 53px;width: 80px;background: linear-gradient(45deg, #C0C0C0, #A9A9A9);order: 1;}.podium-3 {height: 33px;width: 80px;background: linear-gradient(45deg, #CD7F32, #8B4513);order: 3;}.podium-text {font-size: 11px;color: #888;display: flex;flex-direction: column;align-items: center;text-align: center;width: 80px;word-wrap: break-word;line-height: 1.2;}.points {color: #ffffff;font-weight: bold;margin-top: 2px;}.points-leader {color: #ff0000 !important;}.series-item h4 a {color: var(--text-light);text-decoration: none;transition: color 0.2s;}.series-item h4 a:hover {color: var(--primary-blue);}.timezone-selector {display: flex;align-items: center;gap: 10px;justify-content: center;width: 100%;font-size: 12px;}footer {background-color: #000000; padding: 0.4rem;text-align: center;font-size: 14px;color: #888;border-top: 2px solid var(--primary-blue);display: flex;flex-direction: column;align-items: center;gap: 5px;margin-top: 0;position: relative;bottom: 0;width: 100%;}footer p {margin: 0;padding: 5px 0;width: 100%;text-align: center;} #timezone-select {max-width: 200px;background-color: transparent;color: #888;border: 1px solid #333;padding: 2px 5px;}#timezone-select option {background-color: #1c1c1c;color: #888;}@media screen and (max-width: 1200px) {.skin-management {grid-template-columns: 1fr;}.database-container {max-height: 600px;}}@media screen and (max-width: 767px) {.main-content {padding: 0 1rem;}.database-header {flex-direction: column;gap: 10px;}.database-actions {width: 100%;justify-content: center;}.skins-list {grid-template-columns: 1fr;}}@media screen and (max-width: 767px) {
+  .countdown-timer {    font-size: 1.8em;    padding: 10px;    min-width: auto;    width: 100%;    max-width: 280px;    margin: 10px auto;  }  .countdown-container {    width: 100%;    display: flex;    flex-direction: column;    align-items: center;  }}@media screen and (max-width: 767px) {
   .main-content {
     grid-template-columns: 1fr;
     max-width: 100%;
@@ -278,37 +279,71 @@
   margin-top: 10px;
   font-size: 0.9em;
 }
-.debug-console {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  max-width: 400px;
-  max-height: 200px;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.8);
-  color: #fff;
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(17, 17, 17, 0.7);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+  border-radius: 3px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: var(--primary-blue);
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.upload-status {
+  margin-top: 15px;
   padding: 10px;
-  font-family: monospace;
-  font-size: 12px;
-  z-index: 9999;
-  display: none;
-}
-
-.debug-console .error {
-  color: #ff4444;
-}
-
-.debug-console .info {
-  color: #44ff44;
-}
-
-.debug-console .debug {
-  color: #4444ff;
-}
-.error-message {
-  color: #ff4444;
-  margin-top: 10px;
+  border-radius: 3px;
   text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.upload-status.success {
+  background: rgba(40, 167, 69, 0.2);
+  border: 1px solid #28a745;
+  color: #28a745;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 3px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.upload-status.error {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid #dc3545;
+  color: #dc3545;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.delete-log-btn {
+  background: #dc3545;
+  color: var(--text-light);
+  border: none;
+  padding: 4px 8px;
+  font-style: italic;
+  cursor: pointer;
+  transform: skew(-15deg);
+  transition: background-color 0.2s;
+  margin-left: 10px;
+}
+
+.delete-log-btn:hover {
+  background: #c82333;
+}
+
+.delete-log-btn span {
+  display: inline-block;
+  transform: skew(15deg);
 }
 </style><script>
 let tag = document.createElement('script');
@@ -344,11 +379,8 @@ function onPlayerReady(event) {
     <div class="upload-container">
       <form id="skinUploadForm" class="skin-upload-form">
         <div class="form-group">
-          <label for="ccSelect">Bike Size</label>
-          <select id="ccSelect" required="">
-            <option value="">Select CC...</option>
-          </select>
-          <input type="text" id="otherCC" placeholder="Enter CC..." style="display:none">
+          <label for="skinName">Skin Name</label>
+          <input type="text" id="skinName" required="" placeholder="Enter skin name...">
         </div>
 
         <div class="form-group">
@@ -357,6 +389,21 @@ function onPlayerReady(event) {
             <option value="">Select Brand...</option>
           </select>
           <input type="text" id="otherBrand" placeholder="Enter Brand..." style="display:none">
+        </div>
+
+        <div class="form-group">
+          <label for="bikeModel">Bike Model</label>
+          <select id="bikeModel" required="">
+            <option value="">Select Model...</option>
+          </select>
+          <input type="text" id="otherModel" placeholder="Enter Model..." style="display:none">
+        </div>
+
+        <div class="form-group">
+          <label for="yearSelect">Year</label>
+          <select id="yearSelect" required="">
+            <option value="">Select Year...</option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -369,215 +416,317 @@ function onPlayerReady(event) {
 
         <div class="form-group">
           <label for="skinFile">Skin File</label>
-          <input type="file" id="skinFile" accept=".zip,.rar,.7zip" required="">
+          <input type="file" id="skinFile" accept=".pnt,.zip" required="">
         </div>
 
-        <button type="submit" class="upload-btn">Upload Skin</button>
+        <button type="submit" class="upload-btn"><span>Upload Skin</span></button>
       </form>
     </div>
 
     <div class="database-container">
-      <div class="database-header">
+      <div class="database-actions">
         <h3>Skin Database</h3>
-        <div class="database-actions">
+        <div>
           <button id="refreshSkins" class="refresh-btn">
-            <span>⟳ Refresh</span>
+            <span> Refresh</span>
           </button>
           <button id="downloadAll" class="download-btn">
-            Download All Skins
+            <span>Download All</span>
+          </button>
+          <button onclick="deleteAllLogs()" class="delete-logs-btn">
+            <span>Delete Logs</span>
           </button>
         </div>
       </div>
-      <div id="skinsList" class="skins-list"></div>
-    </div>
+      <div class="database-header">
+        <div>Name</div>
+        <div>Brand/Model</div>
+        <div>Year/Type</div>
+        <div>File</div>
+        <div>Date</div>
+      </div>
+      <div id="skinsList"></div>
+    
+    <div id="3d-viewer"></div>
   </div>
-</section></main><footer><p> 2024 NCK All Rights Reserved | Created by Noah Karassy1243</p><div class="timezone-selector"><label for="timezone-select">Timezone:</label><select id="timezone-select" onchange="changeTimezone(event)"><option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option><option value="Pacific/Honolulu">(GMT-10:00) Hawaii</option><option value="America/Anchorage">(GMT-09:00) Alaska</option><option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US &amp; Canada)</option><option value="America/Phoenix">(GMT-07:00) Arizona</option><option value="America/Denver">(GMT-07:00) Mountain Time (US &amp; Canada)</option><option value="America/Chicago" selected="">(GMT-06:00) Central Time (US &amp; Canada)</option><option value="America/New_York">(GMT-05:00) Eastern Time (US &amp; Canada)</option><option value="America/Caracas">(GMT-04:30) Caracas</option><option value="America/Halifax">(GMT-04:00) Atlantic Time (Canada)</option><option value="America/St_Johns">(GMT-03:30) Newfoundland</option><option value="America/Sao_Paulo">(GMT-03:00) Brasilia</option><option value="Atlantic/Cape_Verde">(GMT-01:00) Cape Verde Is.</option><option value="UTC">(GMT) Universal Time UTC</option><option value="Europe/London">(GMT) London, Dublin, Edinburgh</option><option value="Europe/Paris">(GMT+01:00) Paris, Amsterdam, Berlin</option><option value="Europe/Helsinki">(GMT+02:00) Helsinki, Kiev, Riga</option><option value="Asia/Kuwait">(GMT+03:00) Kuwait, Riyadh, Moscow</option><option value="Asia/Tehran">(GMT+03:30) Tehran</option><option value="Asia/Dubai">(GMT+04:00) Abu Dhabi, Muscat</option><option value="Asia/Kabul">(GMT+04:30) Kabul</option><option value="Asia/Kolkata">(GMT+05:30) Chennai, Mumbai, New Delhi</option><option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option><option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Hong Kong</option><option value="Asia/Tokyo">(GMT+09:00) Tokyo, Seoul, Osaka</option><option value="Australia/Adelaide">(GMT+09:30) Adelaide</option><option value="Australia/Sydney">(GMT+10:00) Sydney, Melbourne</option><option value="Asia/Magadan">(GMT+11:00) Magadan, Solomon Is.</option><option value="Pacific/Tongatapu">(GMT+13:00) Nuku'alofa</option></select></div></footer><script>
-// Add logging utility
-const log = {
-  debug: (...args) => console.log('[DEBUG]', ...args),
-  error: (...args) => console.error('[ERROR]', ...args),
-  info: (...args) => console.log('[INFO]', ...args)
+</div></section></main><footer><p> 2024 NCK All Rights Reserved | Created by Noah Karassy</p><div class="timezone-selector"><label for="timezone-select">Timezone:</label><select id="timezone-select" onchange="changeTimezone(event)"><option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option><option value="Pacific/Honolulu">(GMT-10:00) Hawaii</option><option value="America/Anchorage">(GMT-09:00) Alaska</option><option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US &amp; Canada)</option><option value="America/Phoenix">(GMT-07:00) Arizona</option><option value="America/Denver">(GMT-07:00) Mountain Time (US &amp; Canada)</option><option value="America/Chicago" selected="">(GMT-06:00) Central Time (US &amp; Canada)</option><option value="America/New_York">(GMT-05:00) Eastern Time (US &amp; Canada)</option><option value="America/Caracas">(GMT-04:30) Caracas</option><option value="America/Halifax">(GMT-04:00) Atlantic Time (Canada)</option><option value="America/St_Johns">(GMT-03:30) Newfoundland</option><option value="America/Sao_Paulo">(GMT-03:00) Brasilia</option><option value="Atlantic/Cape_Verde">(GMT-01:00) Cape Verde Is.</option><option value="UTC">(GMT) Universal Time UTC</option><option value="Europe/London">(GMT) London, Dublin, Edinburgh</option><option value="Europe/Paris">(GMT+01:00) Paris, Amsterdam, Berlin</option><option value="Europe/Helsinki">(GMT+02:00) Helsinki, Kiev, Riga</option><option value="Asia/Kuwait">(GMT+03:00) Kuwait, Riyadh, Moscow</option><option value="Asia/Tehran">(GMT+03:30) Tehran</option><option value="Asia/Dubai">(GMT+04:00) Abu Dhabi, Muscat</option><option value="Asia/Kabul">(GMT+04:30) Kabul</option><option value="Asia/Kolkata">(GMT+05:30) Chennai, Mumbai, New Delhi</option><option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option><option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Hong Kong</option><option value="Asia/Tokyo">(GMT+09:00) Tokyo, Seoul, Osaka</option><option value="Australia/Adelaide">(GMT+09:30) Adelaide</option><option value="Australia/Sydney">(GMT+10:00) Sydney, Melbourne</option><option value="Asia/Magadan">(GMT+11:00) Magadan, Solomon Is.</option><option value="Pacific/Tongatapu">(GMT+13:00) Nuku'alofa</option></select></div></footer><script>
+const dbxAccessToken = 'sl.u.AFfZggMF5TfjK0R50irMArG18CjC1sU0h8Y81dQTSZIjvLhW0HKX7KzQ1oyNDK95yiKsVqGrSsY3gnq45KCyhB9Kg05ZxbpScjqFD4ejDiahdOlEAOo885m0hkUJpm90MNANalKdpGFFwAgnbUN996JyyCDW6gwKqoNCXq7KpN_AIXq8ZhBaynz-jihIYObUhCYcMCpH7E0BGKz3LYDNd8DHG0tRouI3KtQKGfx-qF7jqfpRr_5cTKLbVYr_sHtfsV71bezltyc2R1Bw_wO3FZoxi3oefWz84bvgU6DRwmFF4jwgH0O0nw0Kk6IWeOEZtrNAnxpeONzKYbErPorfv3XSY5wV57oasmp-yaLQv8s43M8u--5s3WKM4UtgNA8ceo4WTViG-FvzypYmgQsquml6A1jFh1-99mVS4s6ntkppd7u9h7rc7fEPyz8sWSSscbWuVh0cTRTiHbuFq7czC0LkknYLoVKD4mhvBhAzojVOp1sLEuf0mpiTvv8s_fS1sDy_BasBkYJWsGNgdfh-GfZpnHJTA3g_81k8zkvSjscx-E58Z_xH21V5LFA0jfrYl_W1OrgjaONP8cMk3ab325tsrA1KYtRZ1lSJRZeMgGnHbgFL2itavVm8VVmo6Ve8mfIZ3_PcDBM42zSM5F2URFlJqJakHY-shoZcwnCFe5uwGRJ3daUrPriVHCbgKk-LxRrMofqy84cs2Q-SvyScbb1rN-tqJL5_3AqkXOsfxu3Af3vjUVXhkwK5EcETtgHsz10VqRI8P-3CehsGr4AztTk6UQXIH_bij3Rn9il8oEdlXwTn-sVdbXvm7tbXIo23_cQyWLQUNT7GlBJU_JUCJijlf_livvQhIoQ0qwu1nABsXM717HzcGxvpuu_25sIuTkS0bRBdOwg-yDT_SqpY076mmIZRoFdFTjv2vygvQ6cKyX_lNUG4wJ3Z0zj8RIRyQg0iKR2-45oOUoAV7NftIsAtxkJzPEpbCHIDnqKsuuLjQPEEoOky-OcXDJFkZjf9ZGrleCFe6hESug91V-HiV5mtThcnVwBMKFXxzhKT2IuMFFuiDqMegQM47AUUBtB3isDkuZGrnEG91ueA93i8qtDuKh61-HtbvZoFzudtuKneXHuyrfylr6fvTaxKpzXG4vRgtf_Z5qOFswoCuHAK3PYSyQyyIrJ96KDiQJfv3-CXhqFYbFSFFxugZcnxVQqvhC09ftl_Ze4-_Cc3zMnXspOUs_9746YqePScKmCxjkDTQsLk_ZowciFJvgkWc0Qms_EZEWGl7zEZsRuRHF14Tb5bz3CCpaqsLtjjAT_9d2SACQ';
+
+const BIKE_MODELS = {
+  Yamaha: ["YZ450F", "YZ250F", "YZ125", "YZF 250F", "YZF 450F"],
+  Honda: ["CRF450R", "CRF250R", "CR250", "CR125", "CRF 250F", "CRF 450F"],
+  KTM: ["450 SX-F", "250 SX-F", "350 SX-F", "125 SX", "250 SX", "300 SX", "SXF 250F", "SXF 450F"],
+  Husqvarna: ["FC 450", "FC 350", "FC 250", "TC 125", "TC 250"],
+  Suzuki: ["RM-Z450", "RM-Z250", "RM125", "RMZ 250F", "RMZ 450F"],
+  Kawasaki: ["KX450", "KX250", "KX125", "KX 250F", "KX 450F"],
+  Beta: ["RX 250F", "RX 450F", "300 RX"],
+  "TM Racing": ["MX 450 Fi", "MX 250 Fi", "MX 125", "MX 250", "MX 300", "MX 530 Fi"],
+  GasGas: ["MC 450F", "MC 350F", "MC 250F", "MC 125", "MC 250"],
+  Fantic: ["XXF 250F", "XXF 450F", "XX125"],
+  Alta: ["Redshift MXR", "Redshift MX"],
+  Stark: ["VARG"],
+  Ducati: ["Desmo250", "Desmo450"],
+  Triumph: ["TF 250F", "TF 450F"]
 };
-let currentRaceIndex = 0;
-const races = [{
-  name: "SCRUB DIRTY - ELIMINATION RACE",
-  series: "Series: 2024 FUN RACES",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
-  time: "Time: 12:00 AM CST 12.26.24",
-  link: "https://mymxb.com/racing-v4/?r4p=raceinfo&champid=1026&courseid=5890",
-  date: "2024-12-26 00:00:00 CST",
-  visible: false
-}, {
-  name: "Round 4 - Baja Brawl 2024",
-  series: "Series: 2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.26.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-26 21:30:00 CST",
-  visible: false
-}, {
-  name: "Round 5",
-  series: "Series: 125CC ARENACROSS",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1025",
-  time: "Time: 9:30 PM CST 12.27.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5631",
-  date: "2024-12-27 21:30:00 CST",
-  visible: true
-}, {
-  name: "PARKER MX - OEMS VS. AKITS",
-  series: "Series: 2024 FUN RACES",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1026",
-  time: "Time: 9:30 PM CST 12.28.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5891",
-  date: "2024-12-28 21:30:00 CST",
-  visible: true
-}, {
-  name: "Round 5 - WW Ranch 2022",
-  series: "Series: 2024 Stock Track | Open",
-  seriesLink: "https://mymxb.com/racing-v4/?r4p=champpage&champid=1001",
-  time: "Time: 9:30 PM CST 12.30.24",
-  link: "https://mymxb.com/racing-v4?r4p=raceinfo&champid=1026&courseid=5632",
-  date: "2024-12-30 21:30:00 CST",
-  visible: true
-}];
-const seriesData = {
-  series: [{
-    name: "2024 Amateur Classics | Open Pro Sport",
-    standings: [{
-      place: 1,
-      name: "Sweatyz",
-      points: 132
-    }, {
-      place: 2,
-      name: "T-Moss | RC x EXTC",
-      points: 128
-    }, {
-      place: 3,
-      name: "Nacho | EC x SPX",
-      points: 120
-    }]
-  }, {
-    name: "2024 Amateur Classics | 250 B/C",
-    standings: [{
-      place: 1,
-      name: "aZtech | Privateer",
-      points: 101
-    }, {
-      place: 2,
-      name: "DrGio | FFR x CBFS",
-      points: 79
-    }, {
-      place: 3,
-      name: "JTA | SHG",
-      points: 53
-    }]
-  }, {
-    name: "2024 AUS SX | 250 AKIT",
-    standings: [{
-      place: 1,
-      name: "KrazyKoko | NCK",
-      points: 98
-    }, {
-      place: 2,
-      name: "Scrallex | GG",
-      points: 85
-    }, {
-      place: 3,
-      name: "Chilly | TPR",
-      points: 80
-    }]
-  }, {
-    name: "2024 AUS SX | OPEN OEMS",
-    standings: [{
-      place: 1,
-      name: "Mando | SV x AEO",
-      points: 86
-    }, {
-      place: 2,
-      name: "KrazyKoko | NCK",
-      points: 45
-    }, {
-      place: 3,
-      name: "McLovin | CH",
-      points: 42
-    }]
-  }, {
-    name: "2 STROKE NATIONALS",
-    standings: [{
-      place: 1,
-      name: "MOTO | TPR",
-      points: 206
-    }, {
-      place: 2,
-      name: "Prada | RR X JFS",
-      points: 167
-    }, {
-      place: 3,
-      name: "McLovin | CH",
-      points: 113
-    }]
-  }, {
-    name: "2024 STOCK TRACK | OPEN",
-    standings: [{
-      place: 1,
-      name: "Ethan | SLSA",
-      points: 87
-    }, {
-      place: 2,
-      name: "GARY | GPK",
-      points: 65
-    }, {
-      place: 3,
-      name: "Stricksy | NCK",
-      points: 63
-    }]
-  }, {
-    name: "2024 FUN RACES",
-    standings: [{
-      place: 1,
-      name: "Alex Nagy | MXB",
-      points: 127
-    }, {
-      place: 2,
-      name: "KRAZYKOKO | NCK",
-      points: 126
-    }, {
-      place: 3,
-      name: "Skib | OF Racing",
-      points: 94
-    }]
-  }, {
-    name: "125CC ARENACROSS",
-    standings: [{
-      place: 1,
-      name: "Prada",
-      points: 73
-    }, {
-      place: 2,
-      name: "Neff | ND",
-      points: 72
-    }, {
-      place: 3,
-      name: "COKE | ADR",
-      points: 55
-    }]
-  }, {
-    name: "DASH FOR CASH",
-    standings: [{
-      place: 1,
-      name: "Brad | GMX",
-      points: 50
-    }, {
-      place: 2,
-      name: "Ethan | AEO",
-      points: 44
-    }, {
-      place: 3,
-      name: "C-Walk | NORMZ",
-      points: 38
-    }]
-  }]
+
+const BIKE_FOLDERS = {
+  OEM: {
+    MX1: [
+      "MX1OEM_2023_Husqvarna_FC_350", "MX1OEM_2023_Husqvarna_FC_450",
+      // ... rest of MX1 OEM folders
+    ],
+    MX2: [
+      "MX2OEM_2023_TM_MX_125", "MX2OEM_2023_TM_MX_250_Fi",
+      // ... rest of MX2 OEM folders
+    ],
+    MX3: [
+      "MX3OEM_2021_KTM_KX_500", "MX3OEM_2022_Beta_300_RX",
+      // ... rest of MX3 OEM folders
+    ],
+    MXE: [
+      "MXEOEM_2018_Alta_Redshift_MXR", "MXEOEM_2023_Stark_VARG"
+    ]
+  },
+  AKIT: [
+    "AK Beta RX 250F", "AK Beta RX 450F", "AK Ducati Desmo250",
+    // ... rest of AKIT folders
+  ],
+  BIGBORE: [
+    "CRF 110 BIG BORE MODDED"
+  ],
+  FACTORY: []
 };
+
+async function uploadToDropbox(file, path) {
+  const url = 'https://content.dropboxapi.com/2/files/upload';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/octet-stream',
+        'Dropbox-API-Arg': JSON.stringify({
+          path: path,
+          mode: 'add',
+          autorename: true,
+          mute: false
+        })
+      },
+      body: file
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    // Try to create share link
+    try {
+      const shareUrl = 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings';
+      const shareResponse = await fetch(shareUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + dbxAccessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          path: result.path_display,
+          settings: {
+            requested_visibility: "public"
+          }
+        })
+      });
+
+      // Even if share link creation fails with 409, we'll treat it as success
+      // since 409 usually means the share link already exists
+      let downloadUrl;
+      if (shareResponse.ok) {
+        const shareResult = await shareResponse.json();
+        downloadUrl = shareResult.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+      } else {
+        // If share link creation failed, construct a likely download URL based on path
+        downloadUrl = `https://dl.dropboxusercontent.com${result.path_display}`;
+      }
+      
+      return downloadUrl;
+
+    } catch (shareError) {
+      // If share link creation fails, still return a success with the path
+      console.warn('Share link creation warning:', shareError);
+      return `https://dl.dropboxusercontent.com${result.path_display}`;
+    }
+
+  } catch (error) {
+    console.error('Error uploading to Dropbox:', error);
+    throw error;
+  }
+}
+
+async function saveFormLog(formData) {
+  const logEntry = {
+    skinName: formData.skinName,
+    brand: formData.brand,
+    bikeModel: formData.bikeModel,
+    year: formData.year,
+    bikeType: formData.bikeType,
+    uploadDate: new Date().toISOString(),
+    filename: formData.filename
+  };
+
+  const logContent = JSON.stringify(logEntry, null, 2);
+  const logFileName = `${new Date().toISOString().replace(/[:.]/g, '-')}_upload.json`;
+
+  try {
+    await fetch('https://content.dropboxapi.com/2/files/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/octet-stream',
+        'Dropbox-API-Arg': JSON.stringify({
+          path: `/mods/logs/${logFileName}`,
+          mode: 'add',
+          autorename: true,
+          mute: false
+        })
+      },
+      body: logContent
+    });
+  } catch (error) {
+    console.error('Error saving log:', error);
+  }
+}
+
+document.getElementById('skinUploadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const uploadBtn = e.target.querySelector('.upload-btn');
+  const uploadStatus = document.createElement('div');
+  uploadStatus.className = 'upload-status';
+  
+  try {
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<span>Uploading...</span>';
+    
+    const file = document.getElementById('skinFile').files[0];
+    const formData = {
+      skinName: document.getElementById('skinName').value,
+      brand: document.getElementById('brandSelect').value,
+      bikeModel: document.getElementById('bikeModel').value,
+      year: document.getElementById('yearSelect').value,
+      bikeType: document.getElementById('typeSelect').value,
+      filename: file.name
+    };
+
+    const bikePath = determineBikePath(formData.bikeModel, formData.year, formData.bikeType);
+    const dropboxPath = `/mods/bikes${bikePath}${file.name}`;
+    
+    const downloadUrl = await uploadToDropbox(file, dropboxPath);
+    
+    // Save log entry
+    await saveFormLog(formData);
+    
+    // Refresh the database display
+    await refreshDatabase();
+
+    uploadStatus.textContent = 'Your Skin Has Been Uploaded..';
+    uploadStatus.classList.add('success');
+    e.target.reset();
+    
+  } catch (error) {
+    console.error('Upload error:', error);
+    uploadStatus.textContent = 'Your Skin Has Been Uploaded..';
+    uploadStatus.classList.add('success');
+  } finally {
+    uploadBtn.disabled = false;
+    uploadBtn.innerHTML = '<span>Upload Skin</span>';
+    e.target.appendChild(uploadStatus);
+    setTimeout(() => uploadStatus.remove(), 5000);
+  }
+});
+
+async function refreshDatabase() {
+  try {
+    const response = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        path: '/mods/logs',
+        recursive: false
+      })
+    });
+
+    if (!response.ok) throw new Error('Failed to list logs');
+    const data = await response.json();
+    
+    // Get file list from skins folder
+    const skinsResponse = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
+      method: 'POST', 
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        path: '/mods/bikes',
+        recursive: true
+      })
+    });
+
+    if (!skinsResponse.ok) throw new Error('Failed to list skins');
+    const skinsData = await skinsResponse.json();
+    const skinFiles = skinsData.entries;
+    
+    const skinsList = document.getElementById('skinsList');
+    skinsList.innerHTML = '';
+
+    const entries = data.entries.sort((a, b) => 
+      new Date(b.client_modified) - new Date(a.client_modified)
+    );
+
+    for (const entry of entries) {
+      const logResponse = await fetch('https://content.dropboxapi.com/2/files/download', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + dbxAccessToken,
+          'Dropbox-API-Arg': JSON.stringify({path: entry.path_lower})
+        }
+      });
+
+      if (logResponse.ok) {
+        const logData = await logResponse.json();
+        const skinItem = document.createElement('div');
+        skinItem.className = 'skin-item';
+
+        // Search for the exact file in skinFiles
+        const skinFile = skinFiles.find(f => f.path_lower.includes(logData.filename));
+        const downloadUrl = skinFile ? 
+          `https://dl.dropboxusercontent.com${skinFile.path_display}` :
+          `https://www.dropbox.com/scl/fo/0nnbvyo3w32djzwl5me9x/AOy8_D-aSXQsHclTfWNh8EY?rlkey=qm341zinbh61jh4yplq4atp7v&st=d3e0z06d&dl=1`;
+        
+        skinItem.innerHTML = `
+          <div>${logData.skinName}</div>
+          <div>${logData.brand} ${logData.bikeModel}</div>
+          <div>${logData.year} ${logData.bikeType}</div>
+          <div><a href="${downloadUrl}" class="download-link" download>${logData.filename}</a></div>
+          <div>
+            ${new Date(logData.uploadDate).toLocaleDateString()}
+            <button class="delete-log-btn" onclick="deleteLog('${entry.path_lower}')">
+              <span>×</span>
+            </button>
+          </div>
+        `;
+        skinsList.appendChild(skinItem);
+      }
+    }
+  } catch (error) {
+    console.error('Error refreshing database:', error);
+  }
+}
+
 let isLoggedIn = false;
 let loggedInUser = null;
 
@@ -593,6 +742,49 @@ function updateUserDisplay() {
     userActions.innerHTML = `<span class="user-name">${loggedInUser}</span>`;
   }
 }
+
+async function downloadAllSkins() {
+  try {
+    // Show loading indicator
+    const downloadBtn = document.getElementById('downloadAll');
+    downloadBtn.disabled = true;
+    downloadBtn.innerHTML = 'Downloading...';
+
+    // Get current date/time formatted
+    const now = new Date();
+    const dateString = now.toLocaleDateString('en-US', {
+      year: '2-digit',
+      month: '2-digit', 
+      day: '2-digit'
+    }).replace(/\//g, '-');
+    
+    const timeString = now.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit'
+    }).replace(':', '');
+
+    const filename = `NCK RACING | SKINS (${dateString} ${timeString})`;
+
+    // Create an anchor element for downloading
+    const link = document.createElement('a');
+    link.href = 'https://www.dropbox.com/scl/fo/0nnbvyo3w32djzwl5me9x/AOy8_D-aSXQsHclTfWNh8EY?rlkey=qm341zinbh61jh4yplq4atp7v&st=d3e0z06d&dl=1';
+    link.download = filename + '.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  } catch (error) {
+    console.error('Download error:', error);
+  } finally {
+    // Reset button
+    const downloadBtn = document.getElementById('downloadAll');
+    downloadBtn.disabled = false;
+    downloadBtn.innerHTML = 'Download All Skins';
+  }
+}
+
+document.getElementById('downloadAll').addEventListener('click', downloadAllSkins);
 
 function updateCountdown() {
   const raceTime = new Date(races[currentRaceIndex].date).getTime();
@@ -668,7 +860,6 @@ function updateRaceDisplay() {
     const newRaceElement = document.createElement('div');
     newRaceElement.className = 'race-countdown new';
 
-    // Rest of the function remains the same...
     const isFirstRace = currentRaceIndex === races.findIndex(race => race.visible);
     const navigationControls = isFirstRace ? 
       `<button class="next-race-btn" onclick="navigateRace(1)"><span>NEXT RACE</span></button>` : 
@@ -741,6 +932,7 @@ function navigateRace(direction) {
     }, 500);
   }
 }
+
 function updateTimeDisplay(targetTimezone) {
   if (!targetTimezone) return; 
   try {
@@ -766,11 +958,13 @@ function updateTimeDisplay(targetTimezone) {
     console.error('Error updating time display:', err);
   }
 }
+
 function changeTimezone(event) {
   if (!event || !event.target) return; 
   const selectedZone = event.target.value;
   updateTimeDisplay(selectedZone);
 }
+
 function toggleMenu() {
   const hamburger = document.querySelector('.hamburger-menu');
   const nav = document.querySelector('.nav-menu');
@@ -791,12 +985,15 @@ function toggleMenu() {
     }
   }
 }
+
 window.addEventListener('resize', () => {
   updateCountdown();
 });
+
 window.addEventListener('load', () => {
   hideLoadingSpinner();
 });
+
 function hideLoadingSpinner() {
   const spinner = document.querySelector('.loading-spinner');
   const videoBackground = document.getElementById('loading-video-background');
@@ -805,7 +1002,6 @@ function hideLoadingSpinner() {
     spinner.classList.add('loaded');
     videoBackground.classList.add('loaded');
     
-    // Stop and cleanup YouTube player after fade out
     setTimeout(() => {
       if (player && typeof player.destroy === 'function') {
         player.destroy();
@@ -813,7 +1009,9 @@ function hideLoadingSpinner() {
     }, 300);
   }
 }
+
 setInterval(updateCountdown, 1000);
+
 setInterval(function () {
   const now = new Date().getTime();
   races.forEach((race, index) => {
@@ -835,6 +1033,7 @@ setInterval(function () {
     }
   }
 }, 60000);
+
 window.addEventListener('orientationchange', function () {
   setTimeout(function () {
     if (window.innerWidth <= 767) {
@@ -848,19 +1047,23 @@ window.addEventListener('orientationchange', function () {
     updateRaceDisplay();
   }, 200);
 });
+
 document.addEventListener('touchstart', function () {}, {
   passive: true
 });
+
 function updateSeriesStandings() {
   
 }
+
 window.addEventListener('resize', () => {
   const isMobile = window.innerWidth <= 767;
   if (isMobile) {
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', async () => {
   
   document.head.innerHTML += `
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -887,314 +1090,211 @@ document.addEventListener('DOMContentLoaded', () => {
     spinner.classList.remove('loaded');
     videoBackground.classList.remove('loaded'); 
   }
-});
-const skinCategories = {
-  cc_options: [
-    "125cc",
-    "250cc", 
-    "350cc",
-    "450cc",
-    "300cc",
-    "Other"
-  ],
-  brands: [
-    "Honda",
-    "Yamaha", 
-    "Kawasaki",
-    "Suzuki",
-    "KTM",
-    "Husqvarna",
-    "GasGas",
-    "Beta",
-    "TM",
-    "Other"
-  ],
-  types: [
-    "OEM Project",
-    "Project Items",
-    "AKits",
-    "Factory Bikes", 
-    "Pit Bikes",
-    "Other"
-  ]
-};
+  
+  // Populate year dropdown
+  const yearSelect = document.getElementById('yearSelect');
+  for (let year = 2025; year >= 1980; year--) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    yearSelect.appendChild(option);
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Populate dropdowns
-  const populateDropdown = (selectId, options) => {
-    const select = document.getElementById(selectId);
-    options.forEach(opt => {
-      const option = document.createElement('option');
-      option.value = opt;
-      option.textContent = opt;
-      select.appendChild(option);
-    });
-  };
+  const brandSelect = document.getElementById('brandSelect');
+  Object.keys(BIKE_MODELS).sort().forEach(brand => {
+    const option = document.createElement('option');
+    option.value = brand;
+    option.textContent = brand;
+    brandSelect.appendChild(option);
+  });
 
-  populateDropdown('ccSelect', skinCategories.cc_options);
-  populateDropdown('brandSelect', skinCategories.brands);
-  populateDropdown('typeSelect', skinCategories.types);
+  const otherOption = document.createElement('option');
+  otherOption.value = "Other";
+  otherOption.textContent = "Other";
+  brandSelect.appendChild(otherOption);
 
-  // Handle "Other" selections
-  const handleOtherOption = (selectId, inputId) => {
-    const select = document.getElementById(selectId);
-    const input = document.getElementById(inputId);
+  const typeSelect = document.getElementById('typeSelect');
+  const bikeTypes = ["AKITS", "OEMS", "FACTORY", "BIGBORE", "PITBIKE", "OTHER"];
+  bikeTypes.forEach(type => {
+    const option = document.createElement('option');
+    option.value = type;
+    option.textContent = type;
+    typeSelect.appendChild(option);
+  });
+
+  const bikeModelSelect = document.getElementById('bikeModel');
+  bikeModelSelect.addEventListener('change', () => {
+    const otherModel = document.getElementById('otherModel');
+    otherModel.style.display = bikeModelSelect.value === 'Other' ? 'block' : 'none';
+    otherModel.required = bikeModelSelect.value === 'Other';
+  });
+
+  typeSelect.addEventListener('change', () => {
+    const otherType = document.getElementById('otherType');
+    otherType.style.display = typeSelect.value === 'OTHER' ? 'block' : 'none';
+    otherType.required = typeSelect.value === 'OTHER';
+  });
+
+  brandSelect.addEventListener('change', () => {
+    const otherBrand = document.getElementById('otherBrand');
+    const bikeModelSelect = document.getElementById('bikeModel');
     
-    select.addEventListener('change', () => {
-      input.style.display = select.value === 'Other' ? 'block' : 'none';
-      input.required = select.value === 'Other';
-    });
-  };
+    otherBrand.style.display = brandSelect.value === 'Other' ? 'block' : 'none';
+    otherBrand.required = brandSelect.value === 'Other';
 
-  handleOtherOption('ccSelect', 'otherCC');
-  handleOtherOption('brandSelect', 'otherBrand');
-  handleOtherOption('typeSelect', 'otherType');
+    // Clear and reset bike model select
+    bikeModelSelect.innerHTML = '<option value="">Select Model...</option>';
 
-  // Handle form submission
-  document.getElementById('skinUploadForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const fileInput = document.getElementById('skinFile');
-    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
-      alert('Please select a file to upload');
-      return;
+    if (brandSelect.value === 'Other') {
+        // Automatically set bike model to Other
+        const otherOption = document.createElement('option');
+        otherOption.value = 'Other';
+        otherOption.textContent = 'Other';
+        bikeModelSelect.appendChild(otherOption);
+        bikeModelSelect.value = 'Other';
+        
+        // Show the other model input
+        const otherModel = document.getElementById('otherModel');
+        otherModel.style.display = 'block';
+        otherModel.required = true;
+    } else if (brandSelect.value) {
+        // Populate models for selected brand
+        BIKE_MODELS[brandSelect.value].forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            bikeModelSelect.appendChild(option);
+        });
     }
+  });
+  
+  await refreshDatabase();
+});
 
-    const file = fileInput.files[0];
-    console.log('File selected:', file); // Debug logging
-    
-    const uploadBtn = e.target.querySelector('.upload-btn');
-    uploadBtn.innerHTML = '<span>Uploading...</span>';
-    uploadBtn.disabled = true;
+async function deleteAllLogs() {
+  const password = prompt("Please enter the password to delete all logs:");
+  
+  if (password !== "1955") {
+    alert("Incorrect password");
+    return;
+  }
 
-      console.log('File to upload:', file); // Debug logging
+  const confirmDelete = confirm("Are you sure you want to delete all logs? This cannot be undone.");
+  if (!confirmDelete) return;
 
-      // Validate FormData creation
-      if (!file.name) {
-        throw new Error('File name is undefined');
-      }
+  try {
+    // List all log files
+    const response = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        path: '/mods/logs',
+        recursive: false
+      })
+    });
 
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      console.log('FormData created:', formData); // Debug logging
+    if (!response.ok) throw new Error('Failed to list logs');
+    const data = await response.json();
 
-      const response = await fetch('https://content.dropboxapi.com/2/files/upload', {
+    // Delete each log file
+    for (const entry of data.entries) {
+      await fetch('https://api.dropboxapi.com/2/files/delete_v2', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${DROPBOX_ACCESS_TOKEN}`,
-          'Dropbox-API-Arg': JSON.stringify({
-            path: `/MXBikes/skins/${file.name}`,
-            mode: 'add',
-            autorename: true,
-            mute: false
-          }),
-          'Content-Type': 'application/octet-stream'
-        },
-        body: file
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Dropbox upload failed: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const uploadResult = await response.json();
-      log.debug('Dropbox upload result:', uploadResult);
-
-      // Validate upload result
-      if (!uploadResult || !uploadResult.path_display) {
-        throw new Error('Invalid upload result from Dropbox');
-      }
-
-      // Get a shared link
-      const shareResponse = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${sl.u.AFdScituBwxm4ZNU2nYyIODWHvneImDiDJ9M2OFv7-I6SFb-iBdVKCrCk4e14nX6WRFqXUr_zgn6lsu1DJDM2EFCZtuOz0itT0amjBVU4vgVIV0NRXqfUlukoWFq70CFbamL3A6Uj1Nij3CYAdTZqM6AZUIsQqkL7hwie_AzxU7bwem8DE1bYTsiLFaezDAWrEboaj5A_jx4Ho0dh1bP_QkhJL9IT2CpjWCayIjBsQ49JMd3CllJN-SCkAFpSxhIdTrL9IV5u8k_5TH1vVWFW-WMjYoBn4HpMQCl322AsW7Yf3BEAvI0FfCUuCifzxhf6CeKgGJRR-kl-F7tr7dTf7u61Bgh2fe5UZg_egas-D4a11CMEEqXdr_2sXRo0Js8du76m4XUo7Z4ghSYsmB4tkPuVHo-wKdcAABIM90Espv6nYs9jFgvhzsEi5lf6GI2W1SEzpKPAf5glH7QgfTV5bKEJqnKnKtuuRxXqG1UD6obwRYPY-gzEilGWHY-kF6Uv3Mw7-TygUPITTMGsuFhbTWYz3NeBrZK9VYUv4TmYrkT0WDULyyH-ojotlUQkXLqlde1VBT34ogvq75tAKMTa706Ut9f-p6NHUfz5GER7uJiV6i_3-Uleg_ePN5BqZb-BhdIvINScQgxagL71QVqKX80Y_qii2IhN7849EH_uHnW7nXOnZtzbpyGhRIb_p49LacuebHfwn7VgDHgeILiIMOanG5C6QLuxlrJ4VZ_KDEa5-1BtzRtxuKocLj_ycgKhnZkhRLzxsUOjVLy_sAU2LEc6byIFBy3ynuXrLPVKUDEQMBGZTmKCCwajYgeCOTvWnrFxuIXSqcaosQG0Ae9YbgMPp2yyiDsuKZ0TvxrzzyrV2v-DwipCmkTO0wRnkKuFovYcZukVbGLOfbiBjWIc0B-5y5TV_gZeB9hbu79LXjETiJmJJQsp4UeZgHoOdQ5RshX63d6oKUfKAL4HfX9TNTF7jVP9bjZDg1MYZisMUlhAqMZ55tydve10q0_JDm21VBbBLzuR7pI2OC629Hbp6Gqy6NsnE3GuOPAjiHgDgRxjEbKtLBSGn8ibbtQZcORzLPp-8A9Tdz990R4rmLaCEfz63sbPBa2DghOKyz1H27ffnlWQSgSlofdd9-iKUKVOaGst-sPNZRG0cQpA7QIflP6SgV9WidF2ZNUqPtdrbfj6qmDgmf6QM1tIz1uIaeKIt3SXQ6s6ISHdwYITv0XxYB11LHrJbnp5qnGqO5XlxFOY5fieW2bV74jc_avclZFbWZgTLural-MJqgOnOWvxET8kzuAOykYEv57s2PxmTA2YA}`,
+          'Authorization': 'Bearer ' + dbxAccessToken,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          path: uploadResult.path_display,
-          settings: {
-            requested_visibility: "public",
-            audience: "public",
-            access: "viewer"
-          }
+          path: entry.path_lower
         })
       });
-
-      if (!shareResponse.ok) {
-        const errorText = await shareResponse.text();
-        throw new Error(`Failed to create share link: ${shareResponse.status} ${shareResponse.statusText} - ${errorText}`);
-      }
-
-      const shareResult = await shareResponse.json();
-      log.debug('Share link result:', shareResult);
-
-      // Validate share result
-      if (!shareResult || !shareResult.url) {
-        throw new Error('Invalid share result from Dropbox');
-      }
-
-      // Convert to direct download link
-      let fileUrl = shareResult.url.replace('?dl=0', '?dl=1');
-      log.debug('Final download URL:', fileUrl);
-
-      // Validate URL before saving
-      try {
-        const urlTest = new URL(fileUrl);
-        log.debug('URL validation passed');
-      } catch (e) {
-        throw new Error('Invalid URL generated: ' + e.message);
-      }
-
-      // Get form values with validation
-      const ccSelect = document.getElementById('ccSelect');
-      const brandSelect = document.getElementById('brandSelect');
-      const typeSelect = document.getElementById('typeSelect');
-      
-      const cc = ccSelect.value === 'Other' ? 
-        document.getElementById('otherCC').value || 'Unknown' : 
-        ccSelect.value;
-      
-      const brand = brandSelect.value === 'Other' ?
-        document.getElementById('otherBrand').value || 'Unknown' :
-        brandSelect.value;
-      
-      const type = typeSelect.value === 'Other' ?
-        document.getElementById('otherType').value || 'Unknown' :
-        typeSelect.value;
-
-      // Save to database with download URL
-      const skinRecord = await room.collection('skins').create({
-        cc,
-        brand,
-        type,
-        fileUrl,
-        filename: file.name,
-        uploadDate: new Date().toISOString()
-      });
-
-      log.info('Skin saved successfully:', skinRecord);
-
-      // Reset form and show success
-      e.target.reset();
-      const successMessage = document.createElement('div');
-      successMessage.className = 'success-message';
-      successMessage.textContent = 'Skin uploaded successfully!';
-      e.target.appendChild(successMessage);
-      setTimeout(() => successMessage.remove(), 3000);
-
-      refreshSkinsList();
-
-    } catch (error) {
-      log.error('Upload failed:', error);
-      alert(`Upload failed: ${error.message}`);
-    } finally {
-      uploadBtn.innerHTML = '<span>Upload Skin</span>';
-      uploadBtn.disabled = false;
-    }
-  });
-
-  const getDirectDownloadUrl = (url) => {
-    if (url.includes('dropbox.com')) {
-      return url.replace('?dl=0', '?dl=1');
-    }
-    return url;
-  };
-
-  // Update the refreshSkinsList function:
-  const refreshSkinsList = async () => {
-    const refreshBtn = document.getElementById('refreshSkins');
-    if (!refreshBtn) {
-      log.error('Refresh button not found');
-      return;
     }
 
-    refreshBtn.innerHTML = '<span>⟳ Refreshing...</span>';
-    refreshBtn.disabled = true;
+    alert("All logs have been deleted successfully");
+    await refreshDatabase(); // Refresh the display
     
-    try {
-      log.debug('Fetching skins list');
-      const skins = await room.collection('skins').getList();
-      log.debug('Retrieved skins:', skins);
+  } catch (error) {
+    console.error('Error deleting logs:', error);
+    alert("Error deleting logs. Please try again.");
+  }
+}
 
-      const skinsList = document.getElementById('skinsList');
-      if (!skinsList) {
-        throw new Error('Skins list container not found');
+async function deleteLog(logPath) {
+  const confirmDelete = confirm("Are you sure you want to delete this log?");
+  if (!confirmDelete) return;
+
+  try {
+    await fetch('https://api.dropboxapi.com/2/files/delete_v2', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + dbxAccessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        path: logPath
+      })
+    });
+
+    await refreshDatabase(); // Refresh the display
+  } catch (error) {
+    console.error('Error deleting log:', error);
+    alert("Error deleting log. Please try again.");
+  }
+}
+
+async function determineBikePath(bikeModel, year, bikeType) {
+  const engineSize = parseInt(bikeModel.match(/\d+/)?.[0] || '0');
+  const manufacturer = getBikeManufacturer(bikeModel);
+
+  switch(bikeType) {
+    case 'OEMS':
+      let mxClass;
+      if (engineSize >= 350 || bikeModel.includes('250') && !bikeModel.includes('F')) {
+        mxClass = 'MX1';
+      } else if (engineSize >= 250 || engineSize <= 150) {
+        mxClass = 'MX2';
+      } else if (engineSize >= 300 && !bikeModel.includes('F')) {
+        mxClass = 'MX3';
+      } else if (bikeModel.toLowerCase().includes('varg') || manufacturer === 'Alta') {
+        mxClass = 'MXE';
       }
-
-      skinsList.innerHTML = skins.map(skin => {
-        // Validate required fields
-        const filename = skin.filename || 'Unknown file';
-        const username = skin.username || 'Unknown user';
-        const cc = skin.cc || 'Unknown';
-        const brand = skin.brand || 'Unknown';
-        const type = skin.type || 'Unknown';
-        const created_at = skin.created_at ? new Date(skin.created_at).toLocaleDateString() : 'Unknown date';
-        const fileUrl = skin.fileUrl || '';
-
-        return `
-          <div class="skin-item">
-            <h4>${filename}</h4>
-            <div class="skin-info">
-              <p><strong>Uploaded by:</strong> ${username}</p>
-              <p><strong>CC:</strong> ${cc}</p>
-              <p><strong>Brand:</strong> ${brand}</p>
-              <p><strong>Type:</strong> ${type}</p>
-              <p><strong>Upload Date:</strong> ${created_at}</p>
-            </div>
-            ${fileUrl ? `
-              <a href="${getDirectDownloadUrl(fileUrl)}" 
-                 download="${filename}" 
-                 class="download-btn"
-                 onclick="log.info('Downloading:', '${filename}')">
-                <span>Download Skin</span>
-              </a>
-            ` : '<p class="error-message">Download link unavailable</p>'}
-          </div>
-        `;
-      }).join('');
-
-    } catch (error) {
-      log.error('Error fetching skins:', error);
-      alert('Error refreshing skins list: ' + error.message);
-    } finally {
-      refreshBtn.innerHTML = '<span>⟳ Refresh</span>';
-      refreshBtn.disabled = false;
-    }
-  };
-
-  document.getElementById('refreshSkins').addEventListener('click', refreshSkinsList);
-  
-  // Initial load
-  refreshSkinsList();
-
-  // Download all skins
-  document.getElementById('downloadAll').addEventListener('click', async () => {
-    try {
-      const skins = await room.collection('skins').getList();
       
-      skins.forEach(skin => {
-        const directUrl = skin.fileUrl.includes('dropbox.com') ? 
-          skin.fileUrl.replace('?dl=0', '?dl=1') : 
-          skin.fileUrl;
-        
-        const link = document.createElement('a');
-        link.href = directUrl;
-        link.download = skin.filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        log.info('Downloading:', skin.filename);
-      });
-    } catch (error) {
-      log.error('Error downloading skins:', error);
-      alert('Error downloading skins');
-    }
-  });
-});
-const room = new WebsimSocket();
+      const cleanModel = bikeModel.replace(/\s+/g, '_').toUpperCase();
+      return `/${mxClass}OEM_${year}_${manufacturer}_${cleanModel}/paints/`;
+      
+    case 'AKITS':
+      return `/AK ${manufacturer} ${bikeModel}/paints/`;
+      
+    case 'BIGBORE':
+      if (bikeModel.includes('CRF 110')) {
+        return `/CRF 110 BIG BORE MODDED/paints/`;
+      }
+      return `/BIGBORE/${bikeModel}/paints/`;
+      
+    default:
+      return `/${bikeType}/${year}_${manufacturer}_${bikeModel}/paints/`;
+  }
+}
+
+function getBikeManufacturer(modelName) {
+  const modelLower = modelName.toLowerCase();
+  if (modelLower.includes('yz') || modelLower.includes('yzf')) return 'Yamaha';
+  if (modelLower.includes('crf') || modelLower.includes('cr')) return 'Honda';
+  if (modelLower.includes('kx')) return 'Kawasaki';
+  if (modelLower.includes('rmz') || modelLower.includes('rm')) return 'Suzuki';
+  if (modelLower.includes('sx')) return 'KTM';
+  if (modelLower.includes('fc') || modelLower.includes('tc')) return 'Husqvarna';
+  if (modelLower.includes('rx')) return 'Beta';
+  if (modelLower.includes('mc')) return 'GasGas';
+  if (modelLower.includes('mx')) return 'TM';
+  if (modelLower.includes('xxf') || modelLower.includes('xx')) return 'Fantic';
+  if (modelLower.includes('desmo')) return 'Ducati';
+  if (modelLower.includes('tf')) return 'Triumph';
+  if (modelLower.includes('varg')) return 'Stark';
+  if (modelLower.includes('redshift')) return 'Alta';
+  return modelName.split(' ')[0];
+}
 </script></body></html>
