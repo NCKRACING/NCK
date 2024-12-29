@@ -3,78 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropbox .pnt Files</title>
+    <title>MXB Skins - PNT Files</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
-        .folder-list {
-            list-style: none;
-            padding: 0;
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
         }
-        .folder-item {
+        .file-item {
+            width: 200px;
+            margin: 10px;
             padding: 10px;
-            background-color: #f4f4f4;
-            margin: 5px 0;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <h1>MXB Skins - .pnt Files</h1>
+    <div class="file-list" id="file-list">
+        <!-- Files will be displayed here -->
+    </div>
 
-<h1>.pnt Files in Dropbox</h1>
-<ul class="folder-list" id="folderList">
-    <!-- Folders will be populated here -->
-</ul>
+    <script>
+        // Replace with your Dropbox Access Token
+        const accessToken = 'sl.u.AFeGOaJHyDSI85WqNttuJ5ZxfZ1jSzpqzparwgfZL0sFfXV7h9Qd_t1TLCA...';
 
-<script>
-    const accessToken = '5Nf5CrxWKAAAAAAAAAAv1-vBlQ-zIHe57REoOVdPp8w'; // Replace with your actual Dropbox access token
-    const folderPath = '/Apps/MXBSKINS/mods'; // Path to your target folder in Dropbox
+        // Dropbox API URL
+        const dropboxApiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
 
-    // Function to fetch .pnt files from Dropbox
-    function fetchPntFiles() {
-        const apiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
+        // Function to fetch the .pnt files from Dropbox
+        async function fetchPntFiles() {
+            const response = await fetch(dropboxApiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    path: '/Apps/MXBSKINS/mods',
+                }),
+            });
 
-        fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                path: folderPath,
-                recursive: true
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            const files = data.entries;
-            const fileListElement = document.getElementById('folderList');
+            const data = await response.json();
 
-            if (files.length > 0) {
-                files.forEach(file => {
-                    // Check if the file has a .pnt extension
-                    if (file.name.endsWith('.pnt')) {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('folder-item');
-                        listItem.textContent = file.name; // Display file name
-                        fileListElement.appendChild(listItem);
-                    }
-                });
+            if (data.entries) {
+                displayFiles(data.entries);
             } else {
-                fileListElement.innerHTML = '<li>No .pnt files found.</li>';
+                document.getElementById('file-list').innerHTML = '<p>No .pnt files found in the folder.</p>';
             }
-        })
-        .catch(error => {
-            console.error('Error fetching Dropbox files:', error);
-            document.getElementById('folderList').innerHTML = '<li>Error fetching files.</li>';
-        });
-    }
+        }
 
-    // Call the function to fetch and display files when the page loads
-    window.onload = fetchPntFiles;
-</script>
+        // Function to display the fetched files
+        function displayFiles(files) {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = ''; // Clear previous data
 
+            files.forEach(file => {
+                if (file.name.endsWith('.pnt')) {
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('file-item');
+                    fileItem.innerHTML = `<p>${file.name}</p>`;
+                    fileList.appendChild(fileItem);
+                }
+            });
+        }
+
+        // Call the fetch function on page load
+        fetchPntFiles();
+    </script>
 </body>
 </html>
