@@ -1,6 +1,13 @@
 <?php
 // dropbox.php
 
+// dropbox.php
+
+// After doing whatever necessary actions, you can redirect the user to skinhub.html.
+header('Location: skinhub.html');  // Redirect to the skinhub.html page
+exit();  // Ensure no further code is executed after the redirect
+?>
+
 // Dropbox API endpoint for listing files/folders
 $apiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
 
