@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dropbox .pnt Files</title>
     <style>
-        /* Basic Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -30,16 +29,51 @@
 </ul>
 
 <script>
-    // Fetch the .pnt files from the backend (dropbox.php)
-    fetch('dropbox.php')
-        .then(response => response.text())
+    const accessToken = 'sl.CDcflYXYjYFXmf82mqbbeBJbV42imxURPiKcmO5Dbs829mNCJjOIU9FxvcbvJ57u0HFyuqkvI2WaP5FlHMHoL7lR9z3TUFFMQt16s3q5-7CxH_sOjFU_teCEm6e8d--JCKE9_pYZmuzB78_2p9jfA0A'; // Replace with your actual Dropbox access token
+    const folderPath = '/Apps/MXBSKINS/mods'; // Path to your target folder in Dropbox
+
+    // Function to fetch .pnt files from Dropbox
+    function fetchPntFiles() {
+        const apiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
+
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                path: folderPath,
+                recursive: true
+            })
+        })
+        .then(response => response.json())
         .then(data => {
-            // Populate the folder list with the response
-            document.getElementById('folderList').innerHTML = data;
+            const files = data.entries;
+            const fileListElement = document.getElementById('folderList');
+
+            if (files.length > 0) {
+                files.forEach(file => {
+                    // Check if the file has a .pnt extension
+                    if (file.name.endsWith('.pnt')) {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('folder-item');
+                        listItem.textContent = file.name; // Display file name
+                        fileListElement.appendChild(listItem);
+                    }
+                });
+            } else {
+                fileListElement.innerHTML = '<li>No .pnt files found.</li>';
+            }
         })
         .catch(error => {
-            console.error('Error fetching Dropbox .pnt files:', error);
+            console.error('Error fetching Dropbox files:', error);
+            document.getElementById('folderList').innerHTML = '<li>Error fetching files.</li>';
         });
+    }
+
+    // Call the function to fetch and display files when the page loads
+    window.onload = fetchPntFiles;
 </script>
 
 </body>
