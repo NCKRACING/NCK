@@ -1,78 +1,1696 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MXB Skins - PNT Files</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .file-list {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .file-item {
-            width: 200px;
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-    </style>
+<html><head><base href="https://websim.ai/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MX Bikes Skin Database</title>
+  <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+    }
+
+    .form-section, .database-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .database-section {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+
+    input, select {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    button.download-btn {
+      background: #2196F3;
+      font-size: 0.9em;
+      padding: 5px 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      font-size: 0.9em;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    #yearField {
+      width: 100%;
+      display: none;
+    }
+
+    #yearField.show {
+      display: block;
+    }
+
+    #yearField select:disabled {
+      background-color: #eee;
+      cursor: not-allowed;
+    }
+    
+    td small {
+      word-break: break-all;
+      max-width: 300px;
+      display: block;
+    }
+
+    .database-section table {
+      table-layout: fixed;
+    }
+
+    .database-section td {
+      vertical-align: top;
+    }
+
+    .action-btn {
+      background: #2196F3;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9em;
+    }
+
+    .action-btn:hover {
+      background: #1976D2;
+    }
+
+    .refresh-btn {
+      background: #4CAF50;
+    }
+
+    .refresh-btn:hover {
+      background: #388E3C;
+    }
+
+    .time-filter {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .no-results-message {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.1em;
+      color: #666;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin: 20px 0;
+      border: 1px solid #ddd;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 10px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4CAF50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      display: none;
+      color: #4CAF50;
+      text-align: center;
+      margin: 10px 0;
+      padding: 10px;
+      background: #e8f5e9;
+      border-radius: 4px;
+    }
+
+    .skin-row {
+      cursor: pointer;
+    }
+
+    .skin-row.selected {
+      background-color: #e3f2fd !important;
+    }
+
+    .database-section .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .download-selected-btn {
+      background: #2196F3;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9em;
+    }
+
+    .download-selected-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .select-btn {
+      background: #9C27B0;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .select-btn:hover {
+      background: #7B1FA2;
+    }
+
+    .select-btn.selected {
+      background: #4CAF50;
+    }
+
+    .sortable {
+      cursor: pointer;
+      position: relative;
+      padding-right: 20px !important;
+    }
+
+    .sortable:after {
+      content: '↕';
+      position: absolute;
+      right: 5px;
+      color: #999;
+    }
+
+    .sortable.asc:after {
+      content: '↑';
+    }
+
+    .sortable.desc:after {
+      content: '↓';
+    }
+  </style>
 </head>
 <body>
-    <h1>MXB Skins - .pnt Files</h1>
-    <div class="file-list" id="file-list">
-        <!-- Files will be displayed here -->
+  <h1>MX Bikes Skin Database</h1>
+  
+  <div class="container">
+    <div class="form-section">
+      <h2>Upload New Skin</h2>
+      <form id="skinForm">
+        <select id="type" required>
+          <option value>Select Type</option>
+          <option value="AKITS">AKITS</option>
+          <option value="OEMS">OEMS</option>
+          <option value="BIG BORE">BIG BORE</option>
+        </select>
+
+        <select id="brand" required disabled>
+          <option value>Select Brand</option>
+        </select>
+
+        <select id="make" required disabled>
+          <option value>Select Make</option>
+        </select>
+
+        <div id="yearField">
+          <select id="year" required disabled>
+            <option value="">Select Year</option>
+          </select>
+        </div>
+
+        <input type="text" id="name" placeholder="Skin Name" required>
+        <input type="file" id="skinFile" accept=".pnt" required>
+        <input type="text" id="password" placeholder="Create Password (required)" required>
+        <button type="submit">Upload Skin</button>
+        <div class="loading-spinner"></div>
+        <div class="success-message">Your skin has been successfully uploaded!</div>
+      </form>
     </div>
 
-    <script>
-        // Replace with your Dropbox Access Token
-        const accessToken = 'sl.u.AFeGOaJHyDSI85WqNttuJ5ZxfZ1jSzpqzparwgfZL0sFfXV7h9Qd_t1TLCA...';
+    <div class="database-section">
+      <div class="controls">
+        <h2>Skin Database</h2>
+        <div>
+          <select id="timeFilter" class="time-filter">
+            <option value="all">All Time</option>
+            <option value="0.5h">Last 30 Minutes</option>
+            <option value="24h">Last 24 Hours</option>
+            <option value="48h">Last 2 Days</option>
+            <option value="72h">Last 3 Days</option>
+            <option value="120h">Last 5 Days</option>
+            <option value="168h">Last Week</option>
+            <option value="720h">Last Month</option>
+            <option value="8760h">Last Year</option>
+          </select>
+          <button id="downloadSelectedBtn" class="download-selected-btn" disabled>
+            Download Selected
+          </button>
+          <button onclick="downloadAllSkins()" class="action-btn">Download All</button>
+          <button onclick="refreshDatabase()" class="action-btn refresh-btn">
+            <svg style="width: 14px; height: 14px; margin-right: 4px;" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+      <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+        <div style="flex: 1;">
+          <label for="sortBy">Sort by: </label>
+          <select id="sortBy" class="time-filter">
+            <option value>Please Select</option>
+            <option value="modified-desc">Newest to Oldest</option>
+            <option value="modified-asc">Oldest to Newest</option>
+            <option value="name-asc">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
+          </select>
+        </div>
+        <div style="flex: 1;">
+          <label for="searchInput">Search: </label>
+          <input type="text" id="searchInput" class="time-filter" placeholder="Search by name or brand..." style="width: 200px;">
+        </div>
+      </div>
+      <table id="skinDatabase">
+        <thead>
+          <tr>
+            <th class="sortable" data-sort="name">Name</th>
+            <th class="sortable" data-sort="type">Type</th>
+            <th class="sortable" data-sort="brand">Brand</th>
+            <th class="sortable" data-sort="make">Make</th>
+            <th class="sortable" data-sort="year">Year</th>
+            <th class="sortable" data-sort="modified">Modified</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="skinTableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-        // Dropbox API URL
-        const dropboxApiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
+  <div id="deleteModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;">
+    <h3>Enter Password to Delete</h3>
+    <input type="password" id="deletePassword" placeholder="Enter password">
+    <button onclick="confirmDelete()">Delete</button>
+    <button onclick="closeDeleteModal()">Cancel</button>
+  </div>
 
-        // Function to fetch the .pnt files from Dropbox
-        async function fetchPntFiles() {
-            const response = await fetch(dropboxApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    path: '/Apps/MXBSKINS/mods',
-                }),
+  <div id="deleteOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+  <script>
+    let currentDeleteItem = null;
+    let currentSort = {
+      column: null,
+      direction: 'asc'
+    };
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      document.getElementById('deleteOverlay').style.display = 'none';
+      currentDeleteItem = null;
+    }
+
+    async function confirmDelete() {
+      const passwordInput = document.getElementById('deletePassword').value;
+      
+      if (!currentDeleteItem) return;
+      
+      try {
+        // First try bike-specific log file
+        const logPath = currentDeleteItem.path + '/logs/' + currentDeleteItem.filename + '.json';
+        const globalLogPath = '/Apps/MXBSKINS/Apps/Logs/' + currentDeleteItem.filename + '.json';
+        
+        try {
+          // Try bike-specific log first
+          const logFile = await dbx.filesDownload({path: logPath});
+          const logData = JSON.parse(await logFile.result.fileBlob.text());
+          const correctPassword = logData.password || "1955";
+          
+          if (passwordInput === correctPassword) {
+            // Delete paint file
+            await dbx.filesDelete({
+              path: currentDeleteItem.path + '/paints/' + currentDeleteItem.filename
             });
-
-            const data = await response.json();
-
-            if (data.entries) {
-                displayFiles(data.entries);
-            } else {
-                document.getElementById('file-list').innerHTML = '<p>No .pnt files found in the folder.</p>';
+            
+            // Delete both log files
+            await dbx.filesDelete({path: logPath});
+            try {
+              await dbx.filesDelete({path: globalLogPath});
+            } catch (error) {
+              console.log('Global log not found or already deleted');
             }
+            
+            // Delete from database
+            const skinDoc = await room.collection('skins').filter({ path: currentDeleteItem.path }).getList();
+            if (skinDoc && skinDoc[0]) {
+              await room.collection('skins').delete(skinDoc[0].id);
+            }
+            
+            closeDeleteModal();
+            initializeDatabase();
+          } else {
+            alert('Incorrect password');
+          }
+        } catch (logError) {
+          // If bike-specific log not found, try global log
+          try {
+            const globalLogFile = await dbx.filesDownload({path: globalLogPath});
+            const logData = JSON.parse(await globalLogFile.result.fileBlob.text());
+            const correctPassword = logData.password || "1955";
+
+            if (passwordInput === correctPassword) {
+              // Delete paint file
+              await dbx.filesDelete({
+                path: currentDeleteItem.path + '/paints/' + currentDeleteItem.filename
+              });
+              
+              // Try to delete both log files
+              try {
+                await dbx.filesDelete({path: logPath});
+              } catch (error) {
+                console.log('Local log not found or already deleted');
+              }
+              await dbx.filesDelete({path: globalLogPath});
+              
+              // Delete from database
+              const skinDoc = await room.collection('skins').filter({ path: currentDeleteItem.path }).getList();
+              if (skinDoc && skinDoc[0]) {
+                await room.collection('skins').delete(skinDoc[0].id);
+              }
+              
+              closeDeleteModal();
+              initializeDatabase();
+            } else {
+              alert('Incorrect password');
+            }
+          } catch (globalLogError) {
+            // If no log files found, use default password
+            if (passwordInput === "1955") {
+              // Delete paint file
+              await dbx.filesDelete({
+                path: currentDeleteItem.path + '/paints/' + currentDeleteItem.filename
+              });
+              
+              // Delete from database
+              const skinDoc = await room.collection('skins').filter({ path: currentDeleteItem.path }).getList();
+              if (skinDoc && skinDoc[0]) {
+                await room.collection('skins').delete(skinDoc[0].id);
+              }
+              
+              closeDeleteModal();
+              initializeDatabase();
+            } else {
+              alert('Incorrect password');
+            }
+          }
         }
+      } catch (error) {
+        console.error('Error deleting file:', error);
+        alert('Error deleting file. Please try again.');
+      }
+    }
 
-        // Function to display the fetched files
-        function displayFiles(files) {
-            const fileList = document.getElementById('file-list');
-            fileList.innerHTML = ''; // Clear previous data
+    function showDeleteModal(path, filename) {
+      currentDeleteItem = { path, filename };
+      document.getElementById('deleteModal').style.display = 'block';
+      document.getElementById('deleteOverlay').style.display = 'block';
+      document.getElementById('deletePassword').value = '';
+    }
+  </script>
 
-            files.forEach(file => {
-                if (file.name.endsWith('.pnt')) {
-                    const fileItem = document.createElement('div');
-                    fileItem.classList.add('file-item');
-                    fileItem.innerHTML = `<p>${file.name}</p>`;
-                    fileList.appendChild(fileItem);
-                }
-            });
+  <script>
+    document.getElementById('downloadSelectedBtn').addEventListener('click', downloadSelectedSkins);
+  </script>
+  <script>const ACCESS_TOKEN = 'sl.u.AFdT4kScPWnheFgPmQ6dUzeiVpDm8zpx_Wdbt407w_EmZKu1pAkAfVEmoVrGGu0qfd-GjDfN2xhYgMEeB1aHZuHXlalWqcU3-hx4e45RI3m8WlZzREhPu7USpKJsLus0ydrNzEyiJPVIjJjWgMRWG-JXTXQUSq60yly4jJm6R-8dIt2nEW9zwmdMszMvAWfC5LqytqXRqnytu_D1ZSI1Ta3NwBKT3itIFrZpgcT95-VQ9d7vQn9i6cI2VDafrR1ILqki1rXFnGxgtBjHpL3l9fRUCEEvDxtVqREvInQO9ng1SUUj2wqbjZBAhQTx6hvJBHzlScj-o4cCbGO0jIFKwJ19u8E-x-ssOAG767IPC6ag5uCY5fIUOqwVsaVHeU3nkbJ9AO-Ntyat8OhrTLLTyKS5OBb-oeVKt3rV-vsA7wa_3I9_7N3qet-Kh3dckNhFWu9UhpQNGDrzDoeamkbPG4EQXpI1D4Wg2aEnOij_jo4K9L58Gj2s22i4qkOpwXnHLt-mWmFWvZ-fotcSL_lIPWQyJGMYrD48A_tFXJ2rZ2_U59CEI2PPl4S3OD8kjkaqdLFmXCjMOm565UAHn9GswcOWlc5HCCYnrLJid7ZbzOSRIUBbjgxa0t-h7AjYktKyQBjM9e7ci3yWnB--xxfD-WOYG5E4rTo_Ov-QR2nW60HpBd5UJeO9e2XIK0x7i7crbfDSfd47q5BCtnDM0EyFkzJwS8Um4ayq_EC730rNHu4WVXi7h7vEOlbvpX5X7l6SQvLhorba2oyWAd2mPTUAPwzl35c-p3Sf3QlmNqcknEM9jsRrBqtHMi_oLT-xd8AiTBhj4q_ItUCXFt5a9FbpdELpkrlkN2kWyufwzVlOP5Kce2KEXQ9jyl6P3NLOUaRi2muZ6akIW6IfdgK09Zi_kn1xESxtd1K7Jx8BtuH7HhxzNcbQ5HTb08cOLSO1iSvtHwgmUwDub4d7oLyuhmSqbO5lXma9-yqKTgvLo-jJO-_iRoVdDO0-5QYgmbBuyMsGVCvk1svwNnroiyAW39QqLwVYeigHIxe9MdmyW0aarzvmPHUO1UKpiy0nWx3z4TSI303N25Mg7QrSrYaD8UCVACyhdwdQuseSsbyZiVLQwm9D0_K8z54GzBDTtp29epBxLf0DabmO6XEMovPdd50kCoI2Y-rV0g4ued8p7EGagaqq00J-PHSlY2TjDjosBNeIn2faxUNNpUP2sjnFLOqEvkW3uZ6HuzLveME0ndD6gCkWAxEAfRxdbIuLqsWBp-fqlSDjidIjC9OvA9vkL2db1zr71AL9cR9M__YnoQwl0DMkHg';
+const dbx = new Dropbox.Dropbox({
+  accessToken: ACCESS_TOKEN
+});
+const room = new WebsimSocket();
+const validMakes = ['RX 250F', 'RX 450F', 'Desmo250', 'Desmo450', 'XXF 250F', 'XXF 450F', 'MC 250F', 'MC 450F', 'CRF450F', 'CRF250F', 'FC 250F', 'FC 450F', 'KX 250F', 'KX 450F', 'SXF 250F', 'SXF 450F', 'Varg', 'RMZ 250F', 'RMZ 450F', 'TF 250F', 'TF 450F', 'YZF 250F', 'YZF 450F', 'CRF 110 BIG BORE MODDED', 'CR250', 'KX250', 'RM250', 'YZ250', 'Redshift MXR', 'FC350', 'TC250', 'KX450', '250 SX', '350 SXF', '450 SXF', 'MX 144', 'MX 250', 'MX 300Fi', 'MX 450Fi', 'MC 250', 'MC 350F', 'MC 450F', 'CR125', 'KX125', 'RM125', 'Redshift MX', 'TC125', '125 SX', '250 SXF', 'XX125', 'XXF 250', 'MX 125', 'YZ125', 'MC 125', 'KX 500', '300 SX', 'MX 300', 'MX 530Fi', 'CR500AF', 'VARG'];
+function standardizeModelName(make) {
+  make = make.replace(/(\d+) F$/, '$1F');
+  make = make.replace(/(\d+) Fi$/, '$1Fi');
+  make = make.replace(/SX-F/, 'SXF');
+  make = make.replace(/(\d+) F$/, '$1F');
+  const replacements = {
+    'CRF 450F': 'CRF450F',
+    'CRF 250F': 'CRF250F',
+    'CRF450R': 'CRF450F',
+    'CRF250R': 'CRF250F',
+    'FC 350': 'FC350',
+    'TC 250': 'TC250',
+    'TC 125': 'TC125'
+  };
+  return replacements[make] || make;
+}
+const bikeModels = {
+  'Kawasaki': [...new Set(validMakes.filter(make => make.toLowerCase().includes('kx') || make.toLowerCase().includes('kwi')).map(standardizeModelName))],
+  'Honda': [...new Set(validMakes.filter(make => make.toLowerCase().includes('crf') || make.toLowerCase().includes('cr')).map(standardizeModelName))],
+  'KTM': [...new Set(validMakes.filter(make => make.toLowerCase().includes('sx') || make.toLowerCase().includes('xc')).map(standardizeModelName))],
+  'Yamaha': [...new Set(validMakes.filter(make => make.toLowerCase().includes('yz') || make.toLowerCase().includes('yzf')).map(standardizeModelName))],
+  'Suzuki': [...new Set(validMakes.filter(make => make.toLowerCase().includes('rm') || make.toLowerCase().includes('rmz')).map(standardizeModelName))],
+  'Husqvarna': [...new Set(validMakes.filter(make => make.toLowerCase().includes('fc') || make.toLowerCase().includes('tc')).map(standardizeModelName))],
+  'GASGAS': [...new Set(validMakes.filter(make => make.toLowerCase().includes('mc')).map(standardizeModelName))],
+  'Stark': ['Varg'],
+  'Beta': ['RX 250F', 'RX 450F'],  
+  'Fantic': ['Desmo250', 'Desmo450']  
+};
+async function getFolderPath(type, brand, make, year) {
+  try {
+    // Try both paths - shared folder and direct path
+    const basePaths = [
+      '/Apps/MXBSKINS/Apps/MXBSKINS/mods/bikes',
+      '/Apps/MXBSKINS/mods/bikes'
+    ];
+
+    let response;
+    let usedPath;
+
+    // Try each base path until one works
+    for (const basePath of basePaths) {
+      try {
+        response = await dbx.filesListFolder({
+          path: basePath
+        });
+        usedPath = basePath;
+        break;
+      } catch (error) {
+        continue;
+      }
+    }
+
+    if (!response) {
+      throw new Error('Could not access any of the bike folders');
+    }
+
+    let searchPattern = '';
+    if (type === 'OEMS') {
+      let prefix = '';
+      if (make.includes('450F') || make.includes('450')) {
+        prefix = 'MX1OEM';
+      } else if (make.includes('250F') || make.includes('250')) {
+        prefix = 'MX2OEM';
+      } else if (make.includes('125')) {
+        prefix = 'MX3OEM';
+      } else {
+        prefix = 'MXEOEM';
+      }
+      searchPattern = `${prefix}_${year}_${brand}_${make}`.toLowerCase();
+    } else if (type === 'AKITS') {
+      searchPattern = `AK_${brand}_${make}`.toLowerCase();
+    } else if (type === 'BIG BORE') {
+      searchPattern = make.toLowerCase();
+    }
+
+    let bestMatch = null;
+    let highestScore = 0;
+
+    for (const entry of response.result.entries) {
+      if (entry['.tag'] === 'folder') {
+        try {
+          const bikeFolderContent = await dbx.filesListFolder({
+            path: entry.path_display + '/paints'
+          });
+          entries.push(...bikeFolderContent.result.entries);
+        } catch (error) {
+          console.error('Error loading bike folder:', error);
         }
+      }
+    }
+    updateDatabaseTable(entries);
+  } catch (error) {
+    console.error('Error finding folder path:', error);
+    throw error;
+  }
+}
+document.getElementById('type').addEventListener('change', async function (e) {
+  const brandSelect = document.getElementById('brand');
+  const makeSelect = document.getElementById('make');
+  const yearField = document.getElementById('yearField');
+  const yearSelect = document.getElementById('year');
+  
+  brandSelect.innerHTML = '<option value="">Select Brand</option>';
+  makeSelect.innerHTML = '<option value="">Select Make</option>';
+  makeSelect.disabled = true;
+  brandSelect.disabled = true;
+  yearField.style.display = 'none';
+  yearSelect.value = '';
+  yearSelect.disabled = true;
 
-        // Call the fetch function on page load
-        fetchPntFiles();
-    </script>
+  if (e.target.value === 'BIG BORE') {
+    const option = document.createElement('option');
+    option.value = 'Honda';
+    option.textContent = 'Honda';
+    brandSelect.appendChild(option);
+    brandSelect.disabled = false;
+  } else if (e.target.value) {
+    let allBrands;
+    if (e.target.value === 'AKITS') {
+      allBrands = ['Beta', 'Fantic', 'GASGAS', 'Honda', 'Husqvarna', 'Kawasaki', 'KTM', 'Suzuki', 'Yamaha', 'Stark'];
+    } else {
+      allBrands = ['Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'KTM', 'Husqvarna', 'GASGAS', 'Stark'];
+    }
+    
+    allBrands.sort();
+    
+    allBrands.forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      brandSelect.appendChild(option);
+    });
+    brandSelect.disabled = false;
+  }
+});
+document.getElementById('brand').addEventListener('change', function (e) {
+  const makeSelect = document.getElementById('make');
+  const type = document.getElementById('type').value;
+  makeSelect.innerHTML = '<option value="">Select Make</option>';
+  makeSelect.disabled = true;
+
+  if (e.target.value) {
+    if (type === 'BIG BORE' && e.target.value === 'Honda') {
+      const option = document.createElement('option');
+      option.value = 'CRF 110 BIG BORE MODDED';
+      option.textContent = 'CRF 110 BIG BORE MODDED';
+      makeSelect.appendChild(option);
+    } else if (type === 'AKITS' && e.target.value === 'Stark') {
+      const option = document.createElement('option');
+      option.value = 'Varg';
+      option.textContent = 'Varg';
+      makeSelect.appendChild(option);
+    } else {
+      let makes = bikeModels[e.target.value]?.filter(make => make !== 'CRF 110 BIG BORE MODDED') || [];
+      if (type === 'AKITS') {
+        makes = makes.filter(make => {
+          return make.includes('250F') || make.includes('450F') || 
+                 make.includes('Desmo') || make.includes('RX');  
+        });
+      }
+      
+      makes.sort();
+      
+      makes.forEach(make => {
+        const option = document.createElement('option');
+        option.value = make;
+        option.textContent = make;
+        makeSelect.appendChild(option);
+      });
+    }
+    makeSelect.disabled = false;
+  }
+});
+document.getElementById('make').addEventListener('change', function(e) {
+  const yearSelect = document.getElementById('year');
+  const yearField = document.getElementById('yearField');
+  const type = document.getElementById('type').value;
+  const brand = document.getElementById('brand').value;
+  
+  // Clear and reset year dropdown
+  yearSelect.innerHTML = '<option value="">Select Year</option>';
+  
+  if (e.target.value) {
+    if (type === 'BIG BORE') {
+      // Hide year field for BIG BORE
+      yearField.style.display = 'none';
+      yearSelect.disabled = true;
+    } else {
+      // Enable year selection and show field
+      yearSelect.disabled = false;
+      yearField.style.display = 'block';
+      
+      if (type === 'OEMS') {
+        // Special case for Honda CR125
+        if (brand === 'Honda' && e.target.value === 'CR125') {
+          const option = document.createElement('option');
+          option.value = '1996';
+          option.textContent = '1996';
+          yearSelect.appendChild(option);
+        } else {
+          // Normal OEM years
+          const years = ['2024', '2023', '2020'];
+          
+          // Add 1996 only for CR250
+          if (e.target.value === 'CR250') {
+            years.push('1996');
+          }
+          
+          years.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+          });
+        }
+      } else if (type === 'AKITS') {
+        // Only 2024 for AKITS
+        const option = document.createElement('option');
+        option.value = '2024';
+        option.textContent = '2024';
+        yearSelect.appendChild(option);
+      }
+    }
+  } else {
+    // Disable year selection if no make is selected
+    yearSelect.disabled = true;
+    yearField.style.display = 'none';
+  }
+});
+async function initializeDatabase() {
+  try {
+    // Set initial sort state if not already set
+    if (!currentSort.column) {
+      currentSort.column = 'modified';
+      currentSort.direction = 'desc';
+      
+      // Update UI to show sort state
+      document.querySelectorAll('th.sortable').forEach(header => {
+        header.classList.remove('asc', 'desc');
+        if (header.dataset.sort === 'modified') {
+          header.classList.add('desc');
+        }
+      });
+    }
+
+    const response = await dbx.filesListFolder({
+      path: '/Apps/MXBSKINS/mods/bikes'
+    });
+    const entries = [];
+    for (const entry of response.result.entries) {
+      if (entry['.tag'] === 'folder') {
+        try {
+          const bikeFolderContent = await dbx.filesListFolder({
+            path: entry.path_display + '/paints'
+          });
+          entries.push(...bikeFolderContent.result.entries);
+        } catch (error) {
+          console.error('Error loading bike folder:', error);
+        }
+      }
+    }
+    updateDatabaseTable(entries);
+  } catch (error) {
+    console.error('Error loading database:', error);
+  }
+}
+function updateDatabaseTable(entries, timeFilter) {
+  const tableBody = document.getElementById('skinTableBody');
+  const filterElement = document.getElementById('timeFilter');
+  const sortBy = document.getElementById('sortBy').value;
+  const searchTerm = document.getElementById('searchInput').value;
+  
+  if (filterElement) {
+    timeFilter = filterElement.value;
+  }
+
+  let filteredEntries = filterEntriesByTime(entries, timeFilter);
+  filteredEntries = filterBySearch(filteredEntries, searchTerm);
+
+  // Default sort by modified date if no other sort is selected
+  if (!currentSort.column) {
+    currentSort.column = 'modified';
+    currentSort.direction = 'desc';
+  }
+
+  if (currentSort.column) {
+    filteredEntries.sort((a, b) => {
+      let aVal, bVal;
+      
+      // Get values to compare based on column
+      switch(currentSort.column) {
+        case 'modified':
+          aVal = new Date(a.server_modified);
+          bVal = new Date(b.server_modified);
+          break;
+        case 'name':
+          aVal = a.name.toLowerCase();
+          bVal = b.name.toLowerCase();
+          break;
+        case 'type':
+          const detailsA = parseFolderName(a.path_display);
+          const detailsB = parseFolderName(b.path_display);
+          aVal = detailsA.type.toLowerCase();
+          bVal = detailsB.type.toLowerCase();
+          break;
+        case 'brand':
+          const brandA = parseFolderName(a.path_display);
+          const brandB = parseFolderName(b.path_display);
+          aVal = brandA.brand.toLowerCase();
+          bVal = brandB.brand.toLowerCase();
+          break;
+        case 'make':
+          const makeA = parseFolderName(a.path_display);
+          const makeB = parseFolderName(b.path_display);
+          aVal = makeA.make.toLowerCase();
+          bVal = makeB.make.toLowerCase();
+          break;
+        case 'year':
+          const yearA = parseFolderName(a.path_display);
+          const yearB = parseFolderName(b.path_display);
+          aVal = parseInt(yearA.year);
+          bVal = parseInt(yearB.year);
+          break;
+      }
+
+      // Handle date comparison for modified column
+      if (currentSort.column === 'modified') {
+        return currentSort.direction === 'asc' ? 
+          aVal - bVal :
+          bVal - aVal;
+      }
+
+      // Handle numeric comparison for year
+      if (currentSort.column === 'year') {
+        return currentSort.direction === 'asc' ? 
+          aVal - bVal :
+          bVal - aVal;
+      }
+
+      // String comparison for other columns
+      return currentSort.direction === 'asc' ?
+        aVal.localeCompare(bVal) :
+        bVal.localeCompare(aVal);
+    });
+  }
+
+  tableBody.innerHTML = '';
+  if (filteredEntries.length === 0) {
+    const noResultsRow = document.createElement('tr');
+    noResultsRow.innerHTML = `
+        <td colspan="7">
+            <div class="no-results-message">
+                There are no skins to be displayed within the selected time period. Try adjusting your filter settings.
+            </div>
+        </td>
+    `;
+    tableBody.appendChild(noResultsRow);
+    return;
+  }
+  filteredEntries.forEach(entry => {
+    if (entry.name.endsWith('.pnt')) {
+      const fullPath = entry.path_display;
+      const paintsIndex = fullPath.indexOf('/paints');
+      const bikesIndex = fullPath.indexOf('/bikes/');
+      const displayPath = fullPath.substring(bikesIndex + 7, paintsIndex);
+      const pathParts = displayPath.split('/');
+      const folderName = pathParts[pathParts.length - 1];
+      const details = parseFolderName(folderName);
+      const modifiedDate = new Date(entry.server_modified);
+      const formattedDate = formatModifiedDate(entry.server_modified);
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.name.replace('.pnt', '')}</td>
+        <td>${details.type}</td>
+        <td>${details.brand}</td>
+        <td>${details.make}</td>
+        <td>${details.year}</td>
+        <td>${formattedDate}</td>
+        <td>
+          <small style="font-size: 0.8em; color: #666; display: block; margin-bottom: 5px;">
+            ${displayPath.replace(/_/g, ' ')}
+          </small>
+          <button class="select-btn" onclick="event.stopPropagation(); toggleSkinSelection(this.closest('tr'))">
+            Select
+          </button>
+          <button class="download-btn" onclick="downloadSkin('${entry.name}')">
+            Download
+          </button>
+          <button class="action-btn" style="background: #dc3545;" onclick="event.stopPropagation(); showDeleteModal('${fullPath.substring(0, paintsIndex)}', '${entry.name}')">
+            Delete
+          </button>
+        </td>
+      `;
+      row.classList.add('skin-row');
+      row.onclick = () => toggleSkinSelection(row);
+      tableBody.appendChild(row);
+    }
+  });
+}
+function filterEntriesByTime(entries, timeFilter) {
+  if (timeFilter === 'all') return entries;
+  const now = new Date();
+  const hourMap = {
+    '0.5h': 0.5,
+    '24h': 24,
+    '48h': 48,
+    '72h': 72,
+    '120h': 120,
+    '168h': 168,
+    '720h': 720,
+    '8760h': 8760
+  };
+  const hours = hourMap[timeFilter];
+  const cutoff = new Date(now - hours * 60 * 60 * 1000);
+  return entries.filter(entry => {
+    const modifiedDate = new Date(entry.server_modified);
+    return modifiedDate >= cutoff;
+  });
+}
+function filterBySearch(entries, searchTerm) {
+  if (!searchTerm) return entries;
+  searchTerm = searchTerm.toLowerCase();
+  return entries.filter(entry => {
+    const name = entry.name.toLowerCase();
+    const fullPath = entry.path_display;
+    const bikesIndex = fullPath.indexOf('/bikes/');
+    const pathParts = fullPath.substring(bikesIndex + 7).split('/');
+    const folderName = pathParts[0].toLowerCase();
+    
+    return name.includes(searchTerm) || 
+           folderName.includes(searchTerm) ||
+           (searchTerm === 'fantic' && (folderName.includes('fantic') || folderName.includes('desmo'))) ||
+           (searchTerm === 'beta' && (folderName.includes('beta') || folderName.includes('rx')));
+  });
+}
+async function downloadSkin(filename) {
+  try {
+    const type = document.getElementById('type').value;
+    const brand = document.getElementById('brand').value;
+    const make = document.getElementById('make').value;
+    const name = document.getElementById('name').value;
+    const logFileName = `${type}_${brand}_${make}_${name}_${filename}`.replace(/\s+/g, '_');
+    const logPath = `/Apps/MXBSKINS/Apps/Logs/${logFileName}.json`;
+    
+    try {
+      const logFile = await dbx.filesDownload({path: logPath});
+      const logData = JSON.parse(await logFile.result.fileBlob.text());
+      
+      if (logData.downloadUrl) {
+        console.log('Using existing download URL:', logData.downloadUrl);
+        const autoDownloadUrl = logData.downloadUrl.replace('?dl=0', '?dl=1');
+        const a = document.createElement('a');
+        a.href = autoDownloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
+    } catch (err) {
+      console.error('Log file error:', err);
+      console.log('Log file path attempted:', logPath);
+    }
+
+    console.log('Searching for file:', filename);
+    const searchResponse = await dbx.filesSearch({
+      path: '/Apps/MXBSKINS/mods/bikes',
+      query: filename,
+      max_results: 1,
+      file_extensions: ['pnt']
+    });
+
+    if (searchResponse.result.matches.length === 0) {
+      throw new Error(`File not found in Dropbox: ${filename}`);
+    }
+
+    const filePath = searchResponse.result.matches[0].metadata.path_display;
+    console.log('Found file at path:', filePath);
+    
+    const sharedLinkResponse = await dbx.sharingCreateSharedLink({
+      path: filePath,
+      settings: {
+        requested_visibility: { ".tag": "public" },
+        audience: { ".tag": "public" },
+        access: { ".tag": "viewer" }
+      }
+    });
+
+    const downloadUrl = sharedLinkResponse.result.url
+      .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
+      .replace('?dl=0', '?dl=1');
+      
+    console.log('Generated download URL:', downloadUrl);
+
+    // Update log file with new download URL
+    try {
+      const logData = {
+        downloadUrl: downloadUrl,
+        timestamp: new Date().toISOString(),
+        folderName: filePath.split('/').slice(-3)[0]
+      };
+      
+      await dbx.filesUpload({
+        path: logPath,
+        contents: JSON.stringify(logData, null, 2),
+        mode: {'.tag': 'overwrite'}
+      });
+    } catch (logError) {
+      console.error('Error updating log file:', logError);
+    }
+
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Download error:', error);
+    console.log('Error details:', {
+      filename: filename,
+      attempted_path: error.filePath || 'unknown',
+      error_message: error.message
+    });
+    alert(`Error downloading file: ${error.message}\nAttempted path: ${error.filePath || 'unknown'}`);
+  }
+}
+document.getElementById('skinForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const type = document.getElementById('type').value;
+  const brand = document.getElementById('brand').value;
+  const make = document.getElementById('make').value;
+  const year = document.getElementById('year').value || null;
+  const file = document.getElementById('skinFile').files[0];
+  const password = document.getElementById('password').value;
+  if (!file) {
+    alert('Please select a file to upload');
+    return;
+  }
+  const spinner = e.target.querySelector('.loading-spinner');
+  const successMsg = e.target.querySelector('.success-message');
+  spinner.style.display = 'block';
+  successMsg.style.display = 'none';
+  try {
+    // Get the correct folder path
+    const folderPath = await getFolderPath(type, brand, make, year);
+    const fileArrayBuffer = await file.arrayBuffer();
+
+    // Ensure the paints directory exists
+    try {
+      await dbx.filesCreateFolderBatch({
+        paths: [
+          `${folderPath}`,
+          `${folderPath}/logs`
+        ],
+        autorename: false
+      });
+    } catch (error) {
+      // Folders may already exist, continue
+    }
+
+    // Upload the paint file
+    let result;
+    try {
+      result = await dbx.filesUpload({
+        path: `${folderPath}/${file.name}`,
+        contents: fileArrayBuffer,
+        mode: {
+          '.tag': 'overwrite'
+        },
+        autorename: false
+      });
+    } catch (uploadError) {
+      console.error('Upload error:', uploadError);
+      throw uploadError;
+    }
+
+    let downloadUrl;
+    try {
+      const sharedLink = await dbx.sharingCreateSharedLink({
+        path: result.path_display,
+        settings: {
+          requested_visibility: {
+            '.tag': 'public'
+          },
+          audience: {
+            '.tag': 'public'
+          },
+          access: {
+            '.tag': 'viewer'
+          }
+        }
+      });
+      downloadUrl = sharedLink.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+    } catch (error) {
+      console.error('Error generating download link:', error);
+    }
+
+    // Save form data to logs
+    const logData = {
+      name,
+      type,
+      brand,
+      make,
+      year,
+      filename: file.name,
+      password,
+      timestamp: new Date().toISOString(),
+      uploadPath: `${folderPath}/${file.name}`,
+      downloadUrl: downloadUrl,
+      folderName: folderPath.split('/').slice(-2)[0]
+    };
+    
+    const logFileName = `${type}_${brand}_${make}_${name}_${file.name}`.replace(/\s+/g, '_');
+
+    // Save log to bike-specific folder
+    await dbx.filesUpload({
+      path: `${folderPath}/logs/${logFileName}.json`,
+      contents: JSON.stringify(logData, null, 2),
+      mode: {'.tag': 'overwrite'}
+    });
+
+    // Save log to global logs folder (3 folders back)
+    await dbx.filesUpload({
+      path: `/Apps/MXBSKINS/Apps/Logs/${logFileName}.json`,
+      contents: JSON.stringify(logData, null, 2),
+      mode: {'.tag': 'overwrite'}
+    });
+
+    let downloadUrl2;
+    try {
+      const sharedLink = await dbx.sharingCreateSharedLink({
+        path: result.path_display,
+        settings: {
+          requested_visibility: { ".tag": "public" },
+          audience: { ".tag": "public" },
+          access: { ".tag": "viewer" }
+        }
+      });
+      downloadUrl2 = sharedLink.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+    } catch (error) {
+      console.error('Error generating download link:', error);
+    }
+    await room.collection('skins').create({
+      name,
+      type,
+      brand,
+      make,
+      year: year ? parseInt(year) : null,
+      filename: result.name,
+      path: result.path_display,
+      downloadUrl: downloadUrl2,
+      password: password
+    });
+    spinner.style.display = 'none';
+    successMsg.style.display = 'block';
+    initializeDatabase();
+    e.target.reset();
+    setTimeout(() => {
+      successMsg.style.display = 'none';
+    }, 3000);
+  } catch (error) {
+    console.error('Upload error:', error);
+    spinner.style.display = 'none';
+    alert('Error uploading file. Please check the folder structure and try again.');
+  }
+});
+async function generateDownloadLink(filePath) {
+  try {
+    const sharedLinkResponse = await dbx.sharingCreateSharedLink({
+      path: filePath,
+      settings: {
+        requested_visibility: {
+          '.tag': 'public'
+        },
+        audience: {
+          '.tag': 'public'
+        },
+        access: {
+          '.tag': 'viewer'
+        }
+      }
+    });
+    return sharedLinkResponse.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+  } catch (error) {
+    console.error('Error generating download link:', error);
+    return null;
+  }
+}
+room.collection('skins').subscribe(skins => {
+  const tableBody = document.getElementById('skinTableBody');
+  const timeFilter = document.getElementById('timeFilter').value;
+  tableBody.innerHTML = '';
+  const skinEntries = [];
+  const promises = skins.map(async skin => {
+    try {
+      const metadata = await dbx.filesGetMetadata({
+        path: skin.path
+      });
+      let downloadUrl = skin.downloadUrl;
+      if (!downloadUrl) {
+        const sharedLink = await dbx.sharingCreateSharedLink({
+          path: skin.path,
+          settings: {
+            requested_visibility: {
+              '.tag': 'public'
+            },
+            audience: {
+              '.tag': 'public'
+            },
+            access: {
+              '.tag': 'viewer'
+            }
+          }
+        });
+
+        downloadUrl = sharedLink.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+        await room.collection('skins').update(skin.id, {
+          downloadUrl: downloadUrl
+        });
+      }
+      return {
+        skin: {
+          ...skin,
+          downloadUrl
+        },
+        metadata: metadata.result
+      };
+    } catch (error) {
+      console.error('Error fetching metadata:', error);
+      return null;
+    }
+  });
+  Promise.all(promises).then(results => {
+    const validResults = results.filter(result => result !== null);
+    const sortBy = document.getElementById('sortBy').value;
+    
+    // Default sort by modified date if no sort is selected
+    if (!sortBy) {
+      validResults.sort((a, b) => {
+        return new Date(b.metadata.server_modified) - new Date(a.metadata.server_modified);
+      });
+    } else {
+      validResults.sort((a, b) => {
+        switch (sortBy) {
+          case 'modified-desc':
+            return new Date(b.metadata.server_modified) - new Date(a.metadata.server_modified);
+          case 'modified-asc':
+            return new Date(a.metadata.server_modified) - new Date(b.metadata.server_modified);
+          case 'name-asc':
+            return a.skin.filename.localeCompare(b.skin.filename);
+          case 'name-desc':
+            return b.skin.filename.localeCompare(a.skin.filename);
+          default:
+            return new Date(b.metadata.server_modified) - new Date(a.metadata.server_modified);
+        }
+      });
+    }
+
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    validResults = validResults.filter(result => {
+      const filename = result.skin.filename.toLowerCase();
+      const fullPath = result.skin.path;
+      const bikesIndex = fullPath.indexOf('/bikes/');
+      const pathParts = fullPath.substring(bikesIndex + 7).split('/');
+      const folderName = pathParts[0].toLowerCase();
+      
+      return filename.includes(searchTerm) || 
+             folderName.includes(searchTerm) ||
+             (searchTerm === 'fantic' && (folderName.includes('fantic') || folderName.includes('desmo'))) ||
+             (searchTerm === 'beta' && (folderName.includes('beta') || folderName.includes('rx')));
+    });
+
+    validResults.forEach(result => {
+      const {
+        skin,
+        metadata
+      } = result;
+      const fullPath = skin.path;
+      const paintsIndex = fullPath.indexOf('/paints');
+      const bikesIndex = fullPath.indexOf('/bikes/');
+      const displayPath = fullPath.substring(bikesIndex + 7, paintsIndex);
+      const pathParts = displayPath.split('/');
+      const folderName = pathParts[0];
+      const details = parseFolderName(folderName);
+      const modifiedDate = new Date(metadata.server_modified);
+      const formattedDate = formatModifiedDate(metadata.server_modified);
+      const downloadBtnHtml = generateDownloadLink(skin.path) ? `<button class="download-btn" onclick="window.location.href='${generateDownloadLink(skin.path)}'">Download</button>` : `<button class="download-btn" disabled>Link Error</button>`;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${skin.filename.replace('.pnt', '')}</td>
+        <td>${details.type}</td>
+        <td>${details.brand}</td>
+        <td>${details.make}</td>
+        <td>${details.year}</td>
+        <td>${formattedDate}</td>
+        <td>
+          <small style="font-size: 0.8em; color: #666; display: block; margin-bottom: 5px;">
+            ${displayPath.replace(/_/g, ' ')}
+          </small>
+          <button class="select-btn" onclick="event.stopPropagation(); toggleSkinSelection(this.closest('tr'))">
+            Select
+          </button>
+          ${downloadBtnHtml}
+          <button class="action-btn" style="background: #dc3545;" onclick="event.stopPropagation(); showDeleteModal('${skin.path}', '${skin.filename}')">
+            Delete
+          </button>
+        </td>
+      `;
+      row.classList.add('skin-row');
+      row.onclick = () => toggleSkinSelection(row);
+      tableBody.appendChild(row);
+    });
+  }).catch(error => {
+    console.error('Error processing skins:', error);
+  });
+});
+async function downloadAllSkins() {
+  try {
+    const timeFilter = document.getElementById('timeFilter').value;
+    const sortBy = document.getElementById('sortBy').value;
+    const searchTerm = document.getElementById('searchInput').value;
+    let downloadUrl = "https://www.dropbox.com/scl/fo/70hp9xhz3rvqzf2do5bjh/ACqpHdrG71_KxkkZM_R1bc0?rlkey=2fs2p8vozopd5dltffwk4em42&st=8hg8d8tj&dl=1";
+    if (timeFilter !== 'all') {
+      downloadUrl += `&tf=${timeFilter}`;
+    }
+    if (sortBy) {
+      downloadUrl += `&sort=${sortBy}`;
+    }
+    if (searchTerm) {
+      downloadUrl += `&search=${encodeURIComponent(searchTerm)}`;
+    }
+    const response = await dbx.filesListFolder({
+      path: '/Apps/MXBSKINS/mods/bikes'
+    });
+    const visibleRows = document.querySelectorAll('#skinTableBody tr');
+    const visibleFiles = Array.from(visibleRows).map(row => {
+      const filePath = row.querySelector('small').textContent.trim();
+      const fileName = row.querySelector('td:first-child').textContent + '.pnt';
+      return {
+        path: filePath,
+        name: fileName
+      };
+    });
+    const directoryName = `sorted_paints_${Date.now()}`;
+    await dbx.filesCreateFolder({
+      path: `/Apps/MXBSKINS/mods/bikes/${directoryName}`
+    });
+    for (const file of visibleFiles) {
+      const sourceFile = await dbx.filesDownload({
+        path: `/Apps/MXBSKINS/mods/bikes/${file.path}/paints/${file.name}`
+      });
+      await dbx.filesUpload({
+        path: `/Apps/MXBSKINS/mods/bikes/${directoryName}/${file.name}`,
+        contents: sourceFile.result.fileBlob
+      });
+    }
+    const sharedLink = await dbx.sharingCreateSharedLink({
+      path: `/Apps/MXBSKINS/mods/bikes/${directoryName}`,
+      settings: {
+        requested_visibility: {
+          '.tag': 'public'
+        },
+        audience: {
+          '.tag': 'public'
+        },
+        access: {
+          '.tag': 'viewer'
+        }
+      }
+    });
+    const directoryDownloadUrl = sharedLink.result.url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+    const a = document.createElement('a');
+    a.href = directoryDownloadUrl;
+    a.download = `${directoryName}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Error downloading sorted skins:', error);
+    alert('Error downloading sorted skins. Please try again.');
+  }
+}
+async function refreshDatabase() {
+  const refreshButton = document.querySelector('.refresh-btn');
+  refreshButton.style.pointerEvents = 'none';
+  refreshButton.style.opacity = '0.7';
+  try {
+    await initializeDatabase();
+    refreshButton.style.pointerEvents = 'auto';
+    refreshButton.style.opacity = '1';
+  } catch (error) {
+    console.error('Error refreshing database:', error);
+    alert('Error refreshing database. Please try again.');
+    refreshButton.style.pointerEvents = 'auto';
+    refreshButton.style.opacity = '1';
+  }
+}
+function parseFolderName(folderName) {
+  const knownBrands = ['Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'KTM', 'Husqvarna', 'GASGAS', 'CRF', 'Stark'];
+  let year = '2024';
+  const yearMatch = folderName.match(/\d{4}/);
+  if (yearMatch) {
+    year = yearMatch[0];
+  }
+
+  // Check for Beta or Fantic in folder name first
+  let brand = '';
+  if (folderName.toLowerCase().includes('beta')) {
+    brand = 'Beta';
+  } else if (folderName.toLowerCase().includes('fantic') || folderName.toLowerCase().includes('desmo')) {
+    brand = 'Fantic';
+  } else {
+    // Fall back to checking other brands
+    for (const knownBrand of knownBrands) {
+      if (folderName.toLowerCase().includes(knownBrand.toLowerCase())) {
+        brand = knownBrand === 'CRF' ? 'Honda' : knownBrand;
+        break;
+      }
+    }
+  }
+
+  // Rest of function remains the same...
+  let make = '';
+  const folderNameSpaces = folderName.replace(/_/g, ' ');
+  for (const validMake of validMakes) {
+    if (folderNameSpaces.toLowerCase().includes(validMake.toLowerCase())) {
+      make = validMake;
+      break;
+    }
+  }
+  
+  let type = 'Unknown';
+  if (folderName.toLowerCase().includes('oem')) {
+    type = 'OEM';
+  } else if (folderName.toLowerCase().includes('ak')) {
+    type = 'AKIT';
+  } else if (folderName.toLowerCase().includes('big bore')) {
+    type = 'BIG BORE';
+  }
+
+  return {
+    type: type,
+    brand: brand || 'Unknown',
+    make: make || 'Unknown', 
+    year: year
+  };
+}
+document.getElementById('timeFilter').addEventListener('change', async function () {
+  await initializeDatabase();
+});
+document.getElementById('searchInput').addEventListener('input', async function () {
+  await initializeDatabase();
+});
+document.getElementById('sortBy').addEventListener('change', async function () {
+  if (this.value) {
+    await initializeDatabase();
+  }
+});
+let selectedSkins = new Set();
+async function downloadSelectedSkins() {
+  try {
+    const selectedSkinsArray = Array.from(selectedSkins).map(s => JSON.parse(s));
+    
+    for (const skin of selectedSkinsArray) {
+      console.log('Processing selected skin:', skin);
+      const logPath = `/Apps/MXBSKINS/Apps/Logs/${skin.name}.json`;
+      
+      try {
+        // First try to get download URL from log file
+        const logFile = await dbx.filesDownload({path: logPath});
+        const logData = JSON.parse(await logFile.result.fileBlob.text());
+        
+        if (logData.downloadUrl) {
+          console.log('Using existing download URL:', logData.downloadUrl);
+          const autoDownloadUrl = logData.downloadUrl.replace('?dl=0', '?dl=1');
+          const a = document.createElement('a');
+          a.href = autoDownloadUrl;
+          a.target = '_blank';
+          a.click();
+          continue;
+        }
+      } catch (err) {
+        console.error('Log file error for skin:', skin.name, err);
+        console.log('Attempted log path:', logPath);
+      }
+
+      // If no log file or no download URL, create new shared link
+      const fullPath = `/Apps/MXBSKINS/mods/bikes/${skin.path}/paints/${skin.name}`;
+      console.log('Generating new download link for path:', fullPath);
+
+      const sharedLink = await dbx.sharingCreateSharedLink({
+        path: fullPath,
+        settings: {
+          requested_visibility: { ".tag": "public" },
+          audience: { ".tag": "public" },
+          access: { ".tag": "viewer" }
+        }
+      });
+
+      // Convert to direct download URL
+      const directDownloadUrl = sharedLink.result.url
+        .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
+        .replace('?dl=0', '?dl=1');
+      
+      console.log('Generated download URL:', directDownloadUrl);
+
+      // Trigger download
+      const a = document.createElement('a');
+      a.href = directDownloadUrl;
+      a.target = '_blank';
+      a.click();
+
+      // Update log file with new download URL
+      try {
+        const logData = {
+          downloadUrl: directDownloadUrl,
+          timestamp: new Date().toISOString(),
+          folderName: fullPath.split('/').slice(-3)[0]
+        };
+        
+        await dbx.filesUpload({
+          path: logPath,
+          contents: JSON.stringify(logData, null, 2),
+          mode: {'.tag': 'overwrite'}
+        });
+      } catch (logError) {
+        console.error('Error updating log file:', logError);
+      }
+    }
+
+    // Clear selections after downloads
+    selectedSkins.clear();
+    document.querySelectorAll('.skin-row.selected').forEach(row => {
+      row.classList.remove('selected');
+      const selectBtn = row.querySelector('.select-btn');
+      selectBtn.classList.remove('selected');
+      selectBtn.textContent = 'Select';
+    });
+    document.getElementById('downloadSelectedBtn').disabled = true;
+
+  } catch (error) {
+    console.error('Error downloading selected skins:', error);
+    console.log('Error details:', {
+      selected_skins: Array.from(selectedSkins),
+      error_message: error.message
+    });
+    alert(`Error downloading selected skins: ${error.message}`);
+  }
+}
+
+// Update the download skin function to use the same direct download URL format
+async function downloadSkin(filename) {
+  try {
+    const type = document.getElementById('type').value;
+    const brand = document.getElementById('brand').value;
+    const make = document.getElementById('make').value;
+    const name = document.getElementById('name').value;
+    const logFileName = `${type}_${brand}_${make}_${name}_${filename}`.replace(/\s+/g, '_');
+    const logPath = `/Apps/MXBSKINS/Apps/Logs/${logFileName}.json`;
+    
+    try {
+      const logFile = await dbx.filesDownload({path: logPath});
+      const logData = JSON.parse(await logFile.result.fileBlob.text());
+      
+      if (logData.downloadUrl) {
+        console.log('Using existing download URL:', logData.downloadUrl);
+        const autoDownloadUrl = logData.downloadUrl.replace('?dl=0', '?dl=1');
+        const a = document.createElement('a');
+        a.href = autoDownloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
+    } catch (err) {
+      console.error('Log file error:', err);
+      console.log('Log file path attempted:', logPath);
+    }
+
+    console.log('Searching for file:', filename);
+    const searchResponse = await dbx.filesSearch({
+      path: '/Apps/MXBSKINS/mods/bikes',
+      query: filename,
+      max_results: 1,
+      file_extensions: ['pnt']
+    });
+
+    if (searchResponse.result.matches.length === 0) {
+      throw new Error(`File not found in Dropbox: ${filename}`);
+    }
+
+    const filePath = searchResponse.result.matches[0].metadata.path_display;
+    console.log('Found file at path:', filePath);
+    
+    const sharedLinkResponse = await dbx.sharingCreateSharedLink({
+      path: filePath,
+      settings: {
+        requested_visibility: { ".tag": "public" },
+        audience: { ".tag": "public" },
+        access: { ".tag": "viewer" }
+      }
+    });
+
+    const downloadUrl = sharedLinkResponse.result.url
+      .replace('www.dropbox.com', 'dl.dropboxusercontent.com')
+      .replace('?dl=0', '?dl=1');
+      
+    console.log('Generated download URL:', downloadUrl);
+
+    // Update log file with new download URL
+    try {
+      const logData = {
+        downloadUrl: downloadUrl,
+        timestamp: new Date().toISOString(),
+        folderName: filePath.split('/').slice(-3)[0]
+      };
+      
+      await dbx.filesUpload({
+        path: logPath,
+        contents: JSON.stringify(logData, null, 2),
+        mode: {'.tag': 'overwrite'}
+      });
+    } catch (logError) {
+      console.error('Error updating log file:', logError);
+    }
+
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Download error:', error);
+    console.log('Error details:', {
+      filename: filename,
+      attempted_path: error.filePath || 'unknown',
+      error_message: error.message
+    });
+    alert(`Error downloading file: ${error.message}\nAttempted path: ${error.filePath || 'unknown'}`);
+  }
+}
+function toggleSkinSelection(row) {
+  row.classList.toggle('selected');
+  const selectBtn = row.querySelector('.select-btn');
+  selectBtn.classList.toggle('selected');
+  selectBtn.textContent = row.classList.contains('selected') ? 'Selected' : 'Select';
+  
+  const downloadBtn = document.getElementById('downloadSelectedBtn');
+  const skinPath = row.querySelector('small').textContent.trim();
+  const skinName = row.querySelector('td:first-child').textContent + '.pnt';
+  const skinData = {
+    path: skinPath,
+    name: skinName
+  };
+  
+  if (row.classList.contains('selected')) {
+    selectedSkins.add(JSON.stringify(skinData));
+  } else {
+    selectedSkins.delete(JSON.stringify(skinData));
+  }
+  
+  downloadBtn.disabled = selectedSkins.size === 0;
+}
+
+function formatModifiedDate(date) {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+  
+  if (diffInSeconds < 60) { 
+    return "uploaded now";
+  }
+  
+  return new Date(date).toLocaleString();
+}
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const column = th.dataset.sort;
+    
+    // Toggle sort direction if clicking same column
+    if (currentSort.column === column) {
+      currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSort.column = column;
+      currentSort.direction = 'asc'; 
+    }
+
+    // Update sort arrows
+    document.querySelectorAll('th.sortable').forEach(header => {
+      header.classList.remove('asc', 'desc');
+    });
+    th.classList.add(currentSort.direction);
+
+    // Trigger database refresh with new sort
+    initializeDatabase();
+  });
+});
+initializeDatabase();
+</script>
 </body>
 </html>
